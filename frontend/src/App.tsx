@@ -6,7 +6,8 @@ function App() {
 
   return (
     <>
-      <p className="text-3xl font-bold ">🌸 Hier ensteht Sakura Bloom 🌸</p>
+      <h1 className="text-3xl"> SakuraBloom Headline</h1>
+      <p className="text-xl font-bold ">🌸 Hier ensteht Sakura Bloom 🌸</p>
     </>
   );
 }

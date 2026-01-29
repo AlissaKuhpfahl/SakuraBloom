@@ -1,19 +1,53 @@
 @import "tailwindcss";
 
-/* :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/*--------- COLORS ----------*/
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+:root {
+  --color-primary: #f091ac;
+  --color-secondary: #fce4ec;
+  --color-peach: #f7c3b1;
+  --color-green: #9ccfa3;
+  --color-blue: #c7dceb;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-bg-vanilla: #fff8fa;
+  --color-dark-gray: #4b5563; /* für text */
+  --color-light-gray: #e5e7eb;
+
+  --color-warnung: #f3a6a6;
+  --color-skyblue: #e8f0f6;
+  --color-success: #7bc47f;
 }
+
+html,
+body {
+  height: 100%;
+  font-family: "Nunito", sans-serif;
+}
+
+body {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-vanilla) 0%,
+    var(--color-secondary) 45%,
+    var(--color-skyblue) 100%
+  );
+
+  background-attachment: fixed;
+}
+/*--------- HEADLINES ----------*/
+h1,
+h2,
+h3 {
+  font-family: "Bubblegum Sans", sans-serif;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/*--------- Buttons ----------*/
+/*--------- Header----------*/
+
+/* 
+
 
 a {
   font-weight: 500;
