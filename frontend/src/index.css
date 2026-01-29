@@ -16,6 +16,9 @@
   --color-warnung: #f3a6a6;
   --color-skyblue: #e8f0f6;
   --color-success: #7bc47f;
+
+  --color-primary-50: #f7c8d5; /*  50% primary */
+  --color-light-pink: #fff5f9; /* für body bg */
 }
 
 html,
@@ -29,10 +32,12 @@ body {
     135deg,
     var(--color-bg-vanilla) 0%,
     var(--color-secondary) 45%,
-    var(--color-skyblue) 100%
+    var(--color-skyblue) 90%
   );
+  /* background-color: var(--color-light-pink); */
 
   background-attachment: fixed;
+  color: var(--color-dark-gray);
 }
 /*--------- HEADLINES ----------*/
 h1,
