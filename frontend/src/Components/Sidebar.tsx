@@ -8,7 +8,7 @@ export default function Sidebar() {
         {/* Logo */}
         <Link to="/" className="mb-10 flex justify-center">
           <img src="/logo.svg" alt="SakuraBloom Logo" className="" />
-          {/* <img src={logo} alt="SakuraBloom Logo" className="h-32" /> */}
+          {/* <img src={logo} alt="SakuraBloom Logo" className="h-32" /> das hat funktioert */}
         </Link>
 
         {/* Navigation */}
