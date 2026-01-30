@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { login } from "../data/auth.ts";
 
 type LoginFormState = {
   email: string;
@@ -24,7 +25,7 @@ export function Login() {
       setLoading(true);
 
       // TODO: Add login logic
-      // const resData = await authLogin({ email, password });
+      const resData = await login({ email, password });
 
       // toast.success(
       //   resData ? resData.message : "Login attempted (not implemented)",
@@ -42,6 +43,7 @@ export function Login() {
 
   return (
     <>
+      <h1 className="text-2xl font-bold">Anmeldung</h1>
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
         <div className="flex">
           <label htmlFor="login-input-email">Email:</label>
@@ -65,7 +67,13 @@ export function Login() {
             id="login-input-password"
           />
         </div>
-        <button className="border" disabled={loading}>
+        <small>
+          Du hast dich noch nicht registriert?{" "}
+          <Link to="/signup" className="hover:underline">
+            Registere dich hier!
+          </Link>
+        </small>
+        <button className="border hover:font-bold" disabled={loading}>
           Anmelden
         </button>
       </form>

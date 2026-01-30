@@ -1,4 +1,4 @@
-import { authServiceURL } from "@/utils";
+// import { authServiceURL } from "@/utils";
 export async function register(
   body: User & { password: string; confirmPassword: string },
 ) {
