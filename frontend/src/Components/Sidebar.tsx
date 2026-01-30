@@ -1,5 +1,5 @@
 import { NavLink, Link } from "react-router";
-import logo from "../assets/logo.svg";
+// import logo from "../assets/logo.svg";
 
 export default function Sidebar() {
   return (
@@ -7,8 +7,8 @@ export default function Sidebar() {
       <div className="flex h-full flex-col  py-6">
         {/* Logo */}
         <Link to="/" className="mb-10 flex justify-center">
-          {/* <img src="/logo.svg" alt="SakuraBloom Logo" className="" /> */}
-          <img src={logo} alt="SakuraBloom Logo" className="h-32" />
+          <img src="/logo.svg" alt="SakuraBloom Logo" className="" />
+          {/* <img src={logo} alt="SakuraBloom Logo" className="h-32" /> das hat funktioert */}
         </Link>
 
         {/* Navigation */}
