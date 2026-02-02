@@ -1,4 +1,10 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
+import { mime, minLength } from "zod";
+
+const kidsSchema = new Schema({
+  name: { type: String, default: "Child" },
+  id: { type: String }
+});
 
 const userSchema = new Schema(
   {
@@ -29,6 +35,11 @@ const userSchema = new Schema(
       type: [String],
       default: ["user", "child"],
       required: true
+    },
+    kidsSub: { type: [kidsSchema], default: () => ({}) },
+    kidsNest: {
+      name: { type: String, default: "Child" },
+      id: { type: String, default: "" }
     }
   },
   {

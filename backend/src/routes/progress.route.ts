@@ -1,5 +1,5 @@
 import { Router } from "express";
-// import { login, logout, me, refresh, register } from '#controllers';
+import { getProgress } from "#controllers";
 // import { validateBodyZod } from '#middlewares';
 import { loginSchema, registerSchema } from "#schemas";
 
@@ -13,6 +13,6 @@ const progressRouter = Router();
 
 // authRouter.delete('/logout', logout);
 
-// authRouter.get('/me', me);
+progressRouter.get("/:id", getProgress);
 
 export default progressRouter;

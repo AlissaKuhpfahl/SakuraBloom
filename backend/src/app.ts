@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { authRouter } from "#routes";
+import { authRouter, progressRouter } from "#routes";
 import { errorHandler } from "#middlewares";
 import { CLIENT_BASE_URL } from "#config";
 import { initDb } from "./db/index.ts";
@@ -22,6 +22,7 @@ app.use(
 app.use(express.json(), cookieParser());
 
 app.use("/auth", authRouter);
+app.use("/progress", progressRouter);
 
 app.get("/", (req, res) => {
   res.send("Sakura Bloom 🌸 Backend alive!");
