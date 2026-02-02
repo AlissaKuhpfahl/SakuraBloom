@@ -21,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
+
             <Route path="modules" element={<Modules />} />
             <Route path="quiz" element={<Quiz />} />
             <Route path="progress" element={<Progress />} />

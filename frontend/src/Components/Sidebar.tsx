@@ -1,9 +1,9 @@
-// Nav icon fehlen noch + open und close
+////// Nav icon fehlen noch + open und close /////////
 import { NavLink, Link } from "react-router";
 
 export default function Sidebar() {
   return (
-    <aside className="sticky top-0 h-screen w-64 bg-(--color-secondary) border-r border-(--color-primary-50)">
+    <aside className="sticky top-0 h-screen w-64 bg-(--color-secondary) ">
       <div className="flex h-full flex-col  py-6">
         {/* Logo */}
         <Link to="/" className="mb-10 flex justify-center">
@@ -50,7 +50,7 @@ function navClass({ isActive }: { isActive: boolean }) {
      px-0 py-2 text-sm font-semibold transition
     ${
       isActive
-        ? "bg-(--color-primary) text-white  w-full rounded-l-full rounded-r-none  "
+        ? "bg-(--color-light-pink) text-(--color-primary)  w-full rounded-l-full rounded-r-none  "
         : " hover:bg-(--color-primary-50) rounded-l-full rounded-r-none"
     }
   `;
