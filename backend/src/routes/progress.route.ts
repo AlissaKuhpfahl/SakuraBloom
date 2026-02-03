@@ -1,11 +1,17 @@
 import { Router } from "express";
-import { getProgress } from "#controllers";
+import { getProgress, addMember, updateProgress, addProgress, getMembers } from "#controllers";
 // import { validateBodyZod } from '#middlewares';
 import { loginSchema, registerSchema } from "#schemas";
 
 const progressRouter = Router();
 
-// authRouter.post('/register', validateBodyZod(registerSchema), register);
+/**
+ * Endpoint POST /member/add creates a new member progress document and
+ * adds a reference of it to the current user "members".
+ */
+progressRouter.post("/add", addMember);
+
+progressRouter.get("/members", getMembers);
 
 // authRouter.post('/login', validateBodyZod(loginSchema), login);
 
@@ -13,6 +19,10 @@ const progressRouter = Router();
 
 // authRouter.delete('/logout', logout);
 
-progressRouter.get("/:id", getProgress);
+progressRouter.post("progress", addProgress);
+
+progressRouter.get("/progress/:id", getProgress);
+
+progressRouter.put("/progress/:id", updateProgress);
 
 export default progressRouter;

@@ -22,7 +22,7 @@ app.use(
 app.use(express.json(), cookieParser());
 
 app.use("/auth", authRouter);
-app.use("/progress", progressRouter);
+app.use("/member", progressRouter);
 
 app.get("/", (req, res) => {
   res.send("Sakura Bloom 🌸 Backend alive!");

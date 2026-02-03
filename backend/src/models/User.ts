@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 import { mime, minLength } from "zod";
+import { Progress } from "#models";
 
 const kidsSchema = new Schema({
   name: { type: String, default: "Child" },
@@ -36,10 +37,10 @@ const userSchema = new Schema(
       default: ["user", "child"],
       required: true
     },
-    kidsSub: { type: [kidsSchema], default: () => ({}) },
-    kidsNest: {
-      name: { type: String, default: "Child" },
-      id: { type: String, default: "" }
+
+    members: {
+      type: [Schema.Types.ObjectId],
+      ref: "Progress"
     }
   },
   {
