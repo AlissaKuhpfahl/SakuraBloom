@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/*--------- COLORS ----------*/
+
+:root {
+  --color-primary: #f091ac;
+  --color-secondary: #fce4ec;
+  --color-peach: #f7c3b1;
+  --color-green: #9ccfa3;
+  --color-blue: #c7dceb;
+  --color-yellow: #f6e6a6;
+  --color-light-yellow: #fff1c1;
+
+  --color-bg-vanilla: #fff8fa;
+  --color-dark-gray: #4b5563; /* für text */
+  --color-light-gray: #e5e7eb;
+
+  --color-warnung: #f3a6a6;
+  --color-skyblue: #e8f0f6;
+  --color-success: #7bc47f;
+
+  --color-primary-50: #f7c8d5; /*  50% primary */
+  --color-light-pink: #fff5f9; /* für body bg */
+  --color-Deep-Wine: #61033b; /* von logo */
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Nunito", sans-serif;
+}
+
+body {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-vanilla) 0%,
+    var(--color-secondary) 45%,
+    var(--color-skyblue) 90%
+  );
+  /* background-color: var(--color-light-pink); */
+
+  background-attachment: fixed;
+  color: var(--color-dark-gray);
+}
+/*--------- HEADLINES ----------*/
+h1,
+h2 {
+  font-family: "Bubblegum Sans", sans-serif;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+.module-headline {
+  color: var(--color-dark-gray);
+  font-family: "Bubblegum Sans", sans-serif;
+  font-size: 1.5rem;
+}
+h1 {
+  font-size: 3rem;
+}
+h2 {
+  font-size: 2rem;
+}
+
+/*--------- HOME ----------*/
+/* fortschritte */
+.sakura-active {
+  filter: none;
+  opacity: 1;
+}
+
+.sakura-inactive {
+  filter: grayscale(100%) brightness(2.2) contrast(0.8);
+  opacity: 2;
+}
+
+/*--------- Buttons 1 ----------*/
+/* Nintendo-Style Game Button */
+.button-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.9rem 2.2rem;
+  border-radius: 9999px;
+
+  background: var(--color-primary);
+  color: #fff;
+
+  font-size: 1rem;
+  font-weight: 800;
+
+  border: none;
+  cursor: pointer;
+  user-select: none;
+
+  /* 👇 Game-Feeling: klarer, dicker Schatten */
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.6);
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* Hover = leicht hoch, fühlt sich klickbar an */
+.button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Active = gedrückt (WICHTIG für Game UI) */
+.button-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Glanzstreifen oben (Nintendo-typisch) */
+.button-primary::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+/*     TEST BTN      */
+/* Hover-Intensität als Zahl 0..1 (einfach) */
+@property --a {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+
+.btn-primary-goo {
+  --a: 0;
+  --x: 50;
+  --y: 50;
+
+  position: relative;
+  border: 0;
+  border-radius: 999px;
+
+  padding: 17px 42px;
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  /* background: var(--color-primary);  NORMALER BUTTON */
+  color: white;
+
+  cursor: pointer;
+  isolation: isolate;
+
+  transition: transform 0.2s ease, --a 0.35s ease;
+}
+
+.btn-primary-goo:hover {
+  --a: 1; /*  HIER passiert der Hover */
+  transform: scale(1.02);
+}
+
+.btn-primary-goo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+
+  filter: blur(12px) url(#goo);
+
+  background-image:
+    /* Base bleibt immer gleich */ linear-gradient(
+      0deg,
+      var(--color-primary),
+      var(--color-primary)
+    ),
+    /* Gooey Highlight kommt NUR über --a */
+      radial-gradient(
+        40% 70% at calc(var(--x) * 1%) calc(var(--y) * 1%),
+        rgba(240, 145, 172, var(--a)) 0%,
+        transparent 90%
+      );
+
+  background-clip: content-box, border-box;
+  padding: 10px;
+}

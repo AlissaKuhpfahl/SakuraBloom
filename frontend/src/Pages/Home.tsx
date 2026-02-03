@@ -1,4 +1,10 @@
 // hallo (user) fehlt noch
+// grafiken bei module raus die Karte
+// btn klickbar machen
+// Quiz card anpassen
+// kontakt & feedback
+
+import StartButton from "../components/Btn";
 
 export default function Home() {
   // const progressLevel = 1; // später aus DB / State
@@ -46,17 +52,16 @@ export default function Home() {
         {/* Inhalt links — Platz lassen fürs Bild */}
         <div className="max-w-md pr-40">
           <h1 className="text-3xl font-bold">Sicher wachsen im Internet</h1>
-
           <p className="mt-3 text-sm">
             Lerne spielerisch, wie du sicher im Internet unterwegs bist.
           </p>
-
           <button className="button-primary mt-5">Starten</button>
-          <button className="button-52 mt-5" role="button">
+          {/* <button className="button-52 mt-5" role="button">
             test
-          </button>
-          {/* Fortschritte */}
+          </button> */}
+          <StartButton />
 
+          {/* Fortschritte */}
           <div className="mt-6 flex items-center gap-3 text-sm">
             <span>Dein Fortschritt:</span>
 
