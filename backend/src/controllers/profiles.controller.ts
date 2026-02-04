@@ -1,19 +1,36 @@
-import { Profile, User, RefreshToken } from "#models";
-import type { RequestHandler, Response, Request, NextFunction } from "express";
+import { Profile, User } from "#models";
+import type { Response, Request, NextFunction } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { ACCESS_JWT_SECRET } from "#config";
 
-export async function getProgress(req: Request, res: Response) {
-  const { id: memberId } = req.params;
+/**
+ *
+ * @param req
+ * @param res
+ */
+export async function getProgress(req: Request, res: Response, next: NextFunction) {
+  const { id: profileId } = req.params;
 
-  if (!mongoose.isValidObjectId(memberId)) {
-    res.status(400).json({ error: "Not a valid member id" });
-    return;
+  if (!mongoose.isValidObjectId(profileId)) throw new Error("Invalid id", { cause: 400 });
+
+  const profile = await Profile.findById(profileId).select("progress userId").lean();
+
+  if (!profile) throw new Error("Profile id not found", { cause: 404 });
+
+  const { userId, progress } = profile;
+
+  /*
+  Ensure caller is authenticated. Should be because middlware "authenticate" 
+  catches that before. Also satisfies typescript needs
+  */
+  if (!req.user?.id) throw new Error("Authorization error", { cause: 401 });
+
+  if (userId.toString() !== req.user.id) {
+    throw new Error("Forbidden", { cause: 403 });
   }
 
-  console.log(req.cookies);
-  res.json({ message: `Hello ${req.params.id} memberId:${memberId}` });
+  res.json({ profileId, progress: progress });
 }
 
 export async function addProgress(req: Request, res: Response) {
@@ -24,9 +41,20 @@ export async function addProgress(req: Request, res: Response) {
  * Endpoint POST /profiles/add allows to append a new profile to a registered user's account.
  * @param req
  * @param res
+ * @param next
  */
 export async function addProfile(req: Request, res: Response, next: NextFunction) {
-  const { userId, profileName } = req.body;
+  const { profileName } = req.body;
+
+  /*
+  Ensure caller is authenticated. Should be because middlware "authenticate" 
+  catches that before. Also satisfies typescript needs
+  */
+  if (!req.user?.id) throw new Error("Authorization error", { cause: 401 });
+
+  const userId = req.user.id;
+
+  console.log("Add profile for logged in user:", userId);
 
   if (!mongoose.isValidObjectId(userId)) throw new Error("Invalid id", { cause: 400 });
 
@@ -48,44 +76,29 @@ export async function addProfile(req: Request, res: Response, next: NextFunction
 
   await user.save();
 
-  res.json(user);
+  res.status(200).json({ message: "Profile added" });
 }
 
+/**
+ * Get all profiles of logged in user in short form
+ * @param req
+ * @param res
+ * @param next
+ */
 export async function getProfiles(req: Request, res: Response, next: NextFunction) {
-  const { accessToken } = req.cookies;
+  const { id } = req.params;
 
-  console.log("members Cookies:", req.cookies);
+  const profiles = await Profile.find({ userId: req.user?.id }).lean();
 
-  if (!accessToken)
-    throw new Error("Access token is required", {
-      cause: { status: 401 }
-    });
+  const response = profiles.map(profile => {
+    const { _id, progress, __v, createdAt, userId, ...rest } = profile;
 
-  // try {
-  const decoded = jwt.verify(accessToken, ACCESS_JWT_SECRET) as jwt.JwtPayload;
-  console.log("members jwt:", decoded);
-  if (!decoded.sub) throw new Error("Invalid access token", { cause: { status: 401 } });
+    return { id: _id, ...rest };
+  });
 
-  const user = await User.findById(decoded.sub);
-
-  if (!user) throw new Error("User not found", { cause: { status: 404 } });
-
-  const member = await user.populate({ path: "members" });
-  console.log(member);
-  res.status(200).json({ message: "Valid token", user });
-  // } catch (error) {
-  //   if (error instanceof jwt.TokenExpiredError) {
-  //     return next(
-  //       new Error("Expired access token", {
-  //         cause: { status: 401, code: "ACCESS_TOKEN_EXPIRED" }
-  //       })
-  //     );
-  //   }
-
-  //   return next(new Error("Invalid access token", { cause: { status: 401 } }));
-  // }
+  res.json(response);
 }
 
 export async function updateProgress(req: Request, res: Response) {}
 
-export async function deleteMember(req: Request, res: Response) {}
+export async function deleteProfile(req: Request, res: Response) {}
