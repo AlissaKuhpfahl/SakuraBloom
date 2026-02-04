@@ -5,18 +5,20 @@ import jwt from "jsonwebtoken";
 import { ACCESS_JWT_SECRET } from "#config";
 
 /**
- *
+ * Endpoint GET /profiles/progress/:id
  * @param req
  * @param res
+ * @param next
  */
 export async function getProgress(req: Request, res: Response, next: NextFunction) {
   const { id: profileId } = req.params;
 
-  if (!mongoose.isValidObjectId(profileId)) throw new Error("Invalid id", { cause: 400 });
+  if (!mongoose.isValidObjectId(profileId))
+    throw new Error("Invalid id", { cause: { status: 400 } });
 
   const profile = await Profile.findById(profileId).select("progress userId").lean();
 
-  if (!profile) throw new Error("Profile id not found", { cause: 404 });
+  if (!profile) throw new Error("Profile id not found", { cause: { status: 404 } });
 
   const { userId, progress } = profile;
 
@@ -24,19 +26,11 @@ export async function getProgress(req: Request, res: Response, next: NextFunctio
   Ensure caller is authenticated. Should be because middlware "authenticate" 
   catches that before. Also satisfies typescript needs
   */
-  if (!req.user?.id) throw new Error("Authorization error", { cause: 401 });
+  if (!req.user?.id) throw new Error("Authorization error", { cause: { status: 401 } });
 
   if (userId.toString() !== req.user.id) throw new Error("Forbidden", { cause: { status: 403 } });
 
-  // The same as?:
-  // if (userId.toString() !== req.user.id) {
-  //   return next(new Error("Forbidden", { cause: { status: 403 } }));
-  // }
   res.json({ profileId, progress: progress });
-}
-
-export async function addProgress(req: Request, res: Response) {
-  const { userId, profileName, progress } = req.body;
 }
 
 /**
@@ -52,13 +46,13 @@ export async function addProfile(req: Request, res: Response, next: NextFunction
   Ensure caller is authenticated. Should be because middlware "authenticate" 
   catches that before. Also satisfies typescript needs
   */
-  if (!req.user?.id) throw new Error("Authorization error", { cause: 401 });
+  if (!req.user?.id) throw new Error("Authorization error", { cause: { status: 401 } });
 
   const userId = req.user.id;
 
   console.log("Add profile for logged in user:", userId);
 
-  if (!mongoose.isValidObjectId(userId)) throw new Error("Invalid id", { cause: 400 });
+  if (!mongoose.isValidObjectId(userId)) throw new Error("Invalid id", { cause: { status: 400 } });
 
   const user = await User.findById(userId);
 
@@ -82,14 +76,12 @@ export async function addProfile(req: Request, res: Response, next: NextFunction
 }
 
 /**
- * Get all profiles of logged in user in short form
+ * Endpoint GET /profiles: Get all profiles of logged in user in short form
  * @param req
  * @param res
  * @param next
  */
 export async function getProfiles(req: Request, res: Response, next: NextFunction) {
-  const { id } = req.params;
-
   const profiles = await Profile.find({ userId: req.user?.id }).lean();
 
   const response = profiles.map(profile => {
@@ -101,6 +93,49 @@ export async function getProfiles(req: Request, res: Response, next: NextFunctio
   res.json(response);
 }
 
-export async function updateProgress(req: Request, res: Response) {}
+/**
+ * Endpoint PUT "/profiles/progress/:id": Updates progress of a selected profile of logged in user
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function updateProgress(req: Request, res: Response, next: NextFunction) {
+  const { id: profileId } = req.params;
+
+  const {
+    body: { progress }
+  } = req;
+
+  console.log("new Progress", progress);
+
+  if (!mongoose.isValidObjectId(profileId))
+    throw new Error("Invalid id", { cause: { status: 400 } });
+
+  const profile = await Profile.findById(profileId).select("progress userId");
+
+  if (!profile) throw new Error("Profile id not found", { cause: { status: 404 } });
+
+  const { userId } = profile;
+
+  /*
+  Ensure caller is authenticated. Should be because middlware "authenticate" 
+  catches that before. Also satisfies typescript needs
+  */
+  if (!req.user?.id) throw new Error("Authorization error", { cause: { status: 401 } });
+
+  if (userId.toString() !== req.user.id) throw new Error("Forbidden", { cause: { status: 403 } });
+
+  /* Update progress of profile */
+  profile.progress = progress;
+
+  try {
+    await profile.save();
+  } catch (error) {
+    console.log("Catched error:", error);
+    throw new Error("Saving new progress failed", { cause: { status: 500 } });
+  }
+
+  res.json({ message: "Progress updated" });
+}
 
 export async function deleteProfile(req: Request, res: Response) {}

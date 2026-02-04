@@ -6,7 +6,7 @@ const profile = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: [true, "User Id is required"] },
     profileName: { type: String, required: [true, "Profile name is required"] },
-    avatarImg: { type: String, default: "default" },
+    avatarUrl: { type: String, default: "default" },
     progress: [
       {
         _id: false,
