@@ -26,10 +26,12 @@ export async function getProgress(req: Request, res: Response, next: NextFunctio
   */
   if (!req.user?.id) throw new Error("Authorization error", { cause: 401 });
 
-  if (userId.toString() !== req.user.id) {
-    throw new Error("Forbidden", { cause: 403 });
-  }
+  if (userId.toString() !== req.user.id) throw new Error("Forbidden", { cause: { status: 403 } });
 
+  // The same as?:
+  // if (userId.toString() !== req.user.id) {
+  //   return next(new Error("Forbidden", { cause: { status: 403 } }));
+  // }
   res.json({ profileId, progress: progress });
 }
 
