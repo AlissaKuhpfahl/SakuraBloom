@@ -17,7 +17,6 @@ if (!secret) {
 
 const authenticate: RequestHandler = (req, _res, next) => {
   const { accessToken } = req.cookies;
-  console.log(accessToken);
 
   if (!accessToken) throw new Error("Not authenticated", { cause: { status: 401 } });
 

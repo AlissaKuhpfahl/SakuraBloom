@@ -4,7 +4,6 @@ import { createAccessToken, createRefreshToken, hashPassword } from "#utils";
 import { ACCESS_JWT_SECRET, REFRESH_TOKEN_TTL } from "#config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { decode } from "node:punycode";
 
 function setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
   res.cookie("refreshToken", refreshToken, {
@@ -107,8 +106,6 @@ export const logout: RequestHandler = async (req, res) => {
 export const me: RequestHandler = async (req, res, next) => {
   const { accessToken } = req.cookies;
 
-  console.log("/me Cookies:", req.cookies);
-
   if (!accessToken)
     throw new Error("Access token is required", {
       cause: { status: 401 }
@@ -119,7 +116,7 @@ export const me: RequestHandler = async (req, res, next) => {
     console.log(decoded);
     if (!decoded.sub) throw new Error("Invalid access token", { cause: { status: 401 } });
 
-    const user = await User.findById(decoded.sub);
+    const user = await User.findById(decoded.sub).populate({ path: "profiles" });
     if (!user) throw new Error("User not found", { cause: { status: 404 } });
 
     res.status(200).json({ message: "Valid token", user });

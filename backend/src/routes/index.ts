@@ -1,2 +1,2 @@
 export { default as authRouter } from "./auth.route.ts";
-export { default as progressRouter } from "./progress.route.ts";
+export { default as profilesRouter } from "./profiles.route.ts";
