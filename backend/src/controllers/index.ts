@@ -1,2 +1,2 @@
 export * from "./auth.controller.ts";
-export * from "./progress.controller.ts";
+export * from "./profiles.controller.ts";

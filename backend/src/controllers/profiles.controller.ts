@@ -1,10 +1,8 @@
-import { Progress, User, RefreshToken } from "#models";
+import { Profile, User, RefreshToken } from "#models";
 import type { RequestHandler, Response, Request, NextFunction } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { ACCESS_JWT_SECRET } from "#config";
-import bcrypt from "bcrypt";
-import { decode } from "node:punycode";
 
 export async function getProgress(req: Request, res: Response) {
   const { id: memberId } = req.params;
@@ -19,18 +17,16 @@ export async function getProgress(req: Request, res: Response) {
 }
 
 export async function addProgress(req: Request, res: Response) {
-  const { userId, memberName, progress } = req.body;
+  const { userId, profileName, progress } = req.body;
 }
 
 /**
- * Endpoint POST /member/add first creates a new Progress document in collection Progresses.
- * Then the current active user's key "member" is added by a new field with the given new
- * member name and a reference ("Progress") to the new created progress document (ObjectId)
+ * Endpoint POST /profiles/add allows to append a new profile to a registered user's account.
  * @param req
  * @param res
  */
-export async function addMember(req: Request, res: Response, next: NextFunction) {
-  const { userId, memberName } = req.body;
+export async function addProfile(req: Request, res: Response, next: NextFunction) {
+  const { userId, profileName } = req.body;
 
   if (!mongoose.isValidObjectId(userId)) throw new Error("Invalid id", { cause: 400 });
 
@@ -38,24 +34,24 @@ export async function addMember(req: Request, res: Response, next: NextFunction)
 
   if (!user) throw new Error("User Id not found", { cause: { status: 404 } });
 
-  const member = new Progress({
+  const profile = new Profile({
     userId: userId,
-    memberName: memberName,
+    profileName: profileName,
     progress: { moduleId: "1", lectureId: "1", status: "****", date: new Date() }
   });
 
-  await member.save();
+  await profile.save();
 
-  console.log("new member", member);
+  console.log("new profile", profile);
 
-  user.members.push(member._id);
+  user.profiles.push(profile._id);
 
   await user.save();
 
   res.json(user);
 }
 
-export async function getMembers(req: Request, res: Response, next: NextFunction) {
+export async function getProfiles(req: Request, res: Response, next: NextFunction) {
   const { accessToken } = req.cookies;
 
   console.log("members Cookies:", req.cookies);

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "dev": "node --watch --conditions development --env-file=.env.development.local src/app.ts",
+    "dev": "node --watch --trace-deprecation --conditions development --env-file=.env.development.local src/app.ts",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run build",
@@ -64,7 +64,6 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.0.10",
-    "dotenv": "^17.2.3"
+    "@types/node": "^25.0.10"
   }
 }

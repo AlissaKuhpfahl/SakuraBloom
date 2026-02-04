@@ -2,10 +2,11 @@ import { model, Schema } from "mongoose";
 import { Types } from "mongoose";
 import { required } from "zod/mini";
 
-const progress = new Schema(
+const profile = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: [true, "User Id is required"] },
-    memberName: { type: String, required: [true, "Member name is required"] },
+    profileName: { type: String, required: [true, "Profile name is required"] },
+    avatarImg: { type: String, default: "default" },
     progress: [
       {
         _id: false,
@@ -21,6 +22,6 @@ const progress = new Schema(
   }
 );
 
-const Progress = model("Progress", progress);
+const Profile = model("Profile", profile);
 
-export default Progress;
+export default Profile;
