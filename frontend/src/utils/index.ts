@@ -1,1 +1,1 @@
-export * from './fetchInterceptor.ts';
+export * from "./fetchInterceptor.ts";

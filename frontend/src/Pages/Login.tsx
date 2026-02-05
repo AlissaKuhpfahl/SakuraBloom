@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { login } from "../data/auth.ts";
+import { login, getMe } from "../data/auth.ts";
+import { useAuth } from "../contexts/useAuth.tsx";
 
 type LoginFormState = {
   email: string;
@@ -15,6 +16,7 @@ const inputClass =
   "rounded-full grow text-center text-black font-semibold bg-(--color-primary)";
 
 export function Login() {
+  const { setUser } = useAuth();
   const [{ email, password }, setForm] = useState<LoginFormState>({
     email: "",
     password: "",
@@ -33,7 +35,9 @@ export function Login() {
 
       // TODO: Add login logic
       const resData = await login({ email, password });
-
+      console.log(resData);
+      const { user } = await getMe();
+      setUser(user);
       // toast.success(
       //   resData ? resData.message : "Login attempted (not implemented)",
       // );
