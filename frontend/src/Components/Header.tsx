@@ -40,7 +40,7 @@ export default function Header() {
           <div className="h-14 w-14">
             <Lottie
               lottieRef={lottieRef}
-              path="/hatching-chick.json"
+              path="/animations/hatching-chick.json"
               autoplay={false}
               loop={false}
             />

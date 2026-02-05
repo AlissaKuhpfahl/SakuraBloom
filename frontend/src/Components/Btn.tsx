@@ -29,8 +29,20 @@ function GooeyFilterOnce() {
   return null;
 }
 
-/* 🔹 Dein Start Button */
-export default function StartButton() {
+type PrimaryButtonProps = {
+  label?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+};
+
+/*  Primary Button (Gooey) */
+export default function PrimaryButton({
+  label = "Starten",
+  onClick,
+  disabled = false,
+  className = "",
+}: PrimaryButtonProps) {
   const ref = useRef<HTMLButtonElement | null>(null);
 
   return (
@@ -39,8 +51,16 @@ export default function StartButton() {
 
       <button
         ref={ref}
-        className="btn-primary-goo"
+        type="button"
+        disabled={disabled}
+        onClick={onClick}
+        className={[
+          "btn-primary-goo",
+          "disabled:opacity-40 disabled:pointer-events-none",
+          className,
+        ].join(" ")}
         onPointerMove={(e) => {
+          if (disabled) return;
           const el = ref.current;
           if (!el) return;
           const r = el.getBoundingClientRect();
@@ -60,7 +80,7 @@ export default function StartButton() {
           el.style.setProperty("--y", "50");
         }}
       >
-        Starten
+        {label}
       </button>
     </>
   );
