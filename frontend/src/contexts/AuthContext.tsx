@@ -4,7 +4,7 @@ import type { Dispatch, SetStateAction } from "react";
 type AuthContextType = {
   user: User | null;
   setUser: Dispatch<SetStateAction<User | null>>;
-  // authLoading: boolean;
+  authLoading: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);

@@ -59,17 +59,28 @@
 // ////// Nav icon + open/close  /////////
 import { NavLink, Link } from "react-router";
 import { useState } from "react";
+import { logout } from "../data/auth.ts";
+import { useAuth } from "../contexts/useAuth.tsx";
+import { useNavigate } from "react-router";
 
 const NAV = [
   { to: "/", label: "Home", icon: "/icons/home.svg", end: true },
   { to: "/modules", label: "Module", icon: "/icons/modules.svg" },
   { to: "/quiz", label: "Quiz", icon: "/icons/quiz.svg" },
   { to: "/progress", label: "Fortschritte", icon: "/icons/progress.svg" },
-  { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" },
+  { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" }
 ];
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  // const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+    // navigate("/");
+  };
 
   return (
     <aside
@@ -84,10 +95,7 @@ export default function Sidebar() {
           <div className="relative flex h-24 w-full items-center justify-center">
             {/* Logo – nur sichtbar wenn offen */}
             {!collapsed && (
-              <Link
-                to="/"
-                className="absolute inset-0 flex items-center justify-center"
-              >
+              <Link to="/" className="absolute inset-0 flex items-center justify-center">
                 <img src="/logo.svg" alt="SakuraBloom Logo" className="w-40" />
               </Link>
             )}
@@ -95,13 +103,11 @@ export default function Sidebar() {
             {/* Arrow */}
             <button
               type="button"
-              onClick={() => setCollapsed((v) => !v)}
+              onClick={() => setCollapsed(v => !v)}
               aria-label={collapsed ? "Sidebar öffnen" : "Sidebar schließen"}
               className={` absolute grid h-10 w-10 place-items-center rounded-full bg-white/90 shadow transition-all duration-300 hover:scale-105 active:scale-95 ml-1
         ${
-          collapsed
-            ? "left-1/2 -translate-x-1/2 -bottom-4 "
-            : "right-4 -bottom-4" // Pfeil position
+          collapsed ? "left-1/2 -translate-x-1/2 -bottom-4 " : "right-4 -bottom-4" // Pfeil position
         }
       `}
             >
@@ -117,26 +123,16 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav
-          className={`flex flex-col gap-2 ${
-            collapsed ? "pl-3" : "text-center pl-6 pt-6"
-          }`}
-        >
-          {NAV.map((item) => (
+        <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-6"}`}>
+          {NAV.map(item => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
-              className={({ isActive }) =>
-                `group ${navClass({ isActive, collapsed })}`
-              }
+              className={({ isActive }) => `group ${navClass({ isActive, collapsed })}`}
               title={collapsed ? item.label : undefined}
             >
-              <span
-                className={`flex items-center ${
-                  collapsed ? "justify-center" : "gap-3 pl-4"
-                }`}
-              >
+              <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3 pl-4"}`}>
                 {/* Icon */}
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md ">
                   <img
@@ -157,9 +153,7 @@ export default function Sidebar() {
 
         {/* Auth */}
         <div
-          className={`flex flex-col gap-2 text-sm ${
-            collapsed ? "items-center" : "items-center"
-          }`}
+          className={`flex flex-col gap-2 text-sm ${collapsed ? "items-center" : "items-center"}`}
         >
           {/* sign up */}
           <NavLink
@@ -167,11 +161,7 @@ export default function Sidebar() {
             className="text-(--color-primary)  transition group"
             title={collapsed ? "Signup" : undefined}
           >
-            <span
-              className={`flex items-center ${
-                collapsed ? "justify-center" : "gap-3"
-              }`}
-            >
+            <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
               <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
                 <img
                   src="/icons/signup.png"
@@ -180,9 +170,7 @@ export default function Sidebar() {
                 />
               </span>
               {/* Label */}
-              {!collapsed && (
-                <span className="font-semibold w-20 text-left">Sign up</span>
-              )}
+              {!collapsed && <span className="font-semibold w-20 text-left">Sign up</span>}
             </span>
           </NavLink>
 
@@ -192,11 +180,7 @@ export default function Sidebar() {
             title={collapsed ? "Login" : undefined}
             className="group text-(--color-primary) transition "
           >
-            <span
-              className={`flex items-center ${
-                collapsed ? "justify-center" : "gap-3"
-              }`}
-            >
+            <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
               {/* Icon Bubble */}
               <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
                 <img
@@ -206,9 +190,7 @@ export default function Sidebar() {
                 />
               </span>
               {/* Label */}
-              {!collapsed && (
-                <span className="font-semibold w-20 text-left">Login</span>
-              )}
+              {!collapsed && <span className="font-semibold w-20 text-left">Login</span>}
             </span>
           </NavLink>
         </div>
@@ -217,13 +199,7 @@ export default function Sidebar() {
   );
 }
 
-function navClass({
-  isActive,
-  collapsed,
-}: {
-  isActive: boolean;
-  collapsed: boolean;
-}) {
+function navClass({ isActive, collapsed }: { isActive: boolean; collapsed: boolean }) {
   return `
      py-2 text-sm font-semibold transition 
     ${collapsed ? "px-1" : "px-0"}

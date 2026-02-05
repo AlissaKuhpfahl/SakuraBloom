@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { login, getMe } from "../data/auth.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
+import { useNavigate } from "react-router";
 
 type LoginFormState = {
   email: string;
@@ -12,57 +13,48 @@ const buttonClass =
   "px-0 py-2 text-sm text-white font-semibold bg-(--color-primary) \
    w-75 self-center hover:text-black rounded-l-full rounded-r-full";
 
-const inputClass =
-  "rounded-full grow text-center text-black font-semibold bg-(--color-primary)";
+const inputClass = "rounded-full grow text-center text-black font-semibold bg-(--color-primary)";
 
 export function Login() {
   const { setUser } = useAuth();
+  const navigate = useNavigate();
   const [{ email, password }, setForm] = useState<LoginFormState>({
     email: "",
-    password: "",
+    password: ""
   });
   const [loading, setLoading] = useState(false);
+  const [noteSignin, setNoteSignin] = useState<null | string>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       console.log(email, password);
       if (!email || !password) throw new Error("All fields are required");
       setLoading(true);
 
-      // TODO: Add login logic
       const resData = await login({ email, password });
       console.log(resData);
+
       const { user } = await getMe();
       setUser(user);
-      // toast.success(
-      //   resData ? resData.message : "Login attempted (not implemented)",
-      // );
+      navigate("/");
     } catch (error: unknown) {
       console.log(error);
-      // const message = (error as { message: string }).message;
-      // toast.error(message);
+      const message = (error as { message: string }).message;
+      setNoteSignin(message);
     } finally {
       setLoading(false);
     }
-    // const meData = await authMe();
-    // console.log("meData:", meData);
   };
 
   return (
     <>
       <h1 className="text-2xl font-bold">Anmeldung</h1>
-      <form
-        className="my-5 md:w-1/2 mx-auto flex flex-col gap-3"
-        onSubmit={handleSubmit}
-      >
-        <label
-          className="flex items-center gap-2 font-semibold"
-          htmlFor="login-input-email"
-        >
+      <form className="my-5 md:w-1/2 mx-auto flex flex-col gap-3" onSubmit={handleSubmit}>
+        <label className="flex items-center gap-2 font-semibold" htmlFor="login-input-email">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -83,10 +75,7 @@ export function Login() {
           />
         </label>
 
-        <label
-          className="flex items-center gap-2"
-          htmlFor="login-input-password"
-        >
+        <label className="flex items-center gap-2" htmlFor="login-input-password">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -119,9 +108,7 @@ export function Login() {
         <button className={buttonClass} disabled={loading}>
           Anmelden
         </button>
-        <p className="text-center font-extrabold ">
-          Hinweis: Falsches Passwort
-        </p>
+        <p className="text-center font-extrabold ">{noteSignin ? noteSignin : ""}</p>
       </form>
     </>
   );

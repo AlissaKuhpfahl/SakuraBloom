@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
+import { getMe, register } from "../data/auth.ts";
+import { useAuth } from "../contexts/useAuth.tsx";
 
 type RegisterFormState = {
   firstName: string;
@@ -14,31 +16,58 @@ const buttonClass =
   "px-0 py-2 text-sm text-white font-semibold bg-(--color-primary) \
   w-75 self-center hover:text-black rounded-l-full rounded-r-full";
 
-const inputClass =
-  "rounded-full grow text-black text-center font-semibold bg-(--color-primary)";
+const inputClass = "rounded-full grow text-black text-center font-semibold bg-(--color-primary)";
 
 export function SignUp() {
+  /* */
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [{ firstName, lastName, email, password, confirmPassword }, setForm] =
     useState<RegisterFormState>({
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      confirmPassword: ""
     });
 
   const [loading, setLoading] = useState(false);
+  const [noteSignup, setNoteSignup] = useState<null | string>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      if (!firstName || !lastName || !email || !password || !confirmPassword)
+        throw new Error("All fields are required");
+      if (password !== confirmPassword) throw new Error("Passwords do not match");
+      setLoading(true);
+      console.log(firstName, lastName, email, password, confirmPassword);
+      await register({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword
+      });
+      const { user } = await getMe();
+      setUser(user);
+      navigate("/");
+    } catch (error: unknown) {
+      console.log(error);
+      const message = (error as { message: string }).message;
+      setNoteSignup(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <h1 className="text-2xl font-bold">Registrieren</h1>
-      <form
-        className="my-5 md:w-1/2 mx-auto flex flex-col gap-3"
-        // onSubmit={handleSubmit}
-      >
+      <form className="my-5 md:w-1/2 mx-auto flex flex-col gap-3" onSubmit={handleSubmit}>
         <div className="flex justify-between gap-2">
           <label className="grow flex items-center gap-2 font-semibold">
             <svg
@@ -153,9 +182,7 @@ export function SignUp() {
         >
           Erstelle Account
         </button>
-        <p className="text-center font-extrabold ">
-          Benutzer mit dieser E-Mail exisitiert schon!
-        </p>
+        <p className="text-center font-extrabold ">{noteSignup ? noteSignup : ""}</p>
       </form>
     </>
   );
