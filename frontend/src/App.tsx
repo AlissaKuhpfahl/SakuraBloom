@@ -10,6 +10,7 @@ import Progress from "./pages/Progress.tsx";
 import Lessons from "./pages/Lessons";
 import { Login } from "./pages/Login.tsx";
 import { SignUp } from "./pages/Signup.tsx";
+
 //import NotFound from "./pages/NotFound";
 
 function App() {

@@ -64,62 +64,8 @@ h2 {
 h3 {
   font-family: "Bubblegum Sans", sans-serif;
 }
-/*--------- Buttons 1 ----------*/
-/* Nintendo-Style Game Button */
-.button-primary {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/*--------- Buttons primary ----------*/
 
-  padding: 0.9rem 2.2rem;
-  border-radius: 9999px;
-
-  background: var(--color-primary);
-  color: #fff;
-
-  font-size: 1rem;
-  font-weight: 800;
-
-  border: none;
-  cursor: pointer;
-  user-select: none;
-
-  /* 👇 Game-Feeling: klarer, dicker Schatten */
-  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25),
-    inset 0 2px 0 rgba(255, 255, 255, 0.6);
-
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-
-/* Hover = leicht hoch, fühlt sich klickbar an */
-.button-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25),
-    inset 0 2px 0 rgba(255, 255, 255, 0.7);
-}
-
-/* Active = gedrückt (WICHTIG für Game UI) */
-.button-primary:active {
-  transform: translateY(4px);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 3px 6px rgba(0, 0, 0, 0.25);
-}
-
-/* Glanzstreifen oben (Nintendo-typisch) */
-.button-primary::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.35);
-  pointer-events: none;
-}
-
-/*     TEST BTN      */
-/* Hover-Intensität als Zahl 0..1 (einfach) */
 @property --a {
   syntax: "<number>";
   initial-value: 0;
@@ -167,7 +113,7 @@ h3 {
       var(--color-primary),
       var(--color-primary)
     ),
-    /* Gooey Highlight kommt NUR über --a */
+    /* Highlight kommt NUR über --a */
       radial-gradient(
         40% 70% at calc(var(--x) * 1%) calc(var(--y) * 1%),
         rgba(240, 145, 172, var(--a)) 0%,

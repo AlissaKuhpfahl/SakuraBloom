@@ -60,7 +60,7 @@ export default function Header() {
           Hallo
         </p>
 
-        {/* Pfeil rechts: immer sichtbar */}
+        {/* Pfeil rechts*/}
         <div
           className="
             absolute right-1 top-1/2 -translate-y-1/2
