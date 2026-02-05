@@ -95,7 +95,7 @@ export default function Sidebar() {
           <div className="relative flex h-24 w-full items-center justify-center">
             {/* Logo – nur sichtbar wenn offen */}
             {!collapsed && (
-              <Link to="/" className="absolute inset-0 flex items-center justify-center">
+              <Link to="/" className="absolute inset-0 flex items-center justify-center mt-6">
                 <img src="/logo.svg" alt="SakuraBloom Logo" className="w-40" />
               </Link>
             )}
@@ -123,7 +123,7 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-6"}`}>
+        <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-8"}`}>
           {NAV.map(item => (
             <NavLink
               key={item.to}
