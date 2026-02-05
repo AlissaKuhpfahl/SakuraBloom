@@ -5,65 +5,59 @@
 // kontakt & feedback
 
 import PrimaryButton from "../components/Btn";
+import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function Home() {
-  // const progressLevel = 1; // später aus DB / State
-  // const progressSrc = `/sakura-${progressLevel}.svg`;
   const progressLevel = 2; // 1–5
   const total = 5;
 
+  const navigate = useNavigate();
+  // Fortschritte für Module
+
+  const [progress, setProgress] = useState({
+    online: 0,
+    privacy: 0,
+    chats: 0,
+    fake: 0,
+  });
+
+  // 2) Einmal beim Laden holen
+  useEffect(() => {
+    fetch("/api/progress") // <-- dein Backend Endpoint
+      .then((r) => r.json())
+      .then((data) => setProgress(data))
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="space-y-10 pt-6">
-      {/* Hero / Intro */}
-      {/* <div className="rounded-3xl bg-white p-8 shadow-sm">
-        <h1 className=" font-bold">Sicher wachsen im Internet</h1>
-
-        <p className="mt-3 max-w-md text-sm ">
-          Lerne spielerisch, wie du sicher im Internet unterwegs bist.
-        </p>
-
-        <button
-          className="button-primary mt-4
-          "
-        >
-          Starten
-        </button> */}
-
-      {/* Fortschritt */}
-      {/* <div className="mt-6 flex items-center gap-2 text-sm ">
-          <span>Deine Fortschritt:</span>
-          <span>.... </span>
-        </div>
-      </div> */}
-
       {/* Hero */}
-      <div className="relative rounded-3xl bg-white p-8 shadow-sm overflow-visible mt-10 mb-20">
+      <div className="home-hero relative rounded-3xl bg-white p-8 shadow-sm overflow-visible mt-10 mb-20">
         {/* Bild absolut positioniert */}
         <img
           src="/hero-2.svg"
           alt="Sichere digitale Welt"
-          className="
-      absolute right-10 top-1/2 -translate-y-1/2
-      h-110 w-auto
-      drop-shadow-md
-    "
+          className=" absolute right-10 top-1/2 -translate-y-1/2  h-110 w-auto drop-shadow-md home-hero-art"
         />
 
         {/* Inhalt links — Platz lassen fürs Bild */}
-        <div className="max-w-md pr-40">
-          <h1 className="text-3xl font-bold">Sicher wachsen im Internet</h1>
-          <p className="mt-3 text-sm">
+        <div className="max-w-5xl pr-40">
+          <h1 className="home-hero-title text-3xl font-bold">
+            Sicher <br></br>
+            <span className="inline-block text-6xl text-(--color-primary) pr-2 ">
+              wachsen
+            </span>
+            im Internet
+          </h1>
+          <p className="mt-3 text-md">
             Lerne spielerisch, wie du sicher im Internet unterwegs bist.
           </p>
-          <button className="button-primary mt-5">Starten</button>
-          {/* <button className="button-52 mt-5" role="button">
-            test
-          </button> */}
-          <PrimaryButton />
 
           {/* Fortschritte */}
           <div className="mt-6 flex items-center gap-3 text-sm">
-            <span>Dein Fortschritt:</span>
+            <span className="min-w-28">Dein Fortschritt:</span>
 
             <div className="flex items-center gap-2">
               {Array.from({ length: total }).map((_, i) => {
@@ -83,67 +77,130 @@ export default function Home() {
               })}
             </div>
           </div>
-          {/* <div className="mt-6 flex items-center gap-3 text-sm">
-            <span>Dein Fortschritt:</span>
-            <img
-              src={progressSrc}
-              alt={`Fortschritt ${progressLevel} von 5`}
-              className="h-7 w-auto"
-            />
-          </div> */}
+          <PrimaryButton label="Los geht!" className="mt-2" />
         </div>
       </div>
-
-      {/* Sakura Petals */}
-      {/* <span className="absolute bottom-6 right-24 opacity-20">🌸</span>
-        <span className="absolute top-8 right-8 opacity-10">🌸</span> */}
 
       {/* Module */}
       <div className="rounded-3xl bg-white p-8 shadow-sm  ">
         <h2 className="mb-4 text-2xl font-bold ">Module</h2>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="module-headline rounded-2xl bg-(--color-blue) p-6 font-semibold flex items-center justify-between ">
-            Online Sicherheit
-            <img src="/elephant.svg" alt="" className="w-36 drop-shadow-sm" />
-          </div>
-
-          <div className=" module-headline  rounded-2xl bg-(--color-light-yellow) p-6 font-semibold flex items-center justify-between ">
-            Privatsphäre
-            <img src="/hase.svg" alt="" className="w-36 drop-shadow-sm" />
-          </div>
-
-          <div className="module-headline  rounded-2xl bg-(--color-peach) p-6 font-semibold flex items-center justify-between ">
-            Chats & Verhalten
-            <img src="/animal.svg" alt="" className="w-36 drop-shadow-sm" />
-          </div>
-
-          <div className="module-headline  rounded-2xl bg-(--color-green) p-6 font-semibold flex items-center justify-between ">
-            Fake erkennen
-            <img src="/duck.svg" alt="" className="w-36 drop-shadow-sm" />
-          </div>
+          {/* Erste Module */}
+          <Link
+            to="/module/online-sicherheit"
+            data-badge={`${progress.online}/${total}`}
+            className="module-headline module-card rounded-2xl bg-(--color-blue) p-6 font-semibold flex items-center justify-between"
+          >
+            <span>Online Sicherheit</span>
+            <img
+              src="/elephant.svg"
+              alt=""
+              className="w-36 drop-shadow-sm module-card-art"
+            />
+          </Link>
+          {/* Zweite Module */}
+          <Link
+            to="/module/Privatsphäre"
+            data-badge={`${progress.privacy}/${total}`}
+            className=" module-headline  rounded-2xl bg-(--color-light-yellow) p-6 font-semibold flex items-center justify-between home-module"
+          >
+            <span> Privatsphäre</span>
+            <img
+              src="/hase.svg"
+              alt=""
+              className="w-36 drop-shadow-sm module-illustration"
+            />
+          </Link>
+          {/* Dritte Module */}
+          <Link
+            to="/module/Privatsphäre"
+            data-badge={`${progress.chats}/${total}`}
+            className="module-headline  rounded-2xl bg-(--color-peach) p-6 font-semibold flex items-center justify-between home-module"
+          >
+            <span> Chats & Verhalten</span>
+            <img
+              src="/animal.svg"
+              alt=""
+              className="w-36 drop-shadow-sm module-illustration"
+            />
+          </Link>
+          {/* Vierte Module */}
+          <Link
+            to="/module/Privatsphäre"
+            data-badge={`${progress.fake}/${total}`}
+            className="module-headline  rounded-2xl bg-(--color-green) p-6 font-semibold flex items-center justify-between home-module"
+          >
+            <span> Fake erkennen</span>
+            <img
+              src="/duck.svg"
+              alt=""
+              className="w-36 drop-shadow-sm module-illustration"
+            />
+          </Link>
         </div>
       </div>
 
       {/* Quiz Teaser */}
-      <div className="rounded-3xl bg-white p-8 shadow-sm">
+      <div className="quiz-teaser rounded-3xl p-8">
         <div className="flex items-center justify-between gap-6">
-          {/* Left: Text + Button */}
+          {/* Left */}
           <div>
-            <h2 className="text-xl font-bold">Quiz</h2>
+            <h2 className="quiz-title text-2xl font-extrabold">Quiz </h2>
 
-            <p className="mt-2 text-sm text-(--color-dark-gray)">
-              Teste dein Wissen spielerisch.
+            <p className="mt-2 text-md text-(--color-dark-gray)">
+              Finde heraus, wie gut du dich im Internet auskennst!
             </p>
 
-            <button className="button-74 mt-4">Quiz starten</button>
+            <PrimaryButton
+              className="mt-2"
+              label="Quiz starten"
+              onClick={() => navigate("/quiz")}
+            />
           </div>
 
-          {/* Right: Image */}
+          {/* Right */}
           <img
             src="/quiz-home.svg"
             alt="Quiz Illustration"
-            className="h-34 w-auto drop-shadow-sm transition-transform hover:scale-105"
+            className="quiz-illustration h-36 w-auto"
+          />
+        </div>
+      </div>
+
+      {/* Sicherheits-Tipp Card */}
+      <div className="flex justify-center">
+        <div className="tip-card-wrapper w-4/12 ">
+          <div className="tip-card h-52">
+            {/* Front */}
+            <div className="tip-face tip-front">
+              <img src="/tips.svg" alt="" className="h-16 w-16" />
+              <h2 className="text-sm font-bold text-center">Bonus-Tipp</h2>
+            </div>
+
+            {/* Back */}
+            <div className="tip-face tip-back">
+              <p className="text-md text-center ">
+                Teile dein Passwort niemals – auch nicht mit Freundinnen oder
+                Freunden.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Kontakt & Feedback */}
+      <div className="rounded-3xl bg-white p-8">
+        <h3 className="text-lg font-bold">Deine Meinung zählt!</h3>
+
+        <p className="mt-2 text-sm ">
+          Hast du eine Frage, ein Problem oder eine Idee für uns?
+        </p>
+
+        <div className="mt-4 flex gap-3">
+          <PrimaryButton
+            label="Kontakt & Feedback"
+            onClick={() => navigate("/feedback")}
           />
         </div>
       </div>

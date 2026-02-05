@@ -85,7 +85,7 @@ function LottieGraduation({ onDone }: { onDone: () => void }) {
       renderer: "svg",
       loop: false,
       autoplay: true,
-      path: "/animations/completed.json", // <-- deine Datei in public
+      path: "/animations/completed.json",
     });
 
     const finish = () => onDone();

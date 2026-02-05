@@ -43,7 +43,7 @@ body {
   color: var(--color-dark-gray);
 }
 /*--------- HEADLINES ----------*/
-h1,
+
 h2 {
   font-family: "Bubblegum Sans", sans-serif;
   color: var(--color-primary);
@@ -56,23 +56,14 @@ h2 {
 }
 h1 {
   font-size: 3rem;
+  font-family: "Bubblegum Sans", sans-serif;
 }
 h2 {
   font-size: 2rem;
 }
-
-/*--------- HOME ----------*/
-/* fortschritte */
-.sakura-active {
-  filter: none;
-  opacity: 1;
+h3 {
+  font-family: "Bubblegum Sans", sans-serif;
 }
-
-.sakura-inactive {
-  filter: grayscale(100%) brightness(2.2) contrast(0.8);
-  opacity: 2;
-}
-
 /*--------- Buttons 1 ----------*/
 /* Nintendo-Style Game Button */
 .button-primary {
@@ -135,8 +126,8 @@ h2 {
   inherits: true;
 }
 
-.btn-primary-goo {
-  --a: 0;
+.btn-primary {
+  --a: ;
   --x: 50;
   --y: 50;
 
@@ -157,12 +148,12 @@ h2 {
   transition: transform 0.2s ease, --a 0.35s ease;
 }
 
-.btn-primary-goo:hover {
+.btn-primary:hover {
   --a: 1; /*  HIER passiert der Hover */
   transform: scale(1.02);
 }
 
-.btn-primary-goo::before {
+.btn-primary::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -171,8 +162,7 @@ h2 {
 
   filter: blur(12px) url(#goo);
 
-  background-image:
-    /* Base bleibt immer gleich */ linear-gradient(
+  background-image: linear-gradient(
       0deg,
       var(--color-primary),
       var(--color-primary)
@@ -185,5 +175,5 @@ h2 {
       );
 
   background-clip: content-box, border-box;
-  padding: 10px;
+  padding: 10px 0px 10px 0px;
 }

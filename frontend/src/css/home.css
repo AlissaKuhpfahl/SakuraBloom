@@ -1,0 +1,232 @@
+/*--------- HOME ----------*/
+
+/*  Hero  */
+
+/* Headline */
+.home-hero-title {
+  animation: titlePop 900ms cubic-bezier(0.2, 1.2, 0.2, 1) 1;
+}
+
+@keyframes titlePop {
+  0% {
+    transform: translateY(8px) scale(0.98);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Hero bild */
+.home-hero-art {
+  animation: floaty 3.2s ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.home-hero:hover .home-hero-art {
+  transform: translateY(-50%) translateY(-10px) scale(1.01);
+}
+
+/* fortschritte */
+.sakura-active {
+  filter: none;
+  opacity: 1;
+}
+
+.sakura-inactive {
+  filter: grayscale(100%) brightness(2.2) contrast(0.8);
+  opacity: 2;
+}
+
+/* Module Card */
+/* Basis für alle Module */
+.home-module,
+.module-card {
+  position: relative;
+  overflow: hidden;
+
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.3s ease;
+}
+
+/* sanftes Schweben */
+.home-module:hover,
+.module-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  filter: saturate(1.05);
+}
+
+/* Illustration lebt stärker als Karte */
+.module-illustration,
+.module-card-art {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+}
+
+/* Hover-Effekt auf Tier */
+.home-module:hover .module-illustration,
+.module-card:hover .module-card-art {
+  transform: scale(1.25) translateX(12px);
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.12));
+}
+
+/* dezenter Licht-Glanz  */
+.home-module::after,
+.module-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.home-module:hover::after,
+.module-card:hover::after {
+  opacity: 1;
+}
+
+/* Progress Badge */
+.home-module::before,
+.module-card::before {
+  content: attr(data-badge);
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  padding: 0.45rem 0.7rem;
+  border-radius: 9999px;
+
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+
+  transform: translateY(0);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0.95;
+  pointer-events: none;
+}
+.home-module:hover::before,
+.module-card:hover::before {
+  transform: translateY(-2px);
+}
+
+/* QUIZ  */
+.quiz-teaser {
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    var(--color-light-yellow),
+    var(--color-secondary)
+  );
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.3s ease;
+}
+
+.quiz-teaser:hover {
+  transform: translateY(-6px) scale(1.02);
+  filter: saturate(1.05);
+}
+
+/* Illustration  */
+.quiz-illustration {
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.quiz-teaser:hover .quiz-illustration {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+/* sanfter Glanz */
+.quiz-teaser::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  background: radial-gradient(
+    circle at top right,
+    rgba(255, 255, 255, 0.5),
+    transparent 60%
+  );
+}
+
+.quiz-teaser:hover::after {
+  opacity: 1;
+}
+
+/*   TIPPS   */
+/* Wrapper */
+.tip-card-wrapper {
+  perspective: 1000px;
+}
+
+/* Card */
+.tip-card {
+  position: relative;
+  width: 100%;
+  height: 13rem;
+  cursor: pointer;
+
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease-in-out;
+}
+
+/* sanfter Flip */
+.tip-card-wrapper:hover .tip-card {
+  transform: rotateY(180deg);
+}
+
+/* Beide Seiten */
+.tip-face {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  background: #fff;
+
+  backface-visibility: hidden;
+
+  /* weicher Premium-Shadow */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* Front */
+.tip-front img {
+  transition: transform 0.3s ease;
+}
+
+/* kleines Leben */
+.tip-card-wrapper:hover .tip-front img {
+  transform: scale(1.08);
+}
+
+/* Back */
+.tip-back {
+  transform: rotateY(180deg);
+}

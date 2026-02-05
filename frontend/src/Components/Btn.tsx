@@ -36,7 +36,7 @@ type PrimaryButtonProps = {
   className?: string;
 };
 
-/*  Primary Button (Gooey) */
+/*  Primary Button */
 export default function PrimaryButton({
   label = "Starten",
   onClick,
@@ -55,7 +55,7 @@ export default function PrimaryButton({
         disabled={disabled}
         onClick={onClick}
         className={[
-          "btn-primary-goo",
+          "btn-primary",
           "disabled:opacity-40 disabled:pointer-events-none",
           className,
         ].join(" ")}
