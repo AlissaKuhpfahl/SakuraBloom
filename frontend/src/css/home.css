@@ -1,7 +1,5 @@
 /*--------- HOME ----------*/
 
-/*  Hero  */
-
 /* Headline */
 .home-hero-title {
   animation: titlePop 900ms cubic-bezier(0.2, 1.2, 0.2, 1) 1;
@@ -96,7 +94,7 @@
   opacity: 1;
 }
 
-/* Progress Badge */
+/* ------ Progress Badge ------- */
 .home-module::before,
 .module-card::before {
   content: attr(data-badge);
@@ -124,7 +122,7 @@
   transform: translateY(-2px);
 }
 
-/* QUIZ  */
+/* ------- QUIZ ----------  */
 .quiz-teaser {
   position: relative;
   overflow: hidden;
@@ -173,7 +171,7 @@
   opacity: 1;
 }
 
-/*   TIPPS   */
+/*  --------  TIPPS  ------ */
 /* Wrapper */
 .tip-card-wrapper {
   perspective: 1000px;

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-/* 🔹 SVG Filter wird nur EINMAL ins DOM eingefügt */
+/* SVG Filter wird nur EINMAL ins DOM eingefügt */
 function GooeyFilterOnce() {
   useEffect(() => {
     if (document.getElementById("gooey-filter")) return;

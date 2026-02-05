@@ -1,8 +1,4 @@
 // hallo (user) fehlt noch
-// grafiken bei module raus die Karte
-// btn klickbar machen
-// Quiz card anpassen
-// kontakt & feedback
 
 import PrimaryButton from "../components/Btn";
 import { Link } from "react-router";
@@ -25,7 +21,7 @@ export default function Home() {
 
   // 2) Einmal beim Laden holen
   useEffect(() => {
-    fetch("/api/progress") // <-- dein Backend Endpoint
+    fetch("/api/progress")
       .then((r) => r.json())
       .then((data) => setProgress(data))
       .catch(() => {});
@@ -35,14 +31,14 @@ export default function Home() {
     <section className="space-y-10 pt-6">
       {/* Hero */}
       <div className="home-hero relative rounded-3xl bg-white p-8 shadow-sm overflow-visible mt-10 mb-20">
-        {/* Bild absolut positioniert */}
+        {/* Bild */}
         <img
           src="/hero-2.svg"
           alt="Sichere digitale Welt"
           className=" absolute right-10 top-1/2 -translate-y-1/2  h-110 w-auto drop-shadow-md home-hero-art"
         />
 
-        {/* Inhalt links — Platz lassen fürs Bild */}
+        {/* Inhalt links  */}
         <div className="max-w-5xl pr-40">
           <h1 className="home-hero-title text-3xl font-bold">
             Sicher <br></br>
