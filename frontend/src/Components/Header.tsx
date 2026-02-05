@@ -33,7 +33,7 @@ export default function Header() {
           lottieRef.current?.stop?.();
           lottieRef.current?.goToAndStop?.(0, true);
         }}
-        aria-label="Für Kleine"
+        aria-label="Hallo!"
       >
         {/* Kreis links */}
         <div className="absolute left-2 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full  grid place-items-center">
@@ -57,7 +57,7 @@ export default function Header() {
             transition-all duration-150
           "
         >
-          Für Kleine
+          Hallo
         </p>
 
         {/* Pfeil rechts: immer sichtbar */}
