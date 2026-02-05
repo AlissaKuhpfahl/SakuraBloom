@@ -4,7 +4,7 @@
 // Quiz card anpassen
 // kontakt & feedback
 
-import StartButton from "../components/Btn";
+import PrimaryButton from "../components/Btn";
 
 export default function Home() {
   // const progressLevel = 1; // später aus DB / State
@@ -59,7 +59,7 @@ export default function Home() {
           {/* <button className="button-52 mt-5" role="button">
             test
           </button> */}
-          <StartButton />
+          <PrimaryButton />
 
           {/* Fortschritte */}
           <div className="mt-6 flex items-center gap-3 text-sm">
