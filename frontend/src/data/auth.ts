@@ -1,106 +1,78 @@
-// import { authServiceURL } from "@/utils";
-export async function register(
-  body: User & { password: string; confirmPassword: string },
-) {
+import { backendServiceURL as authServiceURL } from "../utils/index.ts";
+export async function register(body: User & { password: string; confirmPassword: string }) {
   const { firstName, lastName, email, password, confirmPassword } = body;
 
-  const res = await fetch(`${authServiceURL}/register`, {
+  const response = await fetch(`${authServiceURL}/auth/register`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       firstName,
       lastName,
       email,
       password,
-      confirmPassword,
+      confirmPassword
     }),
-    credentials: "include",
+    credentials: "include"
   });
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    if (!errorData.error) {
-      throw new Error(errorData.message);
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    if (!errorData.message) {
+      throw new Error("An error occurred while creating new user");
     }
-    throw new Error(errorData.error);
+    throw new Error(errorData.message);
   }
-  return res.json();
+  const data = await response.json();
+  return data;
 }
 
 export async function login(body: { email: string; password: string }) {
   const { email, password } = body;
 
-  const res = await fetch(`${authServiceURL}/login`, {
+  const response = await fetch(`${authServiceURL}/auth/login`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       email,
-      password,
+      password
     }),
-    credentials: "include",
+    credentials: "include"
   });
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    if (!errorData.error) {
-      throw new Error(errorData.message);
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    if (!errorData.message) {
+      throw new Error("An error occurred while login");
     }
-    throw new Error(errorData.error);
+    throw new Error(errorData.message);
   }
-  return res.json();
+  const data = await response.json();
+  return data;
 }
 
 export async function getMe() {
-  const userRes = await fetch(`${authServiceURL}/me`);
+  const userRes = await fetch(`${authServiceURL}/auth/me`);
   if (!userRes.ok) throw new Error("Get user data failed");
   return userRes.json();
 }
 
 export async function refresh() {
-  const res = await fetch(`${authServiceURL}/refresh`, {
-    method: "POST",
+  const res = await fetch(`${authServiceURL}/auth/refresh`, {
+    method: "POST"
   });
 
   if (!res.ok) return;
 }
 
 export async function logout() {
-  const res = await fetch(`${authServiceURL}/logout`, { method: "DELETE" });
+  const res = await fetch(`${authServiceURL}/auth/logout`, {
+    method: "DELETE"
+  });
   if (!res.ok) throw new Error("Logout failed");
-}
-
-export async function loginDummy(body: { email: string; password: string }) {
-  const { password } = body;
-
-  const dummySecret = "sakurabloom";
-
-  // const res = await fetch(`${authServiceURL}/login`, {
-  // 	method: 'POST',
-  // 	headers: {
-  // 		'Content-Type': 'application/json',
-  // 	},
-  // 	body: JSON.stringify({
-  // 		email,
-  // 		password,
-  // 	}),
-  // 	credentials: 'include',
-  // });
-
-  // if (!res.ok) {
-  // 	const errorData = await res.json();
-  // 	if (!errorData.error) {
-  // 		throw new Error(errorData.message);
-  // 	}
-  // 	throw new Error(errorData.error);
-  // }
-  // return res.json();
-
-  if (password !== dummySecret) {
-    throw new Error("Falsches Passwort", { cause: "Wrong password" });
-  }
-  return { message: "Erfogreich" };
 }
