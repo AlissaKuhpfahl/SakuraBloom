@@ -5,6 +5,7 @@ import { authRouter, profilesRouter } from "#routes";
 import { errorHandler } from "#middlewares";
 import { CLIENT_BASE_URL } from "#config";
 import { initDb } from "./db/index.ts";
+import "dotenv/config";
 
 const app = express();
 const port = process.env.PORT || "3000";
