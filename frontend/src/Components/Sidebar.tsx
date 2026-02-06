@@ -59,6 +59,7 @@
 // ////// Nav icon + open/close  /////////
 import { NavLink, Link } from "react-router";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { logout } from "../data/auth.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
 
@@ -72,12 +73,14 @@ const NAV = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   // const navigate = useNavigate();
   const { setUser, user } = useAuth();
 
   const handleLogout = async () => {
     await logout();
     setUser(null);
+    setShowConfirm(false);
   };
 
   return (
@@ -200,7 +203,10 @@ export default function Sidebar() {
             <NavLink
               to="/"
               title={collapsed ? "Logout" : undefined}
-              onClick={handleLogout}
+              onClick={e => {
+                e.preventDefault();
+                setShowConfirm(true);
+              }}
               className="group text-(--color-primary) transition "
             >
               <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
@@ -216,6 +222,38 @@ export default function Sidebar() {
                 {!collapsed && <span className="font-semibold w-20 text-left">Logout</span>}
               </span>
             </NavLink>
+            {showConfirm &&
+              typeof document !== "undefined" &&
+              createPortal(
+                <div
+                  style={{ position: "fixed", inset: 0, zIndex: 2147483647 }}
+                  className="flex items-center justify-center"
+                >
+                  <div
+                    className="absolute inset-0 bg-black/50"
+                    onClick={() => setShowConfirm(false)}
+                  />
+                  <div className="z-10 w-11/12 max-w-md rounded-lg bg-white p-6 shadow-lg">
+                    <h3 className="mb-4 text-lg font-semibold">Ausloggen?</h3>
+                    <p className="mb-6">Willst du dich wirklich ausloggen?</p>
+                    <div className="flex justify-end gap-3">
+                      <button
+                        className="rounded px-4 py-2 text-sm"
+                        onClick={() => setShowConfirm(false)}
+                      >
+                        Abbrechen
+                      </button>
+                      <button
+                        className="rounded bg-(--color-primary) px-4 py-2 text-sm text-white"
+                        onClick={handleLogout}
+                      >
+                        Ausloggen
+                      </button>
+                    </div>
+                  </div>
+                </div>,
+                document.body
+              )}
           </div>
         )}
       </div>
