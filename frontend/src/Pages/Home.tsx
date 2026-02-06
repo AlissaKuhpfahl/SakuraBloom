@@ -16,15 +16,48 @@ export default function Home() {
     online: 0,
     privacy: 0,
     chats: 0,
-    fake: 0,
+    fake: 0
   });
 
   // 2) Einmal beim Laden holen
+  // useEffect(() => {
+  //   fetch("/api/progress")
+  //     .then((r) => r.json())
+  //     .then((data) => setProgress(data))
+  //     .catch(() => {});
+  // }, []);
   useEffect(() => {
-    fetch("/api/progress")
-      .then((r) => r.json())
-      .then((data) => setProgress(data))
-      .catch(() => {});
+    (async () => {
+      try {
+        // 1) Profile holen (Cookie Auth!)
+        const profilesRes = await fetch("/profiles", { credentials: "include" });
+        if (!profilesRes.ok) return;
+
+        const profiles = await profilesRes.json();
+        if (!profiles?.length) return;
+
+        // 2) Erstes Profil wählen (später: aktive Auswahl)
+        const profileId = profiles[0].id;
+
+        // 3) Progress holen
+        const progressRes = await fetch(`/profiles/progress/${profileId}`, {
+          credentials: "include"
+        });
+        if (!progressRes.ok) return;
+
+        const data = await progressRes.json();
+
+        // data.progress ist ein Array
+        setProgress({
+          online: data.progress?.length ?? 0,
+          privacy: 0,
+          chats: 0,
+          fake: 0
+        });
+      } catch (error) {
+        console.log("Progress konnte nicht geladen werden");
+      }
+    })();
   }, []);
 
   return (
@@ -42,9 +75,7 @@ export default function Home() {
         <div className="max-w-5xl pr-40">
           <h1 className="home-hero-title text-3xl font-bold">
             Sicher <br></br>
-            <span className="inline-block text-6xl text-(--color-primary) pr-2 ">
-              wachsen
-            </span>
+            <span className="inline-block text-6xl text-(--color-primary) pr-2 ">wachsen</span>
             im Internet
           </h1>
           <p className="mt-3 text-md">
@@ -89,11 +120,7 @@ export default function Home() {
             className="module-headline module-card rounded-2xl bg-(--color-blue) p-6 font-semibold flex items-center justify-between"
           >
             <span>Online Sicherheit</span>
-            <img
-              src="/elephant.svg"
-              alt=""
-              className="w-36 drop-shadow-sm module-card-art"
-            />
+            <img src="/elephant.svg" alt="" className="w-36 drop-shadow-sm module-card-art" />
           </Link>
           {/* Zweite Module */}
           <Link
@@ -102,11 +129,7 @@ export default function Home() {
             className=" module-headline  rounded-2xl bg-(--color-light-yellow) p-6 font-semibold flex items-center justify-between home-module"
           >
             <span> Privatsphäre</span>
-            <img
-              src="/hase.svg"
-              alt=""
-              className="w-36 drop-shadow-sm module-illustration"
-            />
+            <img src="/hase.svg" alt="" className="w-36 drop-shadow-sm module-illustration" />
           </Link>
           {/* Dritte Module */}
           <Link
@@ -115,11 +138,7 @@ export default function Home() {
             className="module-headline  rounded-2xl bg-(--color-peach) p-6 font-semibold flex items-center justify-between home-module"
           >
             <span> Chats & Verhalten</span>
-            <img
-              src="/animal.svg"
-              alt=""
-              className="w-36 drop-shadow-sm module-illustration"
-            />
+            <img src="/animal.svg" alt="" className="w-36 drop-shadow-sm module-illustration" />
           </Link>
           {/* Vierte Module */}
           <Link
@@ -128,11 +147,7 @@ export default function Home() {
             className="module-headline  rounded-2xl bg-(--color-green) p-6 font-semibold flex items-center justify-between home-module"
           >
             <span> Fake erkennen</span>
-            <img
-              src="/duck.svg"
-              alt=""
-              className="w-36 drop-shadow-sm module-illustration"
-            />
+            <img src="/duck.svg" alt="" className="w-36 drop-shadow-sm module-illustration" />
           </Link>
         </div>
       </div>
@@ -177,8 +192,7 @@ export default function Home() {
             {/* Back */}
             <div className="tip-face tip-back">
               <p className="text-md text-center ">
-                Teile dein Passwort niemals – auch nicht mit Freundinnen oder
-                Freunden.
+                Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden.
               </p>
             </div>
           </div>
@@ -189,15 +203,10 @@ export default function Home() {
       <div className="rounded-3xl bg-white p-8">
         <h3 className="text-lg font-bold">Deine Meinung zählt!</h3>
 
-        <p className="mt-2 text-sm ">
-          Hast du eine Frage, ein Problem oder eine Idee für uns?
-        </p>
+        <p className="mt-2 text-sm ">Hast du eine Frage, ein Problem oder eine Idee für uns?</p>
 
         <div className="mt-4 flex gap-3">
-          <PrimaryButton
-            label="Kontakt & Feedback"
-            onClick={() => navigate("/feedback")}
-          />
+          <PrimaryButton label="Kontakt & Feedback" onClick={() => navigate("/feedback")} />
         </div>
       </div>
     </section>
