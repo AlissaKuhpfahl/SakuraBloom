@@ -1,21 +1,15 @@
-// import { useState } from "react";
-
 import { BrowserRouter, Route, Routes } from "react-router";
 import MainLayout from "./layout/MainLayout";
 // Pages
-import Home from "./pages/Home.tsx";
-import Modules from "./pages/Modules";
-import Quiz from "./pages/Quiz";
-import Progress from "./pages/Progress.tsx";
-import Lessons from "./pages/Lessons";
-import { Login } from "./pages/Login.tsx";
-import { SignUp } from "./pages/Signup.tsx";
-
-//import NotFound from "./pages/NotFound";
+import Home from "./Pages/Home.tsx";
+import Modules from "./Pages/Modules";
+import Quiz from "./Pages/Quiz";
+import Progress from "./Pages/Progress.tsx";
+import Lessons from "./Pages/Lessons";
+import { Login } from "./Pages/Login.tsx";
+import { SignUp } from "./Pages/Signup.tsx";
 
 function App() {
-  // const [count, setCount] = useState(0);
-
   return (
     <>
       <BrowserRouter>
