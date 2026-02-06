@@ -19,6 +19,12 @@ export default function Home() {
     fake: 0
   });
 
+  // Tips
+  const [bonusTip, setBonusTip] = useState({
+    title: "Bonus-Tipp",
+    text: "Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden."
+  });
+
   // 2) Einmal beim Laden holen
   // useEffect(() => {
   //   fetch("/api/progress")
@@ -43,19 +49,31 @@ export default function Home() {
         const progressRes = await fetch(`/profiles/progress/${profileId}`, {
           credentials: "include"
         });
-        if (!progressRes.ok) return;
+        if (progressRes.ok) {
+          const data = await progressRes.json();
+          setProgress({
+            online: data.progress?.length ?? 0,
+            privacy: 0,
+            chats: 0,
+            fake: 0
+          });
+        }
 
-        const data = await progressRes.json();
-
-        // data.progress ist ein Array
-        setProgress({
-          online: data.progress?.length ?? 0,
-          privacy: 0,
-          chats: 0,
-          fake: 0
+        // 4) Bonus-Tipp holen
+        const tipRes = await fetch(`/tips/bonus/${profileId}`, {
+          credentials: "include"
         });
-      } catch (error) {
-        console.log("Progress konnte nicht geladen werden");
+        if (tipRes.ok) {
+          const tipData = await tipRes.json();
+          setBonusTip({
+            title: tipData.title ?? "Bonus-Tipp",
+            text:
+              tipData.text ??
+              "Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden."
+          });
+        }
+      } catch {
+        console.log("Progress/Tipp konnte nicht geladen werden");
       }
     })();
   }, []);
@@ -186,14 +204,12 @@ export default function Home() {
             {/* Front */}
             <div className="tip-face tip-front">
               <img src="/tips.svg" alt="" className="h-16 w-16" />
-              <h2 className="text-sm font-bold text-center">Bonus-Tipp</h2>
+              <h2 className="text-sm font-bold text-center">{bonusTip.title}</h2>
             </div>
 
             {/* Back */}
             <div className="tip-face tip-back">
-              <p className="text-md text-center ">
-                Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden.
-              </p>
+              <p className="text-md text-center ">{bonusTip.text}</p>
             </div>
           </div>
         </div>
