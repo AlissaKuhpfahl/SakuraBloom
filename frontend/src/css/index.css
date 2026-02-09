@@ -108,11 +108,7 @@ h3 {
 
   filter: blur(12px) url(#goo);
 
-  background-image: linear-gradient(
-      0deg,
-      var(--color-primary),
-      var(--color-primary)
-    ),
+  background-image: linear-gradient(0deg, var(--btn-color), var(--btn-color)),
     /* Highlight kommt NUR über --a */
       radial-gradient(
         40% 70% at calc(var(--x) * 1%) calc(var(--y) * 1%),
@@ -122,4 +118,13 @@ h3 {
 
   background-clip: content-box, border-box;
   padding: 10px 0px 10px 0px;
+}
+/* Primary */
+.btn-primary {
+  --btn-color: var(--color-primary);
+}
+
+/* Secondary */
+.btn-secondary {
+  --btn-color: var(--color-success);
 }
