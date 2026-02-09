@@ -1,9 +1,7 @@
-export type Profile =
-  | undefined
-  | {
-      profileName: string;
-      avatarUrl: string;
-    };
+export type Profile = {
+  profileName: string;
+  avatarUrl: string;
+};
 
 declare global {
   type User = {
@@ -12,6 +10,6 @@ declare global {
     lastName: string;
     roles?: string[];
     profiles?: Profile[];
-    activeProfile: string;
+    activeProfile: Profile;
   };
 }
