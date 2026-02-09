@@ -1,15 +1,26 @@
 import Lottie from "lottie-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { useAuth } from "../contexts/useAuth.tsx";
+import type { Profile } from "../types/types.ts";
 
 export default function Header() {
   const lottieRef = useRef<any>(null);
+  const { user, setUser } = useAuth();
+  const [profile, setProfile] = useState<Profile | undefined>(() => {
+    if (!user?.profiles) {
+      return undefined;
+    }
+    return user.profiles[1];
+  });
 
   return (
     <header className="sticky top-4 z-20 ">
       <div className="flex h-20 items-center pl-8">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-black" />
-          <p className="text-sm font-semibold">Hallo Kind</p>
+          <p className="text-sm font-semibold">
+            {profile?.profileName ? `Hallo ${profile.profileName} dd` : "Hallo, bitte anmelden!"}
+          </p>
         </div>
       </div>
 

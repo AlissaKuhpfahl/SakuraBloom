@@ -122,7 +122,7 @@ export default function Home() {
               })}
             </div>
           </div>
-          <PrimaryButton label="Los geht!" className="mt-2" />
+          <PrimaryButton label="Los geht's!" className="mt-2" />
         </div>
       </div>
 

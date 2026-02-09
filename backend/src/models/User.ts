@@ -40,6 +40,10 @@ const userSchema = new Schema(
     profiles: {
       type: [Schema.Types.ObjectId],
       ref: "Profile"
+    },
+    activeProfile: {
+      type: Schema.Types.ObjectId,
+      ref: "Profile"
     }
   },
   {

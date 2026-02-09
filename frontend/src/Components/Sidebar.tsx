@@ -59,9 +59,9 @@
 // ////// Nav icon + open/close  /////////
 import { NavLink, Link } from "react-router";
 import { useState } from "react";
+import ConfirmModal from "./ConfirmModal";
 import { logout } from "../data/auth.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
-import { useNavigate } from "react-router";
 
 const NAV = [
   { to: "/", label: "Home", icon: "/icons/home.svg", end: true },
@@ -73,13 +73,14 @@ const NAV = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   // const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setUser, user } = useAuth();
 
   const handleLogout = async () => {
     await logout();
     setUser(null);
-    // navigate("/");
+    setShowConfirm(false);
   };
 
   return (
@@ -152,48 +153,86 @@ export default function Sidebar() {
         <div className="flex-1" />
 
         {/* Auth */}
-        <div
-          className={`flex flex-col gap-2 text-sm ${collapsed ? "items-center" : "items-center"}`}
-        >
-          {/* sign up */}
-          <NavLink
-            to="/signup"
-            className="text-(--color-primary)  transition group"
-            title={collapsed ? "Signup" : undefined}
+        {user === null ? (
+          <div
+            className={`flex flex-col gap-2 text-sm ${collapsed ? "items-center" : "items-center"}`}
           >
-            <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
-                <img
-                  src="/icons/signup.png"
-                  alt=""
-                  className="h-6 w-6 transition-transform group-hover:scale-110"
-                />
-              </span>
-              {/* Label */}
-              {!collapsed && <span className="font-semibold w-20 text-left">Sign up</span>}
-            </span>
-          </NavLink>
+            {/* sign up */}
 
-          {/* sign in */}
-          <NavLink
-            to="/login"
-            title={collapsed ? "Login" : undefined}
-            className="group text-(--color-primary) transition "
-          >
-            <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
-              {/* Icon Bubble */}
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
-                <img
-                  src="/icons/login.png"
-                  alt=""
-                  className="h-6 w-6 transition-transform group-hover:scale-110"
-                />
+            <NavLink
+              to="/signup"
+              className="text-(--color-primary)  transition group"
+              title={collapsed ? "Signup" : undefined}
+            >
+              <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
+                  <img
+                    src="/icons/signup.png"
+                    alt=""
+                    className="h-6 w-6 transition-transform group-hover:scale-110"
+                  />
+                </span>
+                {/* Label */}
+                {!collapsed && <span className="font-semibold w-20 text-left">Sign up</span>}
               </span>
-              {/* Label */}
-              {!collapsed && <span className="font-semibold w-20 text-left">Login</span>}
-            </span>
-          </NavLink>
-        </div>
+            </NavLink>
+
+            <NavLink
+              to="/login"
+              title={collapsed ? "Login" : undefined}
+              className="group text-(--color-primary) transition "
+            >
+              <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
+                {/* Icon Bubble */}
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
+                  <img
+                    src="/icons/login.png"
+                    alt=""
+                    className="h-6 w-6 transition-transform group-hover:scale-110"
+                  />
+                </span>
+                {/* Label */}
+                {!collapsed && <span className="font-semibold w-20 text-left">Login</span>}
+              </span>
+            </NavLink>
+          </div>
+        ) : (
+          <div
+            className={`flex flex-col gap-2 text-sm ${collapsed ? "items-center" : "items-center"}`}
+          >
+            <NavLink
+              to="/"
+              title={collapsed ? "Logout" : undefined}
+              onClick={e => {
+                e.preventDefault();
+                setShowConfirm(true);
+              }}
+              className="group text-(--color-primary) transition "
+            >
+              <span className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
+                {/* Icon Bubble */}
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
+                  <img
+                    src="/icons/logout.png"
+                    alt=""
+                    className="h-6 w-6 transition-transform group-hover:scale-110"
+                  />
+                </span>
+                {/* Label */}
+                {!collapsed && <span className="font-semibold w-20 text-left">Logout</span>}
+              </span>
+            </NavLink>
+            <ConfirmModal
+              isOpen={showConfirm}
+              title="Ausloggen?"
+              message="Willst du dich wirklich ausloggen?"
+              confirmLabel="Ausloggen"
+              cancelLabel="Abbrechen"
+              onConfirm={handleLogout}
+              onCancel={() => setShowConfirm(false)}
+            />
+          </div>
+        )}
       </div>
     </aside>
   );
