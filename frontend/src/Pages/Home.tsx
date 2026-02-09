@@ -19,12 +19,63 @@ export default function Home() {
     fake: 0
   });
 
+  // Tips
+  const [bonusTip, setBonusTip] = useState({
+    title: "Bonus-Tipp",
+    text: "Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden."
+  });
+
   // 2) Einmal beim Laden holen
+  // useEffect(() => {
+  //   fetch("/api/progress")
+  //     .then((r) => r.json())
+  //     .then((data) => setProgress(data))
+  //     .catch(() => {});
+  // }, []);
   useEffect(() => {
-    fetch("/api/progress")
-      .then(r => r.json())
-      .then(data => setProgress(data))
-      .catch(() => {});
+    (async () => {
+      try {
+        // 1) Profile holen (Cookie Auth!)
+        const profilesRes = await fetch("/profiles", { credentials: "include" });
+        if (!profilesRes.ok) return;
+
+        const profiles = await profilesRes.json();
+        if (!profiles?.length) return;
+
+        // 2) Erstes Profil wählen (später: aktive Auswahl)
+        const profileId = profiles[0].id;
+
+        // 3) Progress holen
+        const progressRes = await fetch(`/profiles/progress/${profileId}`, {
+          credentials: "include"
+        });
+        if (progressRes.ok) {
+          const data = await progressRes.json();
+          setProgress({
+            online: data.progress?.length ?? 0,
+            privacy: 0,
+            chats: 0,
+            fake: 0
+          });
+        }
+
+        // 4) Bonus-Tipp holen
+        const tipRes = await fetch(`/tips/bonus/${profileId}`, {
+          credentials: "include"
+        });
+        if (tipRes.ok) {
+          const tipData = await tipRes.json();
+          setBonusTip({
+            title: tipData.title ?? "Bonus-Tipp",
+            text:
+              tipData.text ??
+              "Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden."
+          });
+        }
+      } catch {
+        console.log("Progress/Tipp konnte nicht geladen werden");
+      }
+    })();
   }, []);
 
   return (
@@ -113,7 +164,7 @@ export default function Home() {
             data-badge={`${progress.fake}/${total}`}
             className="module-headline  rounded-2xl bg-(--color-green) p-6 font-semibold flex items-center justify-between home-module"
           >
-            <span> Fakes erkennen</span>
+            <span> Fake erkennen</span>
             <img src="/duck.svg" alt="" className="w-36 drop-shadow-sm module-illustration" />
           </Link>
         </div>
@@ -153,14 +204,12 @@ export default function Home() {
             {/* Front */}
             <div className="tip-face tip-front">
               <img src="/tips.svg" alt="" className="h-16 w-16" />
-              <h2 className="text-sm font-bold text-center">Bonus-Tipp</h2>
+              <h2 className="text-sm font-bold text-center">{bonusTip.title}</h2>
             </div>
 
             {/* Back */}
             <div className="tip-face tip-back">
-              <p className="text-md text-center ">
-                Teile dein Passwort niemals – auch nicht mit Freundinnen oder Freunden.
-              </p>
+              <p className="text-md text-center ">{bonusTip.text}</p>
             </div>
           </div>
         </div>

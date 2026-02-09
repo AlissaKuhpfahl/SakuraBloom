@@ -1,10 +1,11 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { authRouter, profilesRouter } from "#routes";
+import { authRouter, profilesRouter, tipsRouter } from "#routes";
 import { errorHandler } from "#middlewares";
 import { CLIENT_BASE_URL } from "#config";
 import { initDb } from "./db/index.ts";
+import "dotenv/config";
 
 const app = express();
 const port = process.env.PORT || "3000";
@@ -23,6 +24,7 @@ app.use(express.json(), cookieParser());
 
 app.use("/auth", authRouter);
 app.use("/profiles", profilesRouter);
+app.use("/tips", tipsRouter);
 
 app.get("/", (req, res) => {
   res.send("Sakura Bloom 🌸 Backend alive!");

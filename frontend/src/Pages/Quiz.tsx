@@ -9,18 +9,18 @@ const QUESTIONS = [
     answers: [
       { id: "a", text: "Ich sage es ihm" },
       { id: "b", text: "Ich melde ihn" },
-      { id: "c", text: "Ich ignoriere ihn" },
+      { id: "c", text: "Ich ignoriere ihn" }
     ],
-    correctId: "b",
+    correctId: "b"
   },
   {
     situation: "Du bekommst einen Link: „Gratis Robux / Coins – klick hier!“",
     answers: [
       { id: "a", text: "Ich klicke sofort drauf" },
       { id: "b", text: "Ich frage erst Mama/Papa oder eine Lehrkraft" },
-      { id: "c", text: "Ich leite den Link an Freunde weiter" },
+      { id: "c", text: "Ich leite den Link an Freunde weiter" }
     ],
-    correctId: "b",
+    correctId: "b"
   },
   {
     situation:
@@ -28,10 +28,10 @@ const QUESTIONS = [
     answers: [
       { id: "a", text: "Ich erzähle es, damit wir Freunde werden" },
       { id: "b", text: "Ich sage nein, blockiere ihn und melde es" },
-      { id: "c", text: "Ich schicke ihm ein Foto von mir" },
+      { id: "c", text: "Ich schicke ihm ein Foto von mir" }
     ],
-    correctId: "b",
-  },
+    correctId: "b"
+  }
 ];
 
 // Animation
@@ -39,7 +39,7 @@ type FeedbackType = "correct" | "wrong" | null;
 
 function LottieFeedback({
   type,
-  onDone,
+  onDone
 }: {
   type: Exclude<FeedbackType, null>;
   onDone: () => void;
@@ -59,7 +59,7 @@ function LottieFeedback({
       renderer: "svg",
       loop: false,
       autoplay: true,
-      path,
+      path
     });
 
     const finish = () => onDone();
@@ -85,7 +85,7 @@ function LottieGraduation({ onDone }: { onDone: () => void }) {
       renderer: "svg",
       loop: false,
       autoplay: true,
-      path: "/animations/completed.json",
+      path: "/animations/completed.json"
     });
 
     const finish = () => onDone();
@@ -119,13 +119,11 @@ export default function Quiz() {
     setLocked(true);
 
     const isCorrect = id === current.correctId;
-    if (isCorrect) setScore((s) => s + 1);
+    if (isCorrect) setScore(s => s + 1);
     setFeedback(isCorrect ? "correct" : "wrong");
 
     // Sound:
-    new Audio(isCorrect ? "/sounds/correct.mp3" : "/sounds/wrong.mp3")
-      .play()
-      .catch(() => {});
+    new Audio(isCorrect ? "/sounds/correct.mp3" : "/sounds/wrong.mp3").play().catch(() => {});
   }
 
   function resetForNext() {
@@ -134,7 +132,7 @@ export default function Quiz() {
     setFeedback(null);
 
     // NEXT QUESTION
-    setQIndex((i) => {
+    setQIndex(i => {
       const next = i + 1;
       if (next >= QUESTIONS.length) {
         setFinished(true);
@@ -162,9 +160,7 @@ export default function Quiz() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-2xl font-semibold">Quiz</h1>
-      <p className="mt-1 text-sm">
-        Lerne spielerisch, wie du sicher im Internet unterwegs bist.
-      </p>
+      <p className="mt-1 text-sm">Lerne spielerisch, wie du sicher im Internet unterwegs bist.</p>
 
       <div className="quiz-scene relative mt-6 rounded-4xl p-6">
         {/* X BUTTON */}
@@ -213,7 +209,7 @@ export default function Quiz() {
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 14, opacity: 0, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 380, damping: 24 }}
-                onClick={(e) => e.stopPropagation()} //  Klick IM Panel schließt NICHT
+                onClick={e => e.stopPropagation()} //  Klick IM Panel schließt NICHT
               >
                 <div className="feedback-title">
                   {feedback === "correct" ? "Richtig!" : "Nicht ganz…"}
@@ -224,18 +220,11 @@ export default function Quiz() {
                     : "Versuch’s nochmal — du schaffst das!"}
                 </div>
 
-                <LottieFeedback
-                  key={feedback}
-                  type={feedback}
-                  onDone={() => {}}
-                />
+                <LottieFeedback key={feedback} type={feedback} onDone={() => {}} />
 
                 {/* Button zu näcshte frage */}
 
-                <PrimaryButton
-                  label="Weiter"
-                  onClick={() => setFeedback(null)}
-                />
+                <PrimaryButton label="Weiter" onClick={() => setFeedback(null)} />
               </motion.div>
             </motion.div>
           )}
@@ -258,7 +247,7 @@ export default function Quiz() {
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 14, opacity: 0, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 380, damping: 24 }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               >
                 <div className="feedback-title">Geschafft! 🎓</div>
 
@@ -270,7 +259,20 @@ export default function Quiz() {
 
                 <div className="mt-4 flex justify-center gap-3">
                   <PrimaryButton
-                    label="Nochmal spielen"
+                    label="Widerholen"
+                    onClick={() => {
+                      setFinished(false);
+                      setScore(0);
+                      setQIndex(0);
+                      setSelected(null);
+                      setLocked(false);
+                      setFeedback(null);
+                      winSoundPlayed.current = false;
+                    }}
+                  />
+                  <PrimaryButton
+                    label="Nächste Lektion"
+                    className="btn-secondary"
                     onClick={() => {
                       setFinished(false);
                       setScore(0);
@@ -292,10 +294,7 @@ export default function Quiz() {
           {/* Progress */}
           <div className="quiz-progress">
             <div className="quiz-progress-track">
-              <div
-                className="quiz-progress-fill"
-                style={{ width: `${progress}%` }}
-              />
+              <div className="quiz-progress-fill" style={{ width: `${progress}%` }} />
             </div>
 
             <div className="quiz-progress-label">
@@ -306,11 +305,7 @@ export default function Quiz() {
               {QUESTIONS.map((_, i) => (
                 <span
                   key={i}
-                  className={[
-                    "quiz-dot",
-                    i < qIndex && "is-done",
-                    i === qIndex && "is-current",
-                  ]
+                  className={["quiz-dot", i < qIndex && "is-done", i === qIndex && "is-current"]
                     .filter(Boolean)
                     .join(" ")}
                 />
@@ -326,15 +321,11 @@ export default function Quiz() {
           >
             {/* Innerer Content bleibt links, aber Block sitzt mittig */}
             <div className="w-full max-w-md mt-12">
-              <div className="text-xl font-semibold quiz-headline ">
-                Situation:
-              </div>
-              <p className="mt-1 text-sm font-semibold  ">
-                {current.situation}
-              </p>
+              <div className="text-xl font-semibold quiz-headline ">Situation:</div>
+              <p className="mt-1 text-sm font-semibold  ">{current.situation}</p>
 
               <div className="mt-4 space-y-2">
-                {current.answers.map((a) => {
+                {current.answers.map(a => {
                   const isSelected = selected === a.id;
                   const isCorrect = a.id === current.correctId;
 
@@ -349,15 +340,9 @@ export default function Quiz() {
                         "w-full max-w-md rounded-full px-4 py-2 text-sm transition",
                         !locked &&
                           "bg-(--color-skyblue) border-b-4 border-t-4 border-r-2 border-l-2 border-(--color-Deep-Wine) ransition-transform hover:scale-105",
-                        locked &&
-                          isSelected &&
-                          isCorrect &&
-                          "bg-success text-white",
-                        locked &&
-                          isSelected &&
-                          !isCorrect &&
-                          "bg-warnung text-white",
-                        locked && !isSelected && "opacity-60",
+                        locked && isSelected && isCorrect && "bg-success text-white",
+                        locked && isSelected && !isCorrect && "bg-warnung text-white",
+                        locked && !isSelected && "opacity-60"
                       ].join(" ")}
                     >
                       {a.text}
@@ -367,11 +352,7 @@ export default function Quiz() {
               </div>
 
               <div className="mt-6 flex justify-center">
-                <PrimaryButton
-                  label="Weiter"
-                  disabled={!locked}
-                  onClick={resetForNext}
-                />
+                <PrimaryButton label="Weiter" disabled={!locked} onClick={resetForNext} />
               </div>
             </div>
           </motion.div>
