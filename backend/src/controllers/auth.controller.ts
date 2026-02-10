@@ -116,7 +116,7 @@ export const me: RequestHandler = async (req, res, next) => {
     console.log(decoded);
     if (!decoded.sub) throw new Error("Invalid access token", { cause: { status: 401 } });
 
-    const user = await User.findById(decoded.sub).populate({ path: "profiles" });
+    const user = await User.findById(decoded.sub).populate({ path: "profiles activeProfile" });
     if (!user) throw new Error("User not found", { cause: { status: 404 } });
 
     res.status(200).json({ message: "Valid token", user });
