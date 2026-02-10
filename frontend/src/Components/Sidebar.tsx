@@ -74,7 +74,6 @@ const NAV = [
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  // const navigate = useNavigate();
   const { setUser, user } = useAuth();
 
   const handleLogout = async () => {
