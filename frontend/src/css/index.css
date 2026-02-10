@@ -35,7 +35,7 @@ body {
     135deg,
     var(--color-bg-vanilla) 0%,
     var(--color-secondary) 45%,
-    var(--color-skyblue) 90%
+    var(--color-skyblue) 80%
   );
   /* background-color: var(--color-light-pink); */
 
