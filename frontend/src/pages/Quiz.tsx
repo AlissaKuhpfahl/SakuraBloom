@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import lottie from "lottie-web";
-import PrimaryButton from "../components/Btn";
+import PrimaryButton from "../components/Btn.tsx";
 
 const QUESTIONS = [
   {
@@ -146,8 +146,8 @@ export default function Quiz() {
     feedback === "wrong"
       ? { x: [0, -8, 8, -6, 6, -3, 3, 0] }
       : feedback === "correct"
-      ? { scale: [1, 1.02, 1] }
-      : {};
+        ? { scale: [1, 1.02, 1] }
+        : {};
 
   // win sound
   useEffect(() => {

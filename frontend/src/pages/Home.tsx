@@ -1,6 +1,6 @@
 // hallo (user) fehlt noch
 
-import PrimaryButton from "../components/Btn";
+import PrimaryButton from "../components/Btn.tsx";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
