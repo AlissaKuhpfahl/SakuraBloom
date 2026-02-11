@@ -61,8 +61,8 @@ export async function getBonusTip(req: Request, res: Response) {
   const tip = tips[index];
   // #8 Antwort
   res.json({
-    title: tip.title,
-    text: tip.text,
+    title: tip?.title,
+    text: tip?.text,
     stars
   });
 }
