@@ -69,6 +69,7 @@ export async function addProfile(req: Request, res: Response, next: NextFunction
   console.log("new profile", profile);
 
   user.profiles.push(profile._id);
+  if (!user.activeProfile) user.activeProfile = profile._id;
 
   await user.save();
 

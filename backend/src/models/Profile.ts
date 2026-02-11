@@ -19,6 +19,14 @@ const profile = new Schema(
   },
   {
     timestamps: { createdAt: true, updatedAt: false }
+    //     toJSON: {
+    //   /* Transforms the returned result object into a POJO (Plain Old JavaScript Object) when send as JSON response */
+    //   transform(_doc, ret: any) {
+    //     ret.id = ret._id;
+    //     delete ret._id;
+    //     delete ret.__v;
+    //   }
+    // }
   }
 );
 

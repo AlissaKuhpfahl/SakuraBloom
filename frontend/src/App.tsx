@@ -9,6 +9,7 @@ import Lessons from "./pages/Lessons";
 import { Login } from "./pages/Login.tsx";
 import { SignUp } from "./pages/Signup.tsx";
 import LessonDetail from "./pages/LessonDetail";
+import { CreateProfiles } from "./Pages/CreateProfiles.tsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/lektion" element={<LessonDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="createProfiles" element={<CreateProfiles />} />
           </Route>
         </Routes>
       </BrowserRouter>

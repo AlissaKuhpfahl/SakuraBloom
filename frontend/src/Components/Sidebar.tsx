@@ -68,13 +68,13 @@ const NAV = [
   { to: "/modules", label: "Module", icon: "/icons/modules.svg" },
   { to: "/quiz", label: "Quiz", icon: "/icons/quiz.svg" },
   { to: "/progress", label: "Fortschritte", icon: "/icons/progress.svg" },
-  { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" }
+  { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" },
+  { to: "/createProfiles", label: "Profile", icon: "/avatars/cat.svg" }
 ];
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  // const navigate = useNavigate();
   const { setUser, user } = useAuth();
 
   const handleLogout = async () => {
@@ -231,6 +231,7 @@ export default function Sidebar() {
               onConfirm={handleLogout}
               onCancel={() => setShowConfirm(false)}
             />
+            {/* <NavLink to="createProfiles" title="Create Profile"></NavLink> */}
           </div>
         )}
       </div>

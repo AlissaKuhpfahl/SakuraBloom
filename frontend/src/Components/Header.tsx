@@ -1,28 +1,46 @@
 import Lottie from "lottie-react";
 import { useRef, useState } from "react";
 import { useAuth } from "../contexts/useAuth.tsx";
-import type { Profile } from "../types/types.ts";
+import { ProfilesModal } from "./ProfilesModal.tsx";
 
 export default function Header() {
   const lottieRef = useRef<any>(null);
-  const { user, setUser } = useAuth();
-  const [profile, setProfile] = useState<Profile | undefined>(() => {
-    if (!user?.profiles) {
-      return undefined;
+  const { user } = useAuth();
+  const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
+
+  const getActiveProfileName = (): string => {
+    if (!user) {
+      return "Bitte anmelden";
     }
-    return user.profiles[1];
-  });
+    if (!user.activeProfile) return "Bitte Profil auswählen";
+    if (!user.profiles) return "Bitte Profil anlegen";
+    else {
+      return `Hallo ${user.activeProfile.profileName}`;
+    }
+  };
+
+  const handleProfileClick = () => {
+    console.log("Clicked!");
+    setShowProfilesModal(true);
+  };
 
   return (
     <header className="sticky top-4 z-20 ">
       <div className="flex h-20 items-center pl-8">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-black" />
-          <p className="text-sm font-semibold">
-            {profile?.profileName ? `Hallo ${profile.profileName} dd` : "Hallo, bitte anmelden!"}
-          </p>
+          <button
+            onClick={handleProfileClick}
+            disabled={!user}
+            className="hover:bg-amber-700  h-15 w-15 rounded-full bg-black"
+          >
+            <h2>?</h2>
+          </button>
+          <p className="text-sm font-semibold">{getActiveProfileName()}</p>
         </div>
       </div>
+      {showProfilesModal && (
+        <ProfilesModal setShowProfilesModal={setShowProfilesModal} user={user}></ProfilesModal>
+      )}
 
       {/* Button rechts */}
       <div
