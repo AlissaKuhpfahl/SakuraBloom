@@ -25,12 +25,14 @@ export default function Lessons() {
     fake: "hover:bg-(--color-green)"
   };
 
+  const labelFor = (done: number, total: number) =>
+    done === total ? "Abgeschlossen" : done > 0 ? "Fortsetzen" : "Starten";
+
   // Dummy Daten
   const modules = [
     {
       key: "online" as ModuleKey,
       title: "Online–Sicherheit",
-      done: 2,
       total: 5,
       icon: "/elephant.svg",
       lessons: [
@@ -44,7 +46,6 @@ export default function Lessons() {
     {
       key: "privacy" as ModuleKey,
       title: "Privatsphäre",
-      done: 1,
       total: 4,
       icon: "/hase.svg",
       lessons: [
@@ -57,7 +58,6 @@ export default function Lessons() {
     {
       key: "chats" as ModuleKey,
       title: "Chats & Verhalten",
-      done: 0,
       total: 3,
       icon: "/animal.svg",
       lessons: [
@@ -69,7 +69,6 @@ export default function Lessons() {
     {
       key: "fake" as ModuleKey,
       title: "Fake erkennen",
-      done: 0,
       total: 5,
       icon: "/duck.svg",
       lessons: [
@@ -82,12 +81,27 @@ export default function Lessons() {
     }
   ];
 
-  const selectedModule = modules.find(m => m.key === selected)!;
-  const nextLessonId =
-    selectedModule.lessons.find(l => l.status === "active")?.id ?? selectedModule.lessons[0].id;
+  // computed: doneCount + nextLessonId aus localStorage
+  const computedModules = modules.map(m => {
+    const isDone = (lessonId: string, status: LessonStatus) =>
+      status === "done" || isLessonDone(m.key, lessonId);
 
-  const labelFor = (done: number, total: number) =>
-    done === total ? "Abgeschlossen" : done > 0 ? "Fortsetzen" : "Starten";
+    const doneCount = m.lessons.filter(l => isDone(l.id, l.status)).length;
+
+    const next =
+      // 1) erst aktive Lektion bevorzugen
+      m.lessons.find(l => l.status === "active") ??
+      // 2) sonst erste nicht-done und nicht-locked
+      m.lessons.find(l => !isDone(l.id, l.status) && l.status !== "locked") ??
+      // 3) sonst erste nicht-locked
+      m.lessons.find(l => l.status !== "locked") ??
+      m.lessons[0];
+
+    return { ...m, doneCount, nextLessonId: next.id };
+  });
+
+  const selectedModule = computedModules.find(m => m.key === selected)!;
+  const nextLessonId = selectedModule.nextLessonId;
 
   return (
     <section className="space-y-6 pt-6">
@@ -98,16 +112,9 @@ export default function Lessons() {
 
       {/* Background */}
       <div className="relative min-h-170 overflow-hidden rounded-3xl p-6">
-        {/* <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: "url(/toddle.jpg)",
-            backgroundSize: "cover",
-            backgroundPosition: "center"
-          }}
-        /> */}
         <div className="absolute inset-0" />
-        {/*  Sakura in BG */}
+
+        {/* Sakura in BG */}
         <img
           src="/bg-blumen.svg"
           alt=""
@@ -115,8 +122,8 @@ export default function Lessons() {
         />
 
         <div className="relative z-10 space-y-6">
-          {/* Weiter lernen  Karte */}
-          <div className="    w-full max-w-md rounded-3xl bg-white p-5 shadow-md transition-all duration-300 ease-out hover:-translate-y-1 cursor-pointer ">
+          {/* Weiter lernen Karte */}
+          <div className="w-full max-w-md rounded-3xl bg-white p-5 shadow-md transition-all duration-300 ease-out hover:-translate-y-1 cursor-pointer">
             <p className="text-xs">Weiter lernen</p>
 
             <div className="mt-2 flex items-center justify-between gap-4">
@@ -125,17 +132,11 @@ export default function Lessons() {
                 <p className="mt-1 text-sm font-semibold">
                   Nächste Lektion: {nextLessonId}/{selectedModule.total}
                 </p>
+
                 <PrimaryButton
                   className="mt-3"
                   label="Los!"
-                  onClick={() =>
-                    navigate("/lektion", {
-                      state: {
-                        moduleKey: selectedModule.key,
-                        lessonId: nextLessonId
-                      }
-                    })
-                  }
+                  onClick={() => navigate(`/lektion/${selectedModule.key}/${nextLessonId}`)}
                 />
               </div>
 
@@ -143,12 +144,12 @@ export default function Lessons() {
             </div>
           </div>
 
-          {/* Module  */}
+          {/* Module */}
           <div className="space-y-3">
-            {modules.map(m => {
+            {computedModules.map(m => {
               const isSelected = m.key === selected;
-              const label = labelFor(m.done, m.total);
-              const pct = Math.round((m.done / m.total) * 100);
+              const label = labelFor(m.doneCount, m.total);
+              const pct = Math.round((m.doneCount / m.total) * 100);
 
               return (
                 <button
@@ -156,7 +157,7 @@ export default function Lessons() {
                   type="button"
                   onClick={() => setSelected(m.key)}
                   className={[
-                    "w-full rounded-3xl bg-white px-5 py-4 text-left shadow-md transition hover:-translate-y-0.5 ",
+                    "w-full rounded-3xl bg-white px-5 py-4 text-left shadow-md transition hover:-translate-y-0.5",
                     moduleHoverBg[m.key],
                     isSelected ? "ring-2 ring-(--color-primary)" : ""
                   ].join(" ")}
@@ -166,36 +167,37 @@ export default function Lessons() {
                       <img src={m.icon} alt="" className="h-12 w-12" />
                       <div>
                         <div className="font-extrabold">{m.title}</div>
-                        <div className="mt-1 flex items-center gap-2 text-xs ">
+                        <div className="mt-1 flex items-center gap-2 text-xs">
                           <span className="rounded-full bg-(--color-primary)/10 px-2 py-0.5 font-semibold">
-                            {m.done}/{m.total}
+                            {m.doneCount}/{m.total}
                           </span>
                           <span className="opacity-80 px-2">{pct}%</span>
+                          {/* <span className="rounded-full bg-(--color-primary)/10 px-2 py-0.5 font-semibold">
+                            Sakura{" "}
+                            {Math.min(5, Math.max(1, Math.ceil((m.doneCount / m.total) * 5)))}/5
+                          </span> */}
                           <span>{label}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* progress line */}
                   {/* Blumen-Progress */}
-                  <div className="mt-4 flex items-center ">
+                  <div className="mt-4 flex items-center">
                     {Array.from({ length: m.total }).map((_, i) => {
-                      const active = i < m.done;
+                      const active = i < m.doneCount;
 
                       return (
                         <div key={i} className="flex items-center">
-                          {/* Blume */}
                           <img
                             src={active ? "/flower-full.svg" : "/flower-empty.svg"}
                             alt=""
-                            className="h-5 w-5 "
+                            className="h-5 w-5"
                           />
 
-                          {/* Linie */}
                           {i < m.total - 1 && (
                             <div
-                              className={` h-0.75 w-8 rounded-full ${
+                              className={`h-0.75 w-8 rounded-full ${
                                 active ? "bg-(--color-primary)" : "bg-(--color-dark-gray)/20"
                               }`}
                             />
@@ -209,7 +211,7 @@ export default function Lessons() {
             })}
           </div>
 
-          {/*  Alle Lektionen anzeigen */}
+          {/* Alle Lektionen anzeigen */}
           <div className="grid grid-cols-2 gap-6">
             {selectedModule.lessons.map(l => {
               const storedDone = isLessonDone(selectedModule.key, l.id);
@@ -226,8 +228,7 @@ export default function Lessons() {
                     isLocked ? "opacity-80" : ""
                   ].join(" ")}
                 >
-                  <div className="flex items-center gap-2 text-xs ">
-                    {/* status icon */}
+                  <div className="flex items-center gap-2 text-xs">
                     <img
                       src={isDone ? "/icons/check.svg" : statusIcon[l.status]}
                       alt=""
@@ -236,40 +237,37 @@ export default function Lessons() {
 
                     <span>Lektion {l.id}</span>
 
-                    <span className="ml-auto rounded-full bg-(--color-dark-gray)/5 px-2 py-0.5 text-xs ">
+                    <span className="ml-auto rounded-full bg-(--color-dark-gray)/5 px-2 py-0.5 text-xs">
                       {isDone ? "Fertig" : isLocked ? "Gesperrt" : "Aktiv"}
                     </span>
                   </div>
 
                   <h3 className="mt-2 text-lg font-extrabold">{l.title}</h3>
 
-                  {/* 5 Kreise  */}
+                  {/* 5 Kreise */}
                   <div className="mt-3 flex gap-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <span
-                        key={i}
-                        className={[
-                          "h-2.5 w-2.5 rounded-full",
-                          i < l.stepsDone
-                            ? "bg-(--color-primary)"
-                            : "bg-(--color-dark-gray) opacity-25"
-                        ].join(" ")}
-                      />
-                    ))}
+                    {Array.from({ length: 5 }).map((_, i) => {
+                      const circlesDone = isDone ? 5 : l.stepsDone;
+
+                      return (
+                        <span
+                          key={i}
+                          className={[
+                            "h-2.5 w-2.5 rounded-full",
+                            i < circlesDone
+                              ? "bg-(--color-primary)"
+                              : "bg-(--color-dark-gray) opacity-25"
+                          ].join(" ")}
+                        />
+                      );
+                    })}
                   </div>
 
                   <div className="mt-5 flex items-center justify-between gap-3">
                     <PrimaryButton
                       label={isDone ? "Nochmal" : isActive ? "Weiter" : "Starten"}
                       className={isLocked ? "pointer-events-none opacity-50" : ""}
-                      onClick={() =>
-                        navigate("/lektion", {
-                          state: {
-                            moduleKey: selectedModule.key,
-                            lessonId: l.id
-                          }
-                        })
-                      }
+                      onClick={() => navigate(`/lektion/${selectedModule.key}/${l.id}`)}
                     />
 
                     {(isActive || isDone) && (
