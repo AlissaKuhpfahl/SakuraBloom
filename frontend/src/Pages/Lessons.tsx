@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import PrimaryButton from "../components/Btn";
+import { isLessonDone } from "../utils/progress";
 
 type ModuleKey = "online" | "privacy" | "chats" | "fake";
 type LessonStatus = "done" | "active" | "locked";
@@ -124,11 +125,17 @@ export default function Lessons() {
                 <p className="mt-1 text-sm font-semibold">
                   Nächste Lektion: {nextLessonId}/{selectedModule.total}
                 </p>
-
                 <PrimaryButton
                   className="mt-3"
                   label="Los!"
-                  onClick={() => navigate(`/lektionen/${selectedModule.key}/${nextLessonId}`)}
+                  onClick={() =>
+                    navigate("/lektion", {
+                      state: {
+                        moduleKey: selectedModule.key,
+                        lessonId: nextLessonId
+                      }
+                    })
+                  }
                 />
               </div>
 
@@ -205,9 +212,11 @@ export default function Lessons() {
           {/*  Alle Lektionen anzeigen */}
           <div className="grid grid-cols-2 gap-6">
             {selectedModule.lessons.map(l => {
+              const storedDone = isLessonDone(selectedModule.key, l.id);
+
               const isLocked = l.status === "locked";
-              const isDone = l.status === "done";
-              const isActive = l.status === "active";
+              const isDone = storedDone || l.status === "done";
+              const isActive = !isDone && l.status === "active";
 
               return (
                 <div
@@ -218,7 +227,13 @@ export default function Lessons() {
                   ].join(" ")}
                 >
                   <div className="flex items-center gap-2 text-xs ">
-                    <img src={statusIcon[l.status]} alt="" className="h-4 w-4" />
+                    {/* status icon */}
+                    <img
+                      src={isDone ? "/icons/check.svg" : statusIcon[l.status]}
+                      alt=""
+                      className="h-4 w-4"
+                    />
+
                     <span>Lektion {l.id}</span>
 
                     <span className="ml-auto rounded-full bg-(--color-dark-gray)/5 px-2 py-0.5 text-xs ">
@@ -247,7 +262,14 @@ export default function Lessons() {
                     <PrimaryButton
                       label={isDone ? "Nochmal" : isActive ? "Weiter" : "Starten"}
                       className={isLocked ? "pointer-events-none opacity-50" : ""}
-                      onClick={() => navigate(`/lektionen/${selectedModule.key}/${l.id}`)}
+                      onClick={() =>
+                        navigate("/lektion", {
+                          state: {
+                            moduleKey: selectedModule.key,
+                            lessonId: l.id
+                          }
+                        })
+                      }
                     />
 
                     {(isActive || isDone) && (
