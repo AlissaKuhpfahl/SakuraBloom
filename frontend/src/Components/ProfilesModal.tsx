@@ -16,10 +16,10 @@ type ProfilesModalProps = {
   //   cancelButtonClassName?: string;
 };
 
-const backdropStyle =
-  "background:rgba(0, 0, 0, 0.3) position:fixed top:0 left:0 width: 100% height: 100%";
+// const backdropStyle =
+//   "background:rgba(0, 0, 0, 0.3) position:fixed top:0 left:0 width: 100% height: 100%";
 
-const dialogStyle = "position: fixed left:50% top: 50% transform: translate(-50%, -50%)";
+// const dialogStyle = "position: fixed left:50% top: 50% transform: translate(-50%, -50%)";
 
 function Profiles({ user }: { user: User | null }) {
   if (!user?.profiles || user.profiles.length === 0) {
@@ -64,8 +64,8 @@ export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps
   const wrapperClass = `flex items-center justify-center ${""}`.trim();
   const overlayClass = "absolute inset-0 bg-black/50";
   const panelClass = "z-10 w-11/12 max-w-md rounded-lg bg-white p-6 shadow-lg";
-  const cancelClass = "rounded px-4 py-2 text-sm";
-  const confirmClass = "rounded bg-(--color-primary) px-4 py-2 text-sm text-white";
+  // const cancelClass = "rounded px-4 py-2 text-sm";
+  // const confirmClass = "rounded bg-(--color-primary) px-4 py-2 text-sm text-white";
 
   return createPortal(
     <div style={{ position: "fixed", inset: 0, zIndex: 2147483647 }} className={wrapperClass}>

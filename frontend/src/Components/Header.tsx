@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/useAuth.tsx";
 import { ProfilesModal } from "./ProfilesModal.tsx";
 
@@ -7,6 +7,28 @@ export default function Header() {
   const lottieRef = useRef<any>(null);
   const { user } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
+  const [animationData, setAnimationData] = useState<object | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadAnimation = async () => {
+      try {
+        const res = await fetch("/animations/hatching-chick.json");
+        if (!res.ok) throw new Error("Failed to load animation");
+        const data = (await res.json()) as object;
+        if (isMounted) setAnimationData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void loadAnimation();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const getActiveProfileName = (): string => {
     if (!user) {
@@ -67,12 +89,14 @@ export default function Header() {
         {/* Kreis links */}
         <div className="absolute left-2 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full  grid place-items-center">
           <div className="h-14 w-14">
-            <Lottie
-              lottieRef={lottieRef}
-              path="/animations/hatching-chick.json"
-              autoplay={false}
-              loop={false}
-            />
+            {animationData && (
+              <Lottie
+                lottieRef={lottieRef}
+                animationData={animationData}
+                autoplay={false}
+                loop={false}
+              />
+            )}
           </div>
         </div>
 

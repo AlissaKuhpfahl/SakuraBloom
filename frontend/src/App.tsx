@@ -2,14 +2,14 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import MainLayout from "./layout/MainLayout";
 // Pages
 import Home from "./pages/Home.tsx";
-import Modules from "./pages/Modules";
-import Quiz from "./pages/Quiz";
+import Modules from "./pages/Modules.tsx";
+import Quiz from "./pages/Quiz.tsx";
 import Progress from "./pages/Progress.tsx";
-import Lessons from "./pages/Lessons";
+import Lessons from "./pages/Lessons.tsx";
 import { Login } from "./pages/Login.tsx";
 import { SignUp } from "./pages/Signup.tsx";
-import LessonDetail from "./pages/LessonDetail";
-import { CreateProfiles } from "./Pages/CreateProfiles.tsx";
+import LessonDetail from "./pages/LessonDetail.tsx";
+import { CreateProfiles } from "./pages/CreateProfiles.tsx";
 
 function App() {
   return (

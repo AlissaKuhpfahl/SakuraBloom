@@ -12,6 +12,6 @@ declare global {
     lastName: string;
     roles?: string[];
     profiles?: Profile[];
-    activeProfile: Profile;
+    activeProfile?: Profile;
   };
 }
