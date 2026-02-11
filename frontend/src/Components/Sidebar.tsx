@@ -68,7 +68,7 @@ const NAV = [
   { to: "/modules", label: "Module", icon: "/icons/modules.svg" },
   { to: "/quiz", label: "Quiz", icon: "/icons/quiz.svg" },
   { to: "/progress", label: "Fortschritte", icon: "/icons/progress.svg" },
-  { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" }
+  { to: "/createProfiles", label: "Lektionen", icon: "/icons/lessons.svg" }
 ];
 
 export default function Sidebar() {
@@ -230,6 +230,7 @@ export default function Sidebar() {
               onConfirm={handleLogout}
               onCancel={() => setShowConfirm(false)}
             />
+            {/* <NavLink to="createProfiles" title="Create Profile"></NavLink> */}
           </div>
         )}
       </div>

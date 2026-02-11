@@ -8,6 +8,7 @@ import Progress from "./Pages/Progress.tsx";
 import Lessons from "./Pages/Lessons";
 import { Login } from "./Pages/Login.tsx";
 import { SignUp } from "./Pages/Signup.tsx";
+import { CreateProfiles } from "./Pages/CreateProfiles.tsx";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="lessons" element={<Lessons />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="createProfiles" element={<CreateProfiles />} />
           </Route>
         </Routes>
       </BrowserRouter>
