@@ -265,7 +265,7 @@ export default function LessonDetail() {
       setStepIndex(v => v + 1);
     } else {
       markLessonDone(safeModuleKey, safeLessonId);
-      console.log("SAVED:", moduleKey, lesson.id);
+      console.log("SAVED:", moduleKey, lesson?.id);
       navigate("/lessons", { replace: true });
     }
   }
