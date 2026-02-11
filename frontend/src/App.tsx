@@ -23,7 +23,7 @@ function App() {
             <Route path="quiz" element={<Quiz />} />
             <Route path="progress" element={<Progress />} />
             <Route path="lessons" element={<Lessons />} />
-            <Route path="/lektion" element={<LessonDetail />} />
+            <Route path="lektion/:moduleKey/:lessonId" element={<LessonDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="createProfiles" element={<CreateProfiles />} />
