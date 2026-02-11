@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import PrimaryButton from "../components/Btn";
+import PrimaryButton from "../components/Btn.tsx";
 import type { ModuleKey, Module, Step } from "../types";
-import { markLessonDone } from "../utils/progress";
+import { markLessonDone } from "../utils/progress.ts";
 
 export default function LessonDetail() {
   const navigate = useNavigate();

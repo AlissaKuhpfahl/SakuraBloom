@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import PrimaryButton from "../components/Btn";
-import { isLessonDone } from "../utils/progress";
+import PrimaryButton from "../components/Btn.tsx";
+import { isLessonDone } from "../utils/progress.tsx";
 
 type ModuleKey = "online" | "privacy" | "chats" | "fake";
 type LessonStatus = "done" | "active" | "locked";
