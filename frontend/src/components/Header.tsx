@@ -2,9 +2,10 @@ import Lottie from "lottie-react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/useAuth.tsx";
 import { ProfilesModal } from "./ProfilesModal.tsx";
+import type { LottieRefCurrentProps } from "lottie-react";
 
 export default function Header() {
-  const lottieRef = useRef<any>(null);
+  const lottieRef = useRef<LottieRefCurrentProps>(null);
   const { user } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);

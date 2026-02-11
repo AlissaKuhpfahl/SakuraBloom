@@ -59,7 +59,7 @@
 // ////// Nav icon + open/close  /////////
 import { NavLink, Link } from "react-router";
 import { useState } from "react";
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "./ConfirmModal.tsx";
 import { logout } from "../data/auth.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
 
