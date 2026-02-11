@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { authRouter, profilesRouter, tipsRouter } from "#routes";
+import { authRouter, profilesRouter, tipsRouter, lessonRouter } from "#routes";
 import { errorHandler } from "#middlewares";
 import { CLIENT_BASE_URL } from "#config";
 import { initDb } from "./db/index.ts";
@@ -25,6 +25,7 @@ app.use(express.json(), cookieParser());
 app.use("/auth", authRouter);
 app.use("/profiles", profilesRouter);
 app.use("/tips", tipsRouter);
+app.use("/lessons", lessonRouter);
 
 app.get("/", (req, res) => {
   res.send("Sakura Bloom 🌸 Backend alive!");
