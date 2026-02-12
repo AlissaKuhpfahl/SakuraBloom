@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { addProfile } from "../data/profiles.ts";
-import { useAuth } from "../contexts/useAuth.tsx";
+// import { addProfile } from "../data/profiles.ts";
+// import { useAuth } from "../contexts/useAuth.tsx";
 
 type AvatarOption = {
   id: string;
@@ -81,7 +81,7 @@ export function CreateProfiles() {
   const [profileName, setProfileName] = useState("");
   const [selectedAvatarId, setSelectedAvatarId] = useState(avatarOptions2[0].id);
   const [note, setNote] = useState<string | null>(null);
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const selectedAvatar = useMemo(
     () => avatarOptions2.find(avatar => avatar.id === selectedAvatarId),
@@ -98,7 +98,7 @@ export function CreateProfiles() {
     }
 
     try {
-      const resData = await addProfile(trimmedName, selectedAvatarId);
+      // const resData = await addProfile(trimmedName, selectedAvatarId);
     } catch (error: unknown) {
       console.log(error);
       const message = (error as { message: string }).message;
@@ -167,7 +167,11 @@ export function CreateProfiles() {
               selectedAvatar?.className ?? "bg-(--color-light-gray)"
             }`}
           >
-            <img src={selectedAvatar?.avatarUrl} alt={selectedAvatar.label} className="h-17 w-17" />
+            <img
+              src={selectedAvatar?.avatarUrl}
+              alt={selectedAvatar?.label}
+              className="h-17 w-17"
+            />
           </div>
           <div>
             <h2>{profileName}</h2>

@@ -9,8 +9,8 @@ export async function addProfile(profileName: string, avatarUrl: string, id: str
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      email,
-      password
+      // email,
+      // password
     }),
     credentials: "include"
   });
