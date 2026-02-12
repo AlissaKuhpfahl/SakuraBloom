@@ -14,7 +14,7 @@ type LoginFormState = {
 const inputClass =
   "w-full rounded-2xl px-5 py-2 " +
   "bg-white border-1 border-(--color-primary-50) " +
-  "text-(--color-Deep-Wine) placeholder:text-(--color-dark-gray)/40 " +
+  "text-(--color-Deep-Wine) placeholder:text-(--color-dark-gray)/40  " +
   "transition-all duration-200 " +
   "focus:outline-none focus:border-(--color-primary) " +
   "focus:ring-2 focus:ring-(--color-primary-50)";
@@ -147,6 +147,12 @@ export function Login() {
                 />
 
                 <p className="text-center font-extrabold ">{noteSignin ? noteSignin : ""}</p>
+                {/* Mobile Panda */}
+                <div className="mt-6 flex md:hidden items-center justify-center">
+                  <div className="w-[70%] max-w-xs opacity-95">
+                    {pandaData && <Lottie animationData={pandaData} loop autoplay />}
+                  </div>
+                </div>
               </form>
             </div>
           </div>
