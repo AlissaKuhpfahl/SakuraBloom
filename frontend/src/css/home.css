@@ -53,8 +53,7 @@
   position: relative;
   overflow: hidden;
 
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    filter 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
 }
 
 /* sanftes Schweben */
@@ -64,7 +63,7 @@
   filter: saturate(1.05);
 }
 
-/* Illustration lebt stärker als Karte */
+/* Illustration */
 .module-illustration,
 .module-card-art {
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
@@ -127,14 +126,9 @@
   position: relative;
   overflow: hidden;
 
-  background: linear-gradient(
-    135deg,
-    var(--color-light-yellow),
-    var(--color-secondary)
-  );
+  background: linear-gradient(135deg, var(--color-light-yellow), var(--color-secondary));
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 6px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    filter 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
 }
 
 .quiz-teaser:hover {
@@ -160,11 +154,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 
-  background: radial-gradient(
-    circle at top right,
-    rgba(255, 255, 255, 0.5),
-    transparent 60%
-  );
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.5), transparent 60%);
 }
 
 .quiz-teaser:hover::after {
@@ -209,9 +199,6 @@
   background: #fff;
 
   backface-visibility: hidden;
-
-  /* weicher Premium-Shadow */
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 /* Front */

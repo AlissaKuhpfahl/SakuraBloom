@@ -1,4 +1,4 @@
-import PrimaryButton from "../components/Btn";
+import PrimaryButton from "../components/Btn.tsx";
 import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 
@@ -108,7 +108,7 @@ export default function Progress() {
             <p className="mt-1 text-xs text-(--color-dark-gray)">Freigeschaltet</p>
           </div>
 
-          {/* Erfolg 2 - locked */}
+          {/* Achievement 2 - locked */}
           <div className="rounded-3xl bg-white/60 p-6 text-center opacity-80 shadow-sm backdrop-blur border border-(--color-dark-gray)/10">
             <img src="/icons/progress2.svg" alt="" className="mx-auto h-24 w-24 grayscale" />
 

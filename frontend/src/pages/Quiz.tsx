@@ -146,8 +146,8 @@ export default function Quiz() {
     feedback === "wrong"
       ? { x: [0, -8, 8, -6, 6, -3, 3, 0] }
       : feedback === "correct"
-        ? { scale: [1, 1.02, 1] }
-        : {};
+      ? { scale: [1, 1.02, 1] }
+      : {};
 
   // win sound
   useEffect(() => {
@@ -162,9 +162,9 @@ export default function Quiz() {
       <h1 className="text-2xl font-semibold">Quiz</h1>
       <p className="mt-1 text-sm">Lerne spielerisch, wie du sicher im Internet unterwegs bist.</p>
 
-      <div className="quiz-scene relative mt-6 rounded-4xl p-6">
+      <div className="quiz-scene relative mt-6 rounded-4xl p-25">
         {/* X BUTTON */}
-        <button
+        {/* <button
           type="button"
           aria-label="Schließen"
           className="absolute right-4 top-4 grid place-items-center  h-10 w-10 transition-transform duration-150 hover:scale-110 active:scale-95 cursor-pointer"
@@ -174,23 +174,23 @@ export default function Quiz() {
             viewBox="0 0 512.001 512.001"
             xmlns="http://www.w3.org/2000/svg"
             xmlSpace="preserve"
-          >
-            {/* kreis */}
-            <path d="M256.001,512c141.384,0,255.999-114.615,255.999-256.001C512.001,114.615,397.386,0,256.001,0 S0.001,114.615,0.001,256.001S114.616,512,256.001,512z" />
+          > */}
+        {/* kreis */}
+        {/* <path d="M256.001,512c141.384,0,255.999-114.615,255.999-256.001C512.001,114.615,397.386,0,256.001,0 S0.001,114.615,0.001,256.001S114.616,512,256.001,512z" /> */}
 
-            {/* Shadow / highlight*/}
-            <path
+        {/* Shadow / highlight*/}
+        {/* <path
               className="opacity-10"
               d="M68.873,256.001c0-129.706,96.466-236.866,221.564-253.688 C279.172,0.798,267.681,0,256.001,0C114.616,0,0.001,114.615,0.001,256.001S114.616,512.001,256,512.001 c11.68,0,23.171-0.798,34.436-2.313C165.339,492.865,68.873,385.705,68.873,256.001z"
-            />
+            /> */}
 
-            {/* X (immer weiß) */}
-            <path
+        {/* X (immer weiß) */}
+        {/* <path
               fill="#FFFFFF"
               d="M313.391,256.001l67.398-67.398c4.899-4.899,4.899-12.842,0-17.74l-39.65-39.65 c-4.899-4.899-12.842-4.899-17.74,0l-67.398,67.398l-67.398-67.398c-4.899-4.899-12.842-4.899-17.74,0l-39.65,39.65 c-4.899,4.899-4.899,12.842,0,17.74l67.398,67.398l-67.398,67.398c-4.899,4.899-4.899,12.842,0,17.741l39.65,39.65 c4.899,4.899,12.842,4.899,17.74,0l67.398-67.398L323.4,380.79c4.899,4.899,12.842,4.899,17.74,0l39.65-39.65 c4.899-4.899,4.899-12.842,0-17.741L313.391,256.001z"
             />
           </svg>
-        </button>
+        </button> */}
 
         {/* Feedback Overlay mit Animation */}
         <AnimatePresence>

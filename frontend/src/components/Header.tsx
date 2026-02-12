@@ -48,7 +48,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-4 z-20 ">
+    <header className=" relative mt-8 z-20 ">
       <div className="flex h-20 items-center pl-8">
         <div className="flex items-center gap-3">
           <button
@@ -67,15 +67,13 @@ export default function Header() {
 
       {/* Button rechts */}
       <div
-        className=" 
-          group
-          absolute right-0 top-1/2 -translate-y-1/2
-          h-20 w-20 hover:w-52
-          bg-(--color-light-yellow) shadow-sm
-          rounded-l-full rounded-r-none
-          transition-all duration-200
-          overflow-hidden
-          cursor-pointer
+        className="  group absolute right-0 top-2
+    h-20 w-20 hover:w-52
+    bg-(--color-light-yellow) shadow-sm
+    rounded-l-full rounded-r-none
+    transition-all duration-200
+    overflow-hidden
+          
         "
         onMouseEnter={() => {
           lottieRef.current?.stop?.();
