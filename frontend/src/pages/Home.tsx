@@ -198,17 +198,17 @@ export default function Home() {
       </div>
 
       {/* Sicherheits-Tipp Card */}
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <div className="tip-card-wrapper w-4/12 ">
-          <div className="tip-card h-52">
+          <div className="tip-card h-52 ">
             {/* Front */}
-            <div className="tip-face tip-front">
+            <div className="tip-face tip-front shadow-sm">
               <img src="/tips.svg" alt="" className="h-16 w-16" />
               <h2 className="text-sm font-bold text-center">{bonusTip.title}</h2>
             </div>
 
             {/* Back */}
-            <div className="tip-face tip-back">
+            <div className="tip-face tip-back shadow-sm">
               <p className="text-md text-center ">{bonusTip.text}</p>
             </div>
           </div>
