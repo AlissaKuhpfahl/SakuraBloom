@@ -56,7 +56,7 @@ export default function Header() {
             className="hover:bg-gray-600 flex items-center justify-center  h-19 w-19 rounded-full bg-white"
           >
             <img
-              src={user?.activeProfile?.avatarUrl}
+              src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
               alt={user?.activeProfile?.profileName[0]}
               className="h-18 w-18"
             />
