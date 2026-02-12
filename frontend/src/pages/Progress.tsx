@@ -47,7 +47,7 @@ export default function Progress() {
             )}
           </div>
 
-          <h1 className="-mt-8 text-3xl font-extrabold">Dein Fortschritt</h1>
+          <h1 className="mt-4 text-3xl font-extrabold">Dein Fortschritt</h1>
 
           <p className="mt-2 text-sm text-(--color-dark-gray)">
             Du hast schon{" "}
