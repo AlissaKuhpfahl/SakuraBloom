@@ -12,10 +12,12 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       try {
         setAuthLoading(true);
         await refresh();
+        console.log("Token refreshed");
         const { user } = await getMe();
+        console.log("Refresh: Fetched user:", user);
         setUser(user);
       } catch (error) {
-        console.log(error);
+        console.log("Refresh: ", error);
       } finally {
         setAuthLoading(false);
       }
@@ -24,9 +26,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, authLoading }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, setUser, authLoading }}>{children}</AuthContext.Provider>
   );
 };
 

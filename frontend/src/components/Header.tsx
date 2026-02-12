@@ -43,20 +43,23 @@ export default function Header() {
   };
 
   const handleProfileClick = () => {
-    console.log("Clicked!");
     setShowProfilesModal(true);
   };
 
   return (
     <header className="sticky top-4 z-20 ">
       <div className="flex h-20 items-center pl-8">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center gap-3">
           <button
             onClick={handleProfileClick}
             disabled={!user}
-            className="hover:bg-amber-700  h-15 w-15 rounded-full bg-black"
+            className="hover:bg-gray-600 flex items-center justify-center  h-19 w-19 rounded-full bg-white"
           >
-            <h2>?</h2>
+            <img
+              src={user?.activeProfile?.avatarUrl}
+              alt={user?.activeProfile?.profileName[0]}
+              className="h-18 w-18"
+            />
           </button>
           <p className="text-sm font-semibold">{getActiveProfileName()}</p>
         </div>

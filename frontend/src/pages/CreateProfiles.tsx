@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-// import { addProfile } from "../data/profiles.ts";
-// import { useAuth } from "../contexts/useAuth.tsx";
+import { addProfile } from "../data/profiles.ts";
+import { useAuth } from "../contexts/useAuth.tsx";
+import { getMe } from "../data/auth.ts";
 
 type AvatarOption = {
   id: string;
@@ -9,7 +10,7 @@ type AvatarOption = {
   className?: string;
 };
 
-const avatarOptions2: AvatarOption[] = [
+const avatarOptions: AvatarOption[] = [
   {
     id: "bear",
     label: "Bär",
@@ -79,12 +80,12 @@ const avatarOptions2: AvatarOption[] = [
 
 export function CreateProfiles() {
   const [profileName, setProfileName] = useState("");
-  const [selectedAvatarId, setSelectedAvatarId] = useState(avatarOptions2[0].id);
+  const [selectedAvatarId, setSelectedAvatarId] = useState(avatarOptions[0].id);
   const [note, setNote] = useState<string | null>(null);
-  // const { user } = useAuth();
+  const { setUser } = useAuth();
 
   const selectedAvatar = useMemo(
-    () => avatarOptions2.find(avatar => avatar.id === selectedAvatarId),
+    () => avatarOptions.find(avatar => avatar.id === selectedAvatarId),
     [selectedAvatarId]
   );
 
@@ -98,7 +99,12 @@ export function CreateProfiles() {
     }
 
     try {
-      // const resData = await addProfile(trimmedName, selectedAvatarId);
+      console.log("Name: ", trimmedName, "Avatar URL: ", selectedAvatar?.avatarUrl);
+      const resData = await addProfile(
+        trimmedName,
+        selectedAvatar?.avatarUrl ?? "default-avatar-url"
+      );
+      console.log(resData);
     } catch (error: unknown) {
       console.log(error);
       const message = (error as { message: string }).message;
@@ -106,7 +112,9 @@ export function CreateProfiles() {
       return;
     }
     setNote(`Profil erstellt: ${trimmedName}`);
-    setProfileName("");
+    const { user } = await getMe();
+    setUser(user);
+    // navigate("/");
   };
 
   return (
@@ -131,7 +139,7 @@ export function CreateProfiles() {
         <fieldset className="mb-5">
           <legend className="mb-3 font-semibold">Wähle einen Avatar</legend>
           <div className="grid grid-cols-3 gap-1 sm:grid-cols-6">
-            {avatarOptions2.map(avatar => {
+            {avatarOptions.map(avatar => {
               const isSelected = avatar.id === selectedAvatarId;
 
               return (

@@ -1,7 +1,7 @@
 import { backendServiceURL } from "../utils";
 
-export async function addProfile(profileName: string, avatarUrl: string, id: string) {
-  const res = await fetch(`${backendServiceURL}/profiles/progress/${id}`, {
+export async function addProfile(profileName: string, avatarUrl: string) {
+  const res = await fetch(`${backendServiceURL}/profiles/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -24,22 +24,14 @@ export async function addProfile(profileName: string, avatarUrl: string, id: str
   return res.json();
 }
 
-export async function readProfiles(profileName: string, avatarUrl: string, id: string) {
-  const res = await fetch(`${backendServiceURL}/profiles/progress/${id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      profileName,
-      avatarUrl
-    }),
-    credentials: "include"
-  });
+export async function readProfiles() {
+  const res = await fetch(`${backendServiceURL}/profiles`);
 
   if (!res.ok) {
     const errorData = await res.json();
+
     console.log(errorData);
+
     if (!errorData.error) {
       throw new Error(errorData.message);
     }
