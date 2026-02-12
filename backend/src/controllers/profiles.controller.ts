@@ -40,7 +40,7 @@ export async function getProgress(req: Request, res: Response, next: NextFunctio
  * @param next
  */
 export async function addProfile(req: Request, res: Response, next: NextFunction) {
-  const { profileName } = req.body;
+  const { profileName, avatarUrl } = req.body;
 
   /*
   Ensure caller is authenticated. Should be because middlware "authenticate" 
@@ -61,6 +61,7 @@ export async function addProfile(req: Request, res: Response, next: NextFunction
   const profile = new Profile({
     userId: userId,
     profileName: profileName,
+    avatarUrl: avatarUrl,
     progress: { moduleId: "1", lectureId: "1", status: "****", date: new Date() }
   });
 

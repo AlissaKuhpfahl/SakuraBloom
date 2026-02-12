@@ -1,22 +1,37 @@
 import { backendServiceURL } from "../utils";
 
-export async function addProfile(profileName: string, avatarUrl: string, id: string) {
-  // const { email, password } = body;
-
-  const res = await fetch(`${backendServiceURL}/profiles/progress/${id}`, {
+export async function addProfile(profileName: string, avatarUrl: string) {
+  const res = await fetch(`${backendServiceURL}/profiles/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      // email,
-      // password
+      profileName,
+      avatarUrl
     }),
     credentials: "include"
   });
 
   if (!res.ok) {
     const errorData = await res.json();
+    console.log(errorData);
+    if (!errorData.error) {
+      throw new Error(errorData.message);
+    }
+    throw new Error(errorData.error);
+  }
+  return res.json();
+}
+
+export async function readProfiles() {
+  const res = await fetch(`${backendServiceURL}/profiles`);
+
+  if (!res.ok) {
+    const errorData = await res.json();
+
+    console.log(errorData);
+
     if (!errorData.error) {
       throw new Error(errorData.message);
     }

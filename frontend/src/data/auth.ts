@@ -57,22 +57,53 @@ export async function login(body: { email: string; password: string }) {
 }
 
 export async function getMe() {
-  const userRes = await fetch(`${authServiceURL}/auth/me`);
-  if (!userRes.ok) throw new Error("Get user data failed");
-  return userRes.json();
+  const response = await fetch(`${authServiceURL}/auth/me`);
+
+  console.log("resp:", response);
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    if (!errorData.message) {
+      throw new Error("Get user data failed");
+    }
+    throw new Error(errorData.message);
+  }
+  const data = await response.json();
+  return data;
 }
 
 export async function refresh() {
-  const res = await fetch(`${authServiceURL}/auth/refresh`, {
+  const response = await fetch(`${authServiceURL}/auth/refresh`, {
     method: "POST"
   });
 
-  if (!res.ok) return;
+  console.log("resp:", response);
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    if (!errorData.message) {
+      throw new Error("Refresh failed");
+    }
+    throw new Error(errorData.message);
+  }
+  const data = await response.json();
+  return data;
 }
 
 export async function logout() {
-  const res = await fetch(`${authServiceURL}/auth/logout`, {
+  const response = await fetch(`${authServiceURL}/auth/logout`, {
     method: "DELETE"
   });
-  if (!res.ok) throw new Error("Logout failed");
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    if (!errorData.message) {
+      throw new Error("Logout failed");
+    }
+    throw new Error(errorData.message);
+  }
+  const data = await response.json();
+  return data;
 }
