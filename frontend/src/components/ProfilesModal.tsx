@@ -31,7 +31,12 @@ function Profiles({ user }: { user: User | null }) {
           return (
             <div className="flex items-center gap-3 mb-2">
               <div className="rounded-full flex items-center justify-center h-20 w-20 bg-gradient-to-r from-pink-500 to-rose-500">
-                <p>{profile.profileName[0]}</p>
+                {/* <p>{profile.profileName[0]}</p> */}
+                <img
+                  src={profile.avatarUrl ?? "/avatars/bear.svg"}
+                  alt={profile.profileName[0]}
+                  className="h-18 w-18"
+                />
               </div>
               <h2>{profile.profileName}</h2>
               <input type="checkbox"></input>
