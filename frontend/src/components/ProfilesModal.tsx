@@ -2,24 +2,8 @@ import { createPortal } from "react-dom";
 
 type ProfilesModalProps = {
   user: User | null;
-  //   isOpen: boolean;
-  //   title?: string;
-  //   message?: string;
-  //   confirmLabel?: string;
-  //   cancelLabel?: string;
-  //   onConfirm: () => void;
   setShowProfilesModal: (value: boolean) => void;
-  //   wrapperClassName?: string;
-  //   overlayClassName?: string;
-  //   panelClassName?: string;
-  //   confirmButtonClassName?: string;
-  //   cancelButtonClassName?: string;
 };
-
-// const backdropStyle =
-//   "background:rgba(0, 0, 0, 0.3) position:fixed top:0 left:0 width: 100% height: 100%";
-
-// const dialogStyle = "position: fixed left:50% top: 50% transform: translate(-50%, -50%)";
 
 function Profiles({ user }: { user: User | null }) {
   if (!user?.profiles || user.profiles.length === 0) {
@@ -48,29 +32,11 @@ function Profiles({ user }: { user: User | null }) {
   }
 }
 export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps) {
-  //   return (
-  //     <>
-  //       <h1>Profile</h1>
-  //       <div
-  //         // className={backdropStyle}
-  //         onClick={() => {
-  //           setShowProfilesModal(false);
-  //         }}
-  //       ></div>
-  //       <div
-  //       //   className={dialogStyle}
-  //       >
-  //         <button className="close-button" onClick={() => setShowProfilesModal(false)}>
-  //           Close
-  //         </button>
-  //       </div>
-  //     </>
-  //   );
   const wrapperClass = `flex items-center justify-center ${""}`.trim();
   const overlayClass = "absolute inset-0 bg-black/50";
-  const panelClass = "z-10 w-11/12 max-w-md rounded-lg bg-white p-6 shadow-lg";
-  // const cancelClass = "rounded px-4 py-2 text-sm";
-  // const confirmClass = "rounded bg-(--color-primary) px-4 py-2 text-sm text-white";
+  const panelClass =
+    "z-10 w-11/12 max-w-md max-h-[90vh] rounded-lg bg-white p-6 shadow-lg flex flex-col";
+  const profilesContainerClass = "overflow-y-auto flex-1";
 
   return createPortal(
     <div style={{ position: "fixed", inset: 0, zIndex: 2147483647 }} className={wrapperClass}>
@@ -84,15 +50,8 @@ export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps
         <h2 className="mb-4 text-lg text-center font-semibold">
           {"Profil auswählen oder anlegen"}
         </h2>
-        {/* <p className="mb-6">{message}</p> */}
-        <div className="flex justify-items-start flex-col gap-5">
+        <div className={`flex justify-items-start flex-col gap-5 ${profilesContainerClass}`}>
           {user && <Profiles user={user}></Profiles>}
-          {/* <button className={cancelClass} onClick={onCancel}>
-            {cancelLabel}
-          </button>
-          <button className={confirmClass} onClick={onConfirm}>
-            {confirmLabel} */}
-          {/* </button> */}
         </div>
       </div>
     </div>,
