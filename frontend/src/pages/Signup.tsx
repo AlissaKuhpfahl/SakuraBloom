@@ -76,7 +76,7 @@ export function SignUp() {
   const [pandaData, setPandaData] = useState(null);
 
   useEffect(() => {
-    fetch("/animations/panda.json")
+    fetch("/animations/panda4.json")
       .then(res => res.json())
       .then(data => setPandaData(data));
   }, []);
