@@ -24,6 +24,31 @@ export async function addProfile(profileName: string, avatarUrl: string) {
   return res.json();
 }
 
+export async function updateActiveProfile(id: string) {
+  // const res = await fetch(`${backendServiceURL}/profiles/activeProfile`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   body: JSON.stringify({
+  //     id
+  //   }),
+  //   credentials: "include"
+  // });
+
+  // if (!res.ok) {
+  //   const errorData = await res.json();
+  //   console.log(errorData);
+  //   if (!errorData.message) {
+  //     throw new Error("Error while update active profile");
+  //   }
+  //   throw new Error(errorData.message);
+  // }
+  // const data = await res.json();
+  // return data;
+  return id;
+}
+
 export async function readProfiles() {
   const res = await fetch(`${backendServiceURL}/profiles`);
 

@@ -70,9 +70,13 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleProfileClick}
-              className="h-12 w-12 rounded-full bg-black text-white font-extrabold"
+              className="h-17 w-17 rounded-full flex items-center justify-center bg-black text-white font-extrabold"
             >
-              ?
+              <img
+                src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
+                alt={user?.activeProfile?.profileName.slice(0, 1)}
+                className="h-16 w-16"
+              />
             </button>
             <p className="text-sm font-semibold">{getActiveProfileName()}</p>
           </div>
