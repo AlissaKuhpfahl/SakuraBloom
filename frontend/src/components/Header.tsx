@@ -49,21 +49,36 @@ export default function Header() {
   return (
     <header className=" relative mt-8 z-20 ">
       <div className="flex h-20 items-center pl-8">
-        <div className="flex items-center justify-center gap-3">
-          <button
-            onClick={handleProfileClick}
-            disabled={!user}
-            className="hover:bg-gray-600 flex items-center justify-center  h-19 w-19 rounded-full bg-white"
-          >
-            <img
-              src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
-              alt={user?.activeProfile?.profileName[0]}
-              className="h-18 w-18"
-            />
-          </button>
-          <p className="text-sm font-semibold">{getActiveProfileName()}</p>
-        </div>
+        {!user ? (
+          //  Gast: Girl + Speechbubble + Text
+          <div className="relative flex items-center gap-1">
+            {/* Girl bild */}
+            <img src="/girl.svg" alt="Sakura Girl" className="h-15 w-15 shrink-0" />
+
+            {/* Bubble + Text Overlay */}
+            <div className="relative">
+              <img src="/bubble.svg" alt="Nachricht" className="h-20 w-40" />
+
+              {/* Text in Bubble */}
+              <p className="absolute left-10 top-1/2 -translate-y-1/2  w-24 text-xs font-bold text-(--color-dark-gray) leading-tight ">
+                Komm rein und lerne mit mir!
+              </p>
+            </div>
+          </div>
+        ) : (
+          // Eingeloggt
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleProfileClick}
+              className="h-12 w-12 rounded-full bg-black text-white font-extrabold"
+            >
+              ?
+            </button>
+            <p className="text-sm font-semibold">{getActiveProfileName()}</p>
+          </div>
+        )}
       </div>
+
       {showProfilesModal && (
         <ProfilesModal setShowProfilesModal={setShowProfilesModal} user={user}></ProfilesModal>
       )}
