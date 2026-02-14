@@ -22,7 +22,21 @@ export type StepTask = {
   correctIndex: number;
 };
 
-export type Step = StepBase | StepTask;
+export type StepReward = {
+  title: string;
+  type: "reward";
+  content: string;
+
+  // Animation & Sound
+  lottieSrc: string;
+  soundSrc?: string;
+
+  // Buttons
+  primaryLabel?: string; // default: "Nächste Lektion"
+  secondaryLabel?: string; // default: "Alle Lektionen"
+};
+
+export type Step = StepBase | StepTask | StepReward;
 
 // Lesson
 export type Lesson = {

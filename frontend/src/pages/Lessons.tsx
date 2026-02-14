@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import PrimaryButton from "../components/Btn.tsx";
 import { isLessonDone } from "../utils/progress.ts";
+import { modules } from "../content/modules.ts";
 
+// Types
 type ModuleKey = "online" | "privacy" | "chats" | "fake";
 type LessonStatus = "done" | "active" | "locked";
 
@@ -28,76 +30,31 @@ export default function Lessons() {
   const labelFor = (done: number, total: number) =>
     done === total ? "Abgeschlossen" : done > 0 ? "Fortsetzen" : "Starten";
 
-  // Dummy Daten
-  const modules = [
-    {
-      key: "online" as ModuleKey,
-      title: "Online–Sicherheit",
-      total: 5,
-      icon: "/elephant.svg",
-      lessons: [
-        { id: "1", title: "Passwörter verstehen", status: "done" as LessonStatus, stepsDone: 5 },
-        { id: "2", title: "Sichere Passwörter", status: "active" as LessonStatus, stepsDone: 2 },
-        { id: "3", title: "Links & Nachrichten", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "4", title: "Phishing erkennen", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "5", title: "Hilfe holen", status: "locked" as LessonStatus, stepsDone: 0 }
-      ]
-    },
-    {
-      key: "privacy" as ModuleKey,
-      title: "Privatsphäre",
-      total: 4,
-      icon: "/hase.svg",
-      lessons: [
-        { id: "1", title: "Was sind Daten?", status: "done" as LessonStatus, stepsDone: 5 },
-        { id: "2", title: "Privat bleibt privat", status: "active" as LessonStatus, stepsDone: 1 },
-        { id: "3", title: "Standort & Fotos", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "4", title: "Einstellungen checken", status: "locked" as LessonStatus, stepsDone: 0 }
-      ]
-    },
-    {
-      key: "chats" as ModuleKey,
-      title: "Chats & Verhalten",
-      total: 3,
-      icon: "/animal.svg",
-      lessons: [
-        { id: "1", title: "Freundlich schreiben", status: "active" as LessonStatus, stepsDone: 0 },
-        { id: "2", title: "Nein sagen lernen", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "3", title: "Blockieren & Melden", status: "locked" as LessonStatus, stepsDone: 0 }
-      ]
-    },
-    {
-      key: "fake" as ModuleKey,
-      title: "Fake erkennen",
-      total: 5,
-      icon: "/duck.svg",
-      lessons: [
-        { id: "1", title: "Echt oder Fake?", status: "active" as LessonStatus, stepsDone: 0 },
-        { id: "2", title: "Bilder prüfen", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "3", title: "Schock-Nachrichten", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "4", title: "Quellen checken", status: "locked" as LessonStatus, stepsDone: 0 },
-        { id: "5", title: "Kurz nachdenken!", status: "locked" as LessonStatus, stepsDone: 0 }
-      ]
-    }
-  ];
-
-  // computed: doneCount + nextLessonId aus localStorage
+  ///////////////// nächste lektion richtig freischalten /////////////////////////
   const computedModules = modules.map(m => {
     const isDone = (lessonId: string, status: LessonStatus) =>
       status === "done" || isLessonDone(m.key, lessonId);
 
     const doneCount = m.lessons.filter(l => isDone(l.id, l.status)).length;
 
-    const next =
-      // 1) erst aktive Lektion bevorzugen
-      m.lessons.find(l => l.status === "active") ??
-      // 2) sonst erste nicht-done und nicht-locked
-      m.lessons.find(l => !isDone(l.id, l.status) && l.status !== "locked") ??
-      // 3) sonst erste nicht-locked
-      m.lessons.find(l => l.status !== "locked") ??
-      m.lessons[0];
+    const firstNotDoneIndex = m.lessons.findIndex(l => !isDone(l.id, l.status));
 
-    return { ...m, doneCount, nextLessonId: next.id };
+    const lessonsDynamic = m.lessons.map((l, idx) => {
+      const done = isDone(l.id, l.status);
+
+      let status: LessonStatus = "locked";
+      if (done) status = "done";
+      else if (idx === (firstNotDoneIndex === -1 ? 0 : firstNotDoneIndex)) status = "active";
+
+      return { ...l, status };
+    });
+
+    const nextLessonId =
+      firstNotDoneIndex === -1
+        ? m.lessons[m.lessons.length - 1]?.id ?? "1"
+        : m.lessons[firstNotDoneIndex]?.id ?? "1";
+
+    return { ...m, lessons: lessonsDynamic, doneCount, nextLessonId };
   });
 
   const selectedModule = computedModules.find(m => m.key === selected)!;
@@ -105,13 +62,34 @@ export default function Lessons() {
 
   return (
     <section className="space-y-6 pt-6">
-      <div>
-        <h1 className="text-3xl font-extrabold">Lektionen</h1>
-        <p className="mt-1 text-sm text-(--color-dark-gray)">Wähle ein Modul und lerne weiter.</p>
+      {/* Headline */}
+      <div className="rounded-3xl p-6 ">
+        <p className="text-xs uppercase tracking-widest text-(--color-dark-gray) opacity-70">
+          SakuraBloom
+        </p>
+
+        <h1 className="mt-2 text-3xl font-extrabold">Deine Lernreise</h1>
+
+        <p className="mt-2 max-w-lg text-sm text-(--color-dark-gray)">
+          Wähle ein Modul und mach den nächsten Schritt. Kleine Levels, große Sicherheit.
+        </p>
+
+        {/* Mini-Chips */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="rounded-full bg-(--color-dark-gray)/5 px-3 py-1 text-xs font-semibold">
+            Level-System
+          </span>
+          <span className="rounded-full bg-(--color-dark-gray)/5 px-3 py-1 text-xs font-semibold">
+            Belohnungen
+          </span>
+          <span className="rounded-full bg-(--color-dark-gray)/5 px-3 py-1 text-xs font-semibold">
+            Sicher online
+          </span>
+        </div>
       </div>
 
       {/* Background */}
-      <div className="relative min-h-170 overflow-hidden rounded-3xl p-6">
+      <div className="relative min-h-170 rounded-3xl py-6">
         <div className="absolute inset-0" />
 
         {/* Sakura in BG */}
@@ -124,7 +102,9 @@ export default function Lessons() {
         <div className="relative z-10 space-y-6">
           {/* Weiter lernen Karte */}
           <div className="w-full max-w-md rounded-3xl bg-white p-5 shadow-md transition-all duration-300 ease-out hover:-translate-y-1 cursor-pointer">
-            <p className="text-xs">Weiter lernen</p>
+            <p className="text-xs uppercase tracking-widest text-(--color-dark-gray) opacity-70">
+              Weiter lernen
+            </p>
 
             <div className="mt-2 flex items-center justify-between gap-4">
               <div>
@@ -242,10 +222,10 @@ export default function Lessons() {
                     </span>
                   </div>
 
-                  <h3 className="mt-2 text-lg font-extrabold">{l.title}</h3>
+                  <h2 className="mt-2  font-extrabold">{l.title}</h2>
 
                   {/* 5 Kreise */}
-                  <div className="mt-3 flex gap-2">
+                  {/* <div className="mt-3 flex gap-2">
                     {Array.from({ length: 5 }).map((_, i) => {
                       const circlesDone = isDone ? 5 : l.stepsDone;
 
@@ -261,7 +241,7 @@ export default function Lessons() {
                         />
                       );
                     })}
-                  </div>
+                  </div> */}
 
                   <div className="mt-5 flex items-center justify-between gap-3">
                     <PrimaryButton
