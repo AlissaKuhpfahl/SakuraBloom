@@ -1,5 +1,6 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router";
 import MainLayout from "./layout/MainLayout";
+
 // Pages
 import Home from "./pages/Home.tsx";
 import Modules from "./pages/Modules.tsx";
@@ -19,7 +20,8 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="modules" element={<Modules />} />
-            <Route path="quiz" element={<Quiz />} />
+            <Route path="quiz" element={<Navigate to="/quiz/online" replace />} />
+            <Route path="quiz/:moduleKey" element={<Quiz />} />
             <Route path="progress" element={<Progress />} />
             <Route path="lessons" element={<Lessons />} />
             <Route path="lektion/:moduleKey/:lessonId" element={<LessonDetail />} />

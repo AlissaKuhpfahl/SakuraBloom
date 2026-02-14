@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-
+import { modules } from "../content/modules.ts";
 import PrimaryButton from "../components/Btn.tsx";
-import type { ModuleKey, Module, Step } from "../types";
+import type { ModuleKey, Step } from "../types";
 import { markLessonDone } from "../utils/progress.ts";
+import Lottie from "lottie-react";
 
 export default function LessonDetail() {
   const navigate = useNavigate();
@@ -11,6 +12,10 @@ export default function LessonDetail() {
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  // Lottie data für Reward
+  const [rewardAnim, setRewardAnim] = useState<any>(null);
+  const playedRewardRef = useRef<string>("");
 
   const params = useParams<{ moduleKey: ModuleKey; lessonId: string }>();
   const moduleKey = params.moduleKey;
@@ -45,181 +50,6 @@ export default function LessonDetail() {
     fake: "bg-(--color-green)/25"
   };
 
-  // Platzhalter für alle Lektionen, damit "Nicht gefunden" nicht passiert
-  const placeholderSteps: Step[] = [
-    { type: "read", title: "Kommt bald", content: "Diese Lektion ist noch in Arbeit 🙂" },
-    { type: "tip", title: "Tipp", content: "Mach erstmal eine andere Lektion weiter!" },
-    { type: "check", title: "Check", content: "Nice! ⭐" }
-  ];
-
-  // Dummy Daten (jetzt komplett)
-  const modules: Module[] = [
-    {
-      key: "online",
-      title: "Online–Sicherheit",
-      lessons: [
-        {
-          id: "1",
-          title: "Passwörter verstehen",
-          subtitle: "Warum Passwörter wichtig sind.",
-          steps: placeholderSteps
-        },
-        {
-          id: "2",
-          title: "Sichere Passwörter",
-          subtitle: "Wir bauen ein starkes Passwort.",
-          steps: [
-            {
-              type: "read",
-              title: "Lesen",
-              content:
-                "Ein sicheres Passwort ist lang und schwer zu erraten. Nutze mehrere Wörter + eine Zahl."
-            },
-            {
-              type: "example",
-              title: "Beispiel",
-              content: "✗ passwort123 (zu einfach)\n✓ KeksBananeWolke7 (viel besser!)"
-            },
-            {
-              type: "task",
-              title: "Mini-Aufgabe",
-              content: "Welche Option ist sicherer?",
-              answers: ["Sakura2024", "SakuraLiebtEis!7"],
-              correctIndex: 1
-            },
-            {
-              type: "tip",
-              title: "Tipp",
-              content: "Merke: 3 Wörter + Zahl + Zeichen = super Passwort!"
-            },
-            {
-              type: "check",
-              title: "Check",
-              content: "Level geschafft! ⭐ Du erkennst jetzt sichere Passwörter."
-            }
-          ]
-        },
-        {
-          id: "3",
-          title: "Links & Nachrichten",
-          subtitle: "Sicher klicken.",
-          steps: placeholderSteps
-        },
-        {
-          id: "4",
-          title: "Phishing erkennen",
-          subtitle: "Fallen erkennen.",
-          steps: placeholderSteps
-        },
-        {
-          id: "5",
-          title: "Hilfe holen",
-          subtitle: "Wenn etwas komisch ist.",
-          steps: placeholderSteps
-        }
-      ]
-    },
-    {
-      key: "privacy",
-      title: "Privatsphäre",
-      lessons: [
-        {
-          id: "1",
-          title: "Was sind Daten?",
-          subtitle: "Wir schauen, was Daten über dich verraten können.",
-          steps: [
-            {
-              type: "read",
-              title: "Lesen",
-              content: "Daten sind Infos über dich: Name, Fotos, Standort."
-            },
-            {
-              type: "example",
-              title: "Beispiel",
-              content: "Ein Foto kann verraten, wo du bist – ohne dass du es merkst."
-            },
-            {
-              type: "task",
-              title: "Mini-Aufgabe",
-              content: "Welche Info ist privat?",
-              answers: ["Lieblingsfarbe", "Adresse"],
-              correctIndex: 1
-            },
-            {
-              type: "tip",
-              title: "Tipp",
-              content: "Teile private Infos nur mit Menschen, denen du vertraust."
-            },
-            { type: "check", title: "Check", content: "Top! Nicht alles gehört ins Internet." }
-          ]
-        },
-        {
-          id: "2",
-          title: "Privat bleibt privat",
-          subtitle: "Was du teilen solltest.",
-          steps: placeholderSteps
-        },
-        {
-          id: "3",
-          title: "Standort & Fotos",
-          subtitle: "Was Bilder verraten.",
-          steps: placeholderSteps
-        },
-        {
-          id: "4",
-          title: "Einstellungen checken",
-          subtitle: "Privatsphäre einstellen.",
-          steps: placeholderSteps
-        }
-      ]
-    },
-    {
-      key: "chats",
-      title: "Chats & Verhalten",
-      lessons: [
-        {
-          id: "1",
-          title: "Freundlich schreiben",
-          subtitle: "Netiquette.",
-          steps: placeholderSteps
-        },
-        {
-          id: "2",
-          title: "Nein sagen lernen",
-          subtitle: "Grenzen setzen.",
-          steps: placeholderSteps
-        },
-        {
-          id: "3",
-          title: "Blockieren & Melden",
-          subtitle: "Sicher bleiben.",
-          steps: placeholderSteps
-        }
-      ]
-    },
-    {
-      key: "fake",
-      title: "Fake erkennen",
-      lessons: [
-        { id: "1", title: "Echt oder Fake?", subtitle: "Erste Checks.", steps: placeholderSteps },
-        {
-          id: "2",
-          title: "Bilder prüfen",
-          subtitle: "Bild-Tricks erkennen.",
-          steps: placeholderSteps
-        },
-        {
-          id: "3",
-          title: "Schock-Nachrichten",
-          subtitle: "Nicht stressen lassen.",
-          steps: placeholderSteps
-        },
-        { id: "4", title: "Quellen checken", subtitle: "Wer sagt das?", steps: placeholderSteps },
-        { id: "5", title: "Kurz nachdenken!", subtitle: "Stop & Think.", steps: placeholderSteps }
-      ]
-    }
-  ];
-
   const module = modules.find(m => m.key === moduleKey);
   const lesson = module?.lessons.find(l => l.id === lessonId);
 
@@ -229,18 +59,57 @@ export default function LessonDetail() {
         <div className="rounded-3xl bg-white p-6 shadow-md">
           <h1 className="text-xl font-extrabold">Nicht gefunden</h1>
           <p className="mt-2 text-sm text-(--color-dark-gray)">
-            Diese Lektion gibt es (noch) nicht in den Dummy-Daten.
+            Diese Lektion gibt es (noch) nicht in den Content-Daten.
           </p>
           <PrimaryButton className="mt-4" label="Zurück" onClick={() => navigate("/lessons")} />
         </div>
       </section>
     );
   }
-  const safeModuleKey: ModuleKey = moduleKey;
-  const safeLessonId: string = lessonId;
 
   const steps = lesson.steps;
-  const current = steps[stepIndex];
+  const current = steps[stepIndex] as Step;
+
+  // Next lesson id (Reihenfolge wie im Content)
+  const nextLessonId = useMemo(() => {
+    const ids = module.lessons.map(l => l.id);
+    const idx = ids.indexOf(lessonId);
+    if (idx === -1) return null;
+    return ids[idx + 1] ?? null;
+  }, [module.lessons, lessonId]);
+
+  // Beim Step-Wechsel: Quiz Auswahl resetten
+  useEffect(() => {
+    setPicked(null);
+    setIsCorrect(null);
+  }, [stepIndex]);
+
+  // Reward: speichern + Lottie laden + Sound (einmal)
+  useEffect(() => {
+    if (current?.type !== "reward") return;
+
+    // 1) Fortschritt speichern
+    markLessonDone(moduleKey, lessonId);
+
+    // 2) Lottie laden (aus public)
+    setRewardAnim(null);
+    fetch(current.lottieSrc)
+      .then(r => r.json())
+      .then(setRewardAnim)
+      .catch(() => setRewardAnim(null));
+
+    // 3) Sound (optional) nur einmal pro lesson+step
+    const key = `${moduleKey}:${lessonId}:reward`;
+    if (playedRewardRef.current !== key) {
+      playedRewardRef.current = key;
+
+      if (current.soundSrc) {
+        const audio = new Audio(current.soundSrc);
+        audio.volume = 0.7;
+        audio.play().catch(() => {});
+      }
+    }
+  }, [current, moduleKey, lessonId]);
 
   const iconForStep = (i: number) => {
     if (i < stepIndex) return "/icons/check.svg";
@@ -253,19 +122,16 @@ export default function LessonDetail() {
     setPicked(index);
     setIsCorrect(index === current.correctIndex);
   }
-  //
 
   function next() {
+    // Bei Quiz: nur weiter, wenn richtig
     if (current.type === "task" && isCorrect !== true) return;
-
-    setPicked(null);
-    setIsCorrect(null);
 
     if (stepIndex < steps.length - 1) {
       setStepIndex(v => v + 1);
     } else {
-      markLessonDone(safeModuleKey, safeLessonId);
-      console.log("SAVED:", moduleKey, lesson?.id);
+      // Falls letztes kein reward ist (fallback)
+      markLessonDone(moduleKey, lessonId);
       navigate("/lessons", { replace: true });
     }
   }
@@ -356,17 +222,39 @@ export default function LessonDetail() {
             })}
           </div>
 
+          {/* Buttons unten links */}
           <div className="mt-5 flex items-center justify-between gap-3">
             <PrimaryButton label="Zurück" onClick={() => navigate("/lessons")} />
-            <PrimaryButton
-              label={stepIndex < steps.length - 1 ? "Weiter" : "Fertig!"}
-              onClick={next}
-              className={
-                current.type === "task" && isCorrect !== true
-                  ? "opacity-60 pointer-events-none"
-                  : ""
-              }
-            />
+
+            {current.type === "reward" ? (
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  className="rounded-full bg-(--color-dark-gray)/10 px-6 py-4 font-bold hover:bg-(--color-dark-gray)/15 transition"
+                  onClick={() => navigate("/lessons")}
+                >
+                  Alle Lektionen
+                </button>
+
+                <PrimaryButton
+                  label="Nächste Lektion"
+                  onClick={() => {
+                    if (nextLessonId) navigate(`/lektion/${moduleKey}/${nextLessonId}`);
+                    else navigate("/lessons");
+                  }}
+                />
+              </div>
+            ) : (
+              <PrimaryButton
+                label={stepIndex < steps.length - 1 ? "Weiter" : "Fertig!"}
+                onClick={next}
+                className={
+                  current.type === "task" && isCorrect !== true
+                    ? "opacity-60 pointer-events-none"
+                    : ""
+                }
+              />
+            )}
           </div>
         </div>
 
@@ -383,7 +271,37 @@ export default function LessonDetail() {
             </span>
           </div>
 
-          {current.type !== "task" && (
+          {/* REWARD */}
+          {current.type === "reward" && (
+            <div className="mt-4">
+              <div className="rounded-3xl bg-(--color-primary)/10 p-5">
+                <p className="whitespace-pre-line text-sm font-semibold text-(--color-dark-gray)">
+                  {current.content}
+                </p>
+              </div>
+
+              <div className="mt-4 overflow-hidden rounded-3xl bg-(--color-dark-gray)/5 p-4">
+                {rewardAnim ? (
+                  <Lottie animationData={rewardAnim} loop={false} />
+                ) : (
+                  <div className="h-48 w-full" />
+                )}
+              </div>
+
+              <div className="mt-6 flex items-center gap-3 rounded-3xl bg-white p-5 shadow-sm border border-(--color-dark-gray)/10">
+                <img src="/flower-full.svg" alt="" className="h-8 w-8" />
+                <div>
+                  <p className="text-sm font-extrabold">Belohnung</p>
+                  <p className="text-xs text-(--color-dark-gray)">
+                    Du hast alle Teile geschafft und sammelst eine Sakura 🌸
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* NORMAL (read/example/tip/check) */}
+          {current.type !== "task" && current.type !== "reward" && (
             <div className="mt-4 rounded-3xl bg-(--color-dark-gray)/5 p-5">
               <p className="whitespace-pre-line text-sm text-(--color-dark-gray)">
                 {current.content}
@@ -391,6 +309,7 @@ export default function LessonDetail() {
             </div>
           )}
 
+          {/* TASK */}
           {current.type === "task" && (
             <div className="mt-4 rounded-3xl bg-(--color-dark-gray)/5 p-5">
               <p className="text-sm font-semibold text-(--color-dark-gray)">{current.content}</p>
@@ -431,15 +350,18 @@ export default function LessonDetail() {
             </div>
           )}
 
-          <div className="mt-6 flex items-center gap-3 rounded-3xl bg-white p-5 shadow-sm border border-(--color-dark-gray)/10">
-            <img src="/flower-full.svg" alt="" className="h-8 w-8" />
-            <div>
-              <p className="text-sm font-extrabold">Belohnung</p>
-              <p className="text-xs text-(--color-dark-gray)">
-                Schaffe alle 5 Teile und sammle eine Sakura
-              </p>
+          {/* Belohnungs-Karte auch bei normalen Steps */}
+          {current.type !== "reward" && (
+            <div className="mt-6 flex items-center gap-3 rounded-3xl bg-white p-5 shadow-sm border border-(--color-dark-gray)/10">
+              <img src="/flower-full.svg" alt="" className="h-8 w-8" />
+              <div>
+                <p className="text-sm font-extrabold">Belohnung</p>
+                <p className="text-xs text-(--color-dark-gray)">
+                  Schaffe alle {steps.length} Teile und sammle eine Sakura
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

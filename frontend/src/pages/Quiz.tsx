@@ -1,39 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import lottie from "lottie-web";
 import PrimaryButton from "../components/Btn.tsx";
+import { quizzes } from "../content/quizzes.ts";
+import type { ModuleKey } from "../types/lesson.ts";
+import { modules } from "../content/modules.ts";
 
-const QUESTIONS = [
-  {
-    situation: "Ein Spieler fragt nach deinem Passwort.",
-    answers: [
-      { id: "a", text: "Ich sage es ihm" },
-      { id: "b", text: "Ich melde ihn" },
-      { id: "c", text: "Ich ignoriere ihn" }
-    ],
-    correctId: "b"
-  },
-  {
-    situation: "Du bekommst einen Link: „Gratis Robux / Coins – klick hier!“",
-    answers: [
-      { id: "a", text: "Ich klicke sofort drauf" },
-      { id: "b", text: "Ich frage erst Mama/Papa oder eine Lehrkraft" },
-      { id: "c", text: "Ich leite den Link an Freunde weiter" }
-    ],
-    correctId: "b"
-  },
-  {
-    situation:
-      "Ein fremder Spieler will mit dir privat chatten und fragt nach deinem Namen/Adresse.",
-    answers: [
-      { id: "a", text: "Ich erzähle es, damit wir Freunde werden" },
-      { id: "b", text: "Ich sage nein, blockiere ihn und melde es" },
-      { id: "c", text: "Ich schicke ihm ein Foto von mir" }
-    ],
-    correctId: "b"
-  }
-];
-
+// fragen
+const isModuleKey = (v: unknown): v is ModuleKey =>
+  v === "online" || v === "privacy" || v === "chats" || v === "fake";
 // Animation
 type FeedbackType = "correct" | "wrong" | null;
 
@@ -101,6 +77,15 @@ function LottieGraduation({ onDone }: { onDone: () => void }) {
 }
 
 export default function Quiz() {
+  // Fragen
+  const params = useParams<{ moduleKey?: string }>();
+  const safeModuleKey: ModuleKey = isModuleKey(params.moduleKey) ? params.moduleKey : "online";
+  const QUESTIONS = quizzes[safeModuleKey];
+
+  const navigate = useNavigate();
+
+  const moduleTitle = modules.find(m => m.key === safeModuleKey)?.title ?? "";
+  //
   const [selected, setSelected] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackType>(null);
@@ -159,7 +144,8 @@ export default function Quiz() {
 
   return (
     <div className="min-h-screen p-8">
-      <h1 className="text-2xl font-semibold">Quiz</h1>
+      <h1 className="text-2xl font-semibold">Quiz – {moduleTitle}</h1>
+
       <p className="mt-1 text-sm">Lerne spielerisch, wie du sicher im Internet unterwegs bist.</p>
 
       <div className="quiz-scene relative mt-6 rounded-4xl p-25">
@@ -223,8 +209,9 @@ export default function Quiz() {
                 <LottieFeedback key={feedback} type={feedback} onDone={() => {}} />
 
                 {/* Button zu näcshte frage */}
-
                 <PrimaryButton label="Weiter" onClick={() => setFeedback(null)} />
+
+                {/* <PrimaryButton label="Weiter" onClick={resetForNext} /> */}
               </motion.div>
             </motion.div>
           )}
@@ -271,17 +258,9 @@ export default function Quiz() {
                     }}
                   />
                   <PrimaryButton
-                    label="Nächste Lektion"
+                    label="Zurück zu Lektionen"
                     className="btn-secondary"
-                    onClick={() => {
-                      setFinished(false);
-                      setScore(0);
-                      setQIndex(0);
-                      setSelected(null);
-                      setLocked(false);
-                      setFeedback(null);
-                      winSoundPlayed.current = false;
-                    }}
+                    onClick={() => navigate("/lessons")}
                   />
                 </div>
               </motion.div>

@@ -184,7 +184,7 @@ export default function Home() {
             <PrimaryButton
               className="mt-2"
               label="Quiz starten"
-              onClick={() => navigate("/quiz")}
+              onClick={() => navigate("/quiz/${moduleKey}")}
             />
           </div>
 
