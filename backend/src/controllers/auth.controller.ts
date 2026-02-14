@@ -6,17 +6,19 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 function setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: REFRESH_TOKEN_TTL * 1000
   });
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict"
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax"
   });
 }
 
@@ -97,8 +99,18 @@ export const logout: RequestHandler = async (req, res) => {
     await RefreshToken.findOneAndDelete({ token: refreshToken });
   }
 
-  res.clearCookie("refreshToken");
-  res.clearCookie("accessToken");
+  const isProduction = process.env.NODE_ENV === "production";
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax"
+  });
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax"
+  });
 
   res.status(200).json({ message: "Successfully logged out" });
 };
