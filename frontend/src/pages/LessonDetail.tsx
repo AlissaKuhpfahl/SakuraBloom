@@ -1,25 +1,108 @@
+// LessonDetail.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { motion, AnimatePresence } from "framer-motion";
+
 import { modules } from "../content/modules.ts";
 import PrimaryButton from "../components/Btn.tsx";
 import type { ModuleKey, Step } from "../types";
-import { markLessonDone } from "../utils/progress.ts";
-import Lottie from "lottie-react";
+import { markLessonDone, setPendingModuleComplete } from "../utils/progress.ts";
 
+// Reward Overlay
+type RewardOverlayProps = {
+  open: boolean;
+  title: string;
+  message: string;
+  videoSrc: string; // MP4
+  soundSrc?: string;
+  primaryLabel: string;
+  secondaryLabel: string;
+  onPrimary: () => void;
+  onSecondary: () => void;
+};
+
+function RewardOverlay({
+  open,
+  title,
+  message,
+  videoSrc,
+  soundSrc,
+  primaryLabel,
+  secondaryLabel,
+  onPrimary,
+  onSecondary
+}: RewardOverlayProps) {
+  const playedRef = useRef(false);
+
+  // Sound einmal beim Öffnen
+  useEffect(() => {
+    if (!open) {
+      playedRef.current = false;
+      return;
+    }
+    if (soundSrc && !playedRef.current) {
+      playedRef.current = true;
+      const a = new Audio(soundSrc);
+      a.volume = 0.7;
+      a.play().catch(() => {});
+    }
+  }, [open, soundSrc]);
+
+  if (!open) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 grid place-items-center bg-black/35 p-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onSecondary}
+      >
+        <motion.div
+          className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl"
+          initial={{ y: 14, opacity: 0, scale: 0.96 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: 14, opacity: 0, scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 380, damping: 26 }}
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="text-xl font-extrabold">{title}</div>
+          <div className="mt-2 text-sm text-(--color-dark-gray)">{message}</div>
+
+          <video
+            src={videoSrc}
+            autoPlay
+            playsInline
+            muted
+            controls={false}
+            className="mx-auto mt-4 h-44 w-44 rounded-2xl object-cover"
+          />
+
+          <div className="mt-5 flex justify-center gap-3">
+            <PrimaryButton label={secondaryLabel} className="btn-secondary" onClick={onSecondary} />
+            <PrimaryButton label={primaryLabel} onClick={onPrimary} />
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+// Page
 export default function LessonDetail() {
   const navigate = useNavigate();
 
-  const [stepIndex, setStepIndex] = useState<number>(0);
+  const params = useParams<{ moduleKey?: ModuleKey; lessonId?: string }>();
+  const moduleKey = params.moduleKey;
+  const lessonId = params.lessonId;
+
+  const [stepIndex, setStepIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  // Lottie data für Reward
-  const [rewardAnim, setRewardAnim] = useState<any>(null);
-  const playedRewardRef = useRef<string>("");
-
-  const params = useParams<{ moduleKey: ModuleKey; lessonId: string }>();
-  const moduleKey = params.moduleKey;
-  const lessonId = params.lessonId;
+  const [rewardOpen, setRewardOpen] = useState(false);
+  const rewardShownRef = useRef(false); // verhindert mehrfaches Öffnen
 
   if (!moduleKey || !lessonId) {
     return (
@@ -34,21 +117,6 @@ export default function LessonDetail() {
       </section>
     );
   }
-
-  // Modul-Farben
-  const moduleAccent: Record<ModuleKey, string> = {
-    online: "bg-(--color-blue)",
-    privacy: "bg-(--color-light-yellow)",
-    chats: "bg-(--color-peach)",
-    fake: "bg-(--color-green)"
-  };
-
-  const moduleAccentSoft: Record<ModuleKey, string> = {
-    online: "bg-(--color-blue)/20",
-    privacy: "bg-(--color-light-yellow)/30",
-    chats: "bg-(--color-peach)/30",
-    fake: "bg-(--color-green)/25"
-  };
 
   const module = modules.find(m => m.key === moduleKey);
   const lesson = module?.lessons.find(l => l.id === lessonId);
@@ -67,10 +135,24 @@ export default function LessonDetail() {
     );
   }
 
+  // Farben
+  const moduleAccent: Record<ModuleKey, string> = {
+    online: "bg-(--color-blue)",
+    privacy: "bg-(--color-light-yellow)",
+    chats: "bg-(--color-peach)",
+    fake: "bg-(--color-green)"
+  };
+
+  const moduleAccentSoft: Record<ModuleKey, string> = {
+    online: "bg-(--color-blue)/20",
+    privacy: "bg-(--color-light-yellow)/30",
+    chats: "bg-(--color-peach)/30",
+    fake: "bg-(--color-green)/25"
+  };
+
   const steps = lesson.steps;
   const current = steps[stepIndex] as Step;
 
-  // Next lesson id (Reihenfolge wie im Content)
   const nextLessonId = useMemo(() => {
     const ids = module.lessons.map(l => l.id);
     const idx = ids.indexOf(lessonId);
@@ -78,37 +160,25 @@ export default function LessonDetail() {
     return ids[idx + 1] ?? null;
   }, [module.lessons, lessonId]);
 
-  // Beim Step-Wechsel: Quiz Auswahl resetten
+  // Beim Stepwechsel resetten
   useEffect(() => {
     setPicked(null);
     setIsCorrect(null);
   }, [stepIndex]);
 
-  // Reward: speichern + Lottie laden + Sound (einmal)
+  // Reward Step: Fortschritt speichern + Overlay öffnen (einmal)
   useEffect(() => {
-    if (current?.type !== "reward") return;
-
-    // 1) Fortschritt speichern
-    markLessonDone(moduleKey, lessonId);
-
-    // 2) Lottie laden (aus public)
-    setRewardAnim(null);
-    fetch(current.lottieSrc)
-      .then(r => r.json())
-      .then(setRewardAnim)
-      .catch(() => setRewardAnim(null));
-
-    // 3) Sound (optional) nur einmal pro lesson+step
-    const key = `${moduleKey}:${lessonId}:reward`;
-    if (playedRewardRef.current !== key) {
-      playedRewardRef.current = key;
-
-      if (current.soundSrc) {
-        const audio = new Audio(current.soundSrc);
-        audio.volume = 0.7;
-        audio.play().catch(() => {});
-      }
+    if (current.type !== "reward") {
+      rewardShownRef.current = false;
+      return;
     }
+
+    // nur einmal öffnen pro Reward-Step
+    if (rewardShownRef.current) return;
+    rewardShownRef.current = true;
+
+    markLessonDone(moduleKey, lessonId);
+    setRewardOpen(true);
   }, [current, moduleKey, lessonId]);
 
   const iconForStep = (i: number) => {
@@ -124,26 +194,33 @@ export default function LessonDetail() {
   }
 
   function next() {
-    // Bei Quiz: nur weiter, wenn richtig
     if (current.type === "task" && isCorrect !== true) return;
 
     if (stepIndex < steps.length - 1) {
       setStepIndex(v => v + 1);
     } else {
-      // Falls letztes kein reward ist (fallback)
-      markLessonDone(moduleKey, lessonId);
+      // Fallback: falls content KEIN reward step hätte
+      markLessonDone(moduleKey!, lessonId!);
+
+      // wenn es auch wirklich keine nächste Lektion im Modul gibt: Modul Complete Overlay in Lessons
+      if (!nextLessonId) {
+        setPendingModuleComplete({
+          moduleKey,
+          title: "Modul geschafft! 🎉",
+          message: "Mega! Du hast alle Lektionen in diesem Modul geschafft."
+        });
+      }
+
       navigate("/lessons", { replace: true });
     }
   }
 
   return (
     <section className="space-y-6 pt-6">
-      {/* TOP: Bild links , Modul-Karte rechts */}
+      {/* TOP */}
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-        {/* LEFT: Bild */}
         <div className="relative overflow-hidden rounded-3xl bg-white shadow-md aspect-4/3">
-          <img src="/hase-lektion.jpg" alt="" className="w-full object-cover h-auto" />
-
+          <img src="/hase-lektion.jpg" alt="" className="h-auto w-full object-cover" />
           <div
             className={[
               "pointer-events-none absolute left-4 top-4 rounded-2xl px-3 py-2 text-xs font-bold",
@@ -154,7 +231,6 @@ export default function LessonDetail() {
           </div>
         </div>
 
-        {/* RIGHT: Modul/Lektion Karte */}
         <div className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-md">
           <div className={`absolute left-0 top-0 h-2 w-full ${moduleAccent[moduleKey]}`} />
 
@@ -176,8 +252,8 @@ export default function LessonDetail() {
 
       {/* MAIN */}
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-        {/* LEFT: Steps */}
-        <div className="rounded-3xl bg-white p-5 shadow-md aspect-4/3">
+        {/* LEFT */}
+        <div className="rounded-3xl bg-white p-5 shadow-md">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-extrabold">Mini-Schritte</h3>
             <span className="rounded-full bg-(--color-dark-gray)/5 px-3 py-1 text-xs font-semibold">
@@ -213,7 +289,7 @@ export default function LessonDetail() {
                     locked ? "opacity-60 cursor-not-allowed" : "hover:-translate-y-0.5"
                   ].join(" ")}
                 >
-                  <span className={`${locked ? "text-(--color-dark-gray)" : "font-semibold"}`}>
+                  <span className={locked ? "text-(--color-dark-gray)" : "font-semibold"}>
                     {i + 1}. {s.title}
                   </span>
                   <img src={iconForStep(i)} alt="" className="h-4 w-4 opacity-80" />
@@ -222,29 +298,8 @@ export default function LessonDetail() {
             })}
           </div>
 
-          {/* Buttons unten links */}
-          <div className="mt-5 flex items-center justify-between gap-3">
-            <PrimaryButton label="Zurück" onClick={() => navigate("/lessons")} />
-
-            {current.type === "reward" ? (
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  className="rounded-full bg-(--color-dark-gray)/10 px-6 py-4 font-bold hover:bg-(--color-dark-gray)/15 transition"
-                  onClick={() => navigate("/lessons")}
-                >
-                  Alle Lektionen
-                </button>
-
-                <PrimaryButton
-                  label="Nächste Lektion"
-                  onClick={() => {
-                    if (nextLessonId) navigate(`/lektion/${moduleKey}/${nextLessonId}`);
-                    else navigate("/lessons");
-                  }}
-                />
-              </div>
-            ) : (
+          <div className="mt-5 flex items-center justify-end gap-3">
+            {current.type !== "reward" && (
               <PrimaryButton
                 label={stepIndex < steps.length - 1 ? "Weiter" : "Fertig!"}
                 onClick={next}
@@ -258,49 +313,19 @@ export default function LessonDetail() {
           </div>
         </div>
 
-        {/* RIGHT: Content */}
+        {/* RIGHT */}
         <div className="rounded-3xl bg-white p-6 shadow-md">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className={`h-3 w-3 rounded-full ${moduleAccent[moduleKey]}`} />
               <p className="text-sm font-extrabold">{current.title}</p>
             </div>
-
             <span className="rounded-full bg-(--color-dark-gray)/5 px-3 py-1 text-xs font-semibold">
               Teil {stepIndex + 1}
             </span>
           </div>
 
-          {/* REWARD */}
-          {current.type === "reward" && (
-            <div className="mt-4">
-              <div className="rounded-3xl bg-(--color-primary)/10 p-5">
-                <p className="whitespace-pre-line text-sm font-semibold text-(--color-dark-gray)">
-                  {current.content}
-                </p>
-              </div>
-
-              <div className="mt-4 overflow-hidden rounded-3xl bg-(--color-dark-gray)/5 p-4">
-                {rewardAnim ? (
-                  <Lottie animationData={rewardAnim} loop={false} />
-                ) : (
-                  <div className="h-48 w-full" />
-                )}
-              </div>
-
-              <div className="mt-6 flex items-center gap-3 rounded-3xl bg-white p-5 shadow-sm border border-(--color-dark-gray)/10">
-                <img src="/flower-full.svg" alt="" className="h-8 w-8" />
-                <div>
-                  <p className="text-sm font-extrabold">Belohnung</p>
-                  <p className="text-xs text-(--color-dark-gray)">
-                    Du hast alle Teile geschafft und sammelst eine Sakura 🌸
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* NORMAL (read/example/tip/check) */}
+          {/* READ/EXAMPLE/TIP/CHECK */}
           {current.type !== "task" && current.type !== "reward" && (
             <div className="mt-4 rounded-3xl bg-(--color-dark-gray)/5 p-5">
               <p className="whitespace-pre-line text-sm text-(--color-dark-gray)">
@@ -317,7 +342,6 @@ export default function LessonDetail() {
               <div className="mt-4 grid gap-2">
                 {current.answers.map((a, idx) => {
                   const selectedAnswer = picked === idx;
-
                   return (
                     <button
                       key={a}
@@ -350,7 +374,7 @@ export default function LessonDetail() {
             </div>
           )}
 
-          {/* Belohnungs-Karte auch bei normalen Steps */}
+          {/* Reward-Hinweis (nicht im Reward-Step) */}
           {current.type !== "reward" && (
             <div className="mt-6 flex items-center gap-3 rounded-3xl bg-white p-5 shadow-sm border border-(--color-dark-gray)/10">
               <img src="/flower-full.svg" alt="" className="h-8 w-8" />
@@ -364,6 +388,38 @@ export default function LessonDetail() {
           )}
         </div>
       </div>
+
+      {/* Reward Overlay */}
+      <RewardOverlay
+        open={rewardOpen && current.type === "reward"}
+        title="Belohnung 🌸"
+        message={current.type === "reward" ? current.content : "Super gemacht!"}
+        videoSrc="/animations/sakura-animation.mp4"
+        soundSrc={current.type === "reward" ? current.soundSrc : undefined}
+        primaryLabel={nextLessonId ? "Nächste Lektion" : "Schließen"}
+        secondaryLabel="Alle Lektionen"
+        onSecondary={() => {
+          setRewardOpen(false);
+          navigate("/lessons", { replace: true });
+        }}
+        onPrimary={() => {
+          setRewardOpen(false);
+
+          if (nextLessonId) {
+            navigate(`/lektion/${moduleKey}/${nextLessonId}`, { replace: true });
+            return;
+          }
+
+          // letzte Lektion im Modul
+          setPendingModuleComplete({
+            moduleKey,
+            title: "Modul geschafft! 🎉",
+            message: "Mega! Du hast alle Lektionen in diesem Modul geschafft."
+          });
+
+          navigate("/lessons", { replace: true });
+        }}
+      />
     </section>
   );
 }
