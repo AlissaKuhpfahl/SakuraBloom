@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { getProfiles, addProfile, getProgress, updateProgress } from "#controllers";
+import {
+  getProfiles,
+  addProfile,
+  getProgress,
+  updateProgress,
+  setActiveProfile
+} from "#controllers";
 import { validateBodyZod, authenticate } from "#middlewares";
 import { loginSchema, registerSchema } from "#schemas";
 
@@ -12,5 +18,7 @@ profilesRouter.get("/", authenticate, getProfiles);
 profilesRouter.get("/progress/:id", authenticate, getProgress);
 
 profilesRouter.put("/progress/:id", authenticate, updateProgress);
+
+profilesRouter.post("/activeProfile", authenticate, setActiveProfile);
 
 export default profilesRouter;
