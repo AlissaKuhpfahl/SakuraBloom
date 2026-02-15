@@ -24,29 +24,28 @@ export async function addProfile(profileName: string, avatarUrl: string) {
   return res.json();
 }
 
-export async function updateActiveProfile(id: string) {
-  // const res = await fetch(`${backendServiceURL}/profiles/activeProfile`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   },
-  //   body: JSON.stringify({
-  //     id
-  //   }),
-  //   credentials: "include"
-  // });
+export async function setActiveProfile(profileId: string) {
+  const res = await fetch(`${backendServiceURL}/profiles/activeProfile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      profileId
+    }),
+    credentials: "include"
+  });
 
-  // if (!res.ok) {
-  //   const errorData = await res.json();
-  //   console.log(errorData);
-  //   if (!errorData.message) {
-  //     throw new Error("Error while update active profile");
-  //   }
-  //   throw new Error(errorData.message);
-  // }
-  // const data = await res.json();
-  // return data;
-  return id;
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.log(errorData);
+    if (!errorData.message) {
+      throw new Error("Error while update active profile");
+    }
+    throw new Error(errorData.message);
+  }
+  const data = await res.json();
+  return data;
 }
 
 export async function readProfiles() {

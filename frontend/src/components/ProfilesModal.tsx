@@ -2,14 +2,24 @@ import { createPortal } from "react-dom";
 import { useState } from "react";
 // import { Link } from "react-router";
 import PrimaryButton from "../components/Btn.tsx";
-import { updateActiveProfile } from "../data/profiles.ts";
+import { setActiveProfile } from "../data/profiles.ts";
+import { getMe } from "../data/auth.ts";
 
 type ProfilesModalProps = {
   user: User | null;
+  setUser: (user: User | null) => void;
   setShowProfilesModal: (value: boolean) => void;
 };
 
-function Profiles({ user, setShowModal }: { user: User; setShowModal: (value: boolean) => void }) {
+function Profiles({
+  user,
+  setShowModal,
+  setUser
+}: {
+  user: User;
+  setShowModal: (value: boolean) => void;
+  setUser: (user: User | null) => void;
+}) {
   const [selectedProfileId, setSelectedProfileId] = useState(user?.activeProfile?._id);
   console.log("Selected profile ID in Profiles component:", selectedProfileId);
 
@@ -74,7 +84,9 @@ function Profiles({ user, setShowModal }: { user: User; setShowModal: (value: bo
           className="w-42 mt-2 self-center"
           label="OK"
           onClick={async () => {
-            console.log(await updateActiveProfile(selectedProfileId as string));
+            console.log(await setActiveProfile(selectedProfileId as string));
+            const { upUser } = await getMe();
+            setUser(upUser);
             setShowModal(false);
           }}
         />
@@ -82,7 +94,7 @@ function Profiles({ user, setShowModal }: { user: User; setShowModal: (value: bo
     );
   }
 }
-export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps) {
+export function ProfilesModal({ setShowProfilesModal, user, setUser }: ProfilesModalProps) {
   const wrapperClass = `flex items-center justify-center ${""}`.trim();
   const overlayClass = "absolute inset-0 bg-black/50";
   const panelClass =
@@ -100,7 +112,9 @@ export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps
       <div className={panelClass}>
         <h2 className="mb-4 text-lg text-center font-semibold">{"Profil auswählen"}</h2>
         <div className={`flex justify-items-start flex-col gap-5 ${profilesContainerClass}`}>
-          {user && <Profiles user={user} setShowModal={setShowProfilesModal}></Profiles>}
+          {user && (
+            <Profiles user={user} setShowModal={setShowProfilesModal} setUser={setUser}></Profiles>
+          )}
         </div>
       </div>
     </div>,

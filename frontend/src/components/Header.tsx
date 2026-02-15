@@ -6,7 +6,7 @@ import type { LottieRefCurrentProps } from "lottie-react";
 
 export default function Header() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
 
@@ -84,7 +84,11 @@ export default function Header() {
       </div>
 
       {showProfilesModal && (
-        <ProfilesModal setShowProfilesModal={setShowProfilesModal} user={user}></ProfilesModal>
+        <ProfilesModal
+          setShowProfilesModal={setShowProfilesModal}
+          user={user}
+          setUser={setUser}
+        ></ProfilesModal>
       )}
 
       {/* Button rechts */}
