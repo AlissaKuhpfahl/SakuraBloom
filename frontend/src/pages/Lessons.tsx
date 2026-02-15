@@ -14,7 +14,7 @@ import {
 type ModuleKey = "online" | "privacy" | "chats" | "fake";
 type LessonStatus = "done" | "active" | "locked";
 
-// Overlay (für Modul abgeschlossen)
+// Overlay für Modul abgeschlossen
 function RewardOverlay({
   open,
   title,
@@ -102,15 +102,22 @@ export default function Lessons() {
     const pending = readPendingModuleComplete();
     if (!pending) return;
 
-    const mk = pending.moduleKey as ModuleKey;
-    setCompleteModuleKey(mk);
-
-    setRewardTitle(pending.title ?? "Modul geschafft! 🎉");
-    setRewardMessage(pending.message ?? "Du hast alle Lektionen geschafft!");
+    // Defensive: only set if moduleKey is valid
+    let mk: ModuleKey = "online";
+    if (
+      typeof pending.moduleKey === "string" &&
+      ["online", "privacy", "chats", "fake"].includes(pending.moduleKey)
+    ) {
+      mk = pending.moduleKey as ModuleKey;
+    }
+    setTimeout(() => {
+      setCompleteModuleKey(mk);
+      setRewardTitle(pending.title ?? "Modul geschafft! ");
+      setRewardMessage(pending.message ?? "Du hast alle Lektionen geschafft!");
+      setRewardOpen(true);
+    }, 0);
 
     new Audio("/sounds/module-complete.mp3").play().catch(() => {});
-    setRewardOpen(true);
-
     clearPendingModuleComplete();
   }, []);
 
