@@ -1,5 +1,5 @@
 // LessonDetail.tsx
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -8,12 +8,12 @@ import PrimaryButton from "../components/Btn.tsx";
 import type { ModuleKey, Step } from "../types";
 import { markLessonDone, setPendingModuleComplete } from "../utils/progress.ts";
 
-// Reward Overlay
+// ---------- Overlay ----------
 type RewardOverlayProps = {
   open: boolean;
   title: string;
   message: string;
-  videoSrc: string; // MP4
+  videoSrc: string;
   soundSrc?: string;
   primaryLabel: string;
   secondaryLabel: string;
@@ -34,7 +34,6 @@ function RewardOverlay({
 }: RewardOverlayProps) {
   const playedRef = useRef(false);
 
-  // Sound einmal beim Öffnen
   useEffect(() => {
     if (!open) {
       playedRef.current = false;
@@ -89,21 +88,57 @@ function RewardOverlay({
   );
 }
 
-// Page
+// ---------- Page ----------
 export default function LessonDetail() {
   const navigate = useNavigate();
-
-  const params = useParams<{ moduleKey?: ModuleKey; lessonId?: string }>();
-  const moduleKey = params.moduleKey;
-  const lessonId = params.lessonId;
+  const { moduleKey, lessonId } = useParams<{ moduleKey?: ModuleKey; lessonId?: string }>();
 
   const [stepIndex, setStepIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   const [rewardOpen, setRewardOpen] = useState(false);
-  const rewardShownRef = useRef(false); // verhindert mehrfaches Öffnen
+  const rewardShownRef = useRef(false);
 
+  //  Weiter-Sound
+  const stepSoundRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const a = new Audio("/sounds/steps.mp3");
+    a.volume = 0.7;
+    stepSoundRef.current = a;
+    return () => {
+      stepSoundRef.current = null;
+    };
+  }, []);
+
+  const module = modules.find(m => m.key === moduleKey);
+  const lesson = module?.lessons.find(l => l.id === lessonId);
+
+  // Reset beim Stepwechsel
+  useEffect(() => {
+    if (!lesson) return;
+    setPicked(null);
+    setIsCorrect(null);
+  }, [stepIndex, lesson]);
+
+  // Reward Step: speichern + Overlay öffnen (einmal)
+  useEffect(() => {
+    if (!moduleKey || !lessonId || !module || !lesson) return;
+    const steps = lesson.steps;
+    if (stepIndex < 0 || stepIndex >= steps.length) return;
+    const current = steps[stepIndex] as Step;
+    if (current.type !== "reward") {
+      rewardShownRef.current = false;
+      return;
+    }
+    if (rewardShownRef.current) return;
+    rewardShownRef.current = true;
+
+    markLessonDone(moduleKey!, lessonId!);
+    setRewardOpen(true);
+  }, [stepIndex, moduleKey, lessonId, module, lesson]);
+
+  // Guards + Daten finden
   if (!moduleKey || !lessonId) {
     return (
       <section className="pt-6">
@@ -117,9 +152,6 @@ export default function LessonDetail() {
       </section>
     );
   }
-
-  const module = modules.find(m => m.key === moduleKey);
-  const lesson = module?.lessons.find(l => l.id === lessonId);
 
   if (!module || !lesson) {
     return (
@@ -135,6 +167,9 @@ export default function LessonDetail() {
     );
   }
 
+  const steps = lesson.steps;
+  const current = steps[stepIndex] as Step;
+
   // Farben
   const moduleAccent: Record<ModuleKey, string> = {
     online: "bg-(--color-blue)",
@@ -142,77 +177,60 @@ export default function LessonDetail() {
     chats: "bg-(--color-peach)",
     fake: "bg-(--color-green)"
   };
-
   const moduleAccentSoft: Record<ModuleKey, string> = {
-    online: "bg-(--color-blue)/20",
-    privacy: "bg-(--color-light-yellow)/30",
-    chats: "bg-(--color-peach)/30",
-    fake: "bg-(--color-green)/25"
+    online: "bg-(--color-blue)/50",
+    privacy: "bg-(--color-light-yellow)/50",
+    chats: "bg-(--color-peach)/50",
+    fake: "bg-(--color-green)/50"
   };
 
-  const steps = lesson.steps;
-  const current = steps[stepIndex] as Step;
+  // nächste Lektion (einfach, ohne Hook)
+  const ids = module.lessons.map(l => l.id);
+  const idx = ids.indexOf(lessonId);
+  const nextLessonId = idx >= 0 ? ids[idx + 1] ?? null : null;
 
-  const nextLessonId = useMemo(() => {
-    const ids = module.lessons.map(l => l.id);
-    const idx = ids.indexOf(lessonId);
-    if (idx === -1) return null;
-    return ids[idx + 1] ?? null;
-  }, [module.lessons, lessonId]);
-
-  // Beim Stepwechsel resetten
-  useEffect(() => {
-    setPicked(null);
-    setIsCorrect(null);
-  }, [stepIndex]);
-
-  // Reward Step: Fortschritt speichern + Overlay öffnen (einmal)
-  useEffect(() => {
-    if (current.type !== "reward") {
-      rewardShownRef.current = false;
-      return;
-    }
-
-    // nur einmal öffnen pro Reward-Step
-    if (rewardShownRef.current) return;
-    rewardShownRef.current = true;
-
-    markLessonDone(moduleKey, lessonId);
-    setRewardOpen(true);
-  }, [current, moduleKey, lessonId]);
-
-  const iconForStep = (i: number) => {
+  function iconForStep(i: number) {
     if (i < stepIndex) return "/icons/check.svg";
     if (i === stepIndex) return "/icons/play.svg";
     return "/icons/lock.svg";
-  };
+  }
 
-  function selectAnswer(index: number) {
+  function playStepSound() {
+    const a = stepSoundRef.current;
+    if (!a) return;
+    a.currentTime = 0;
+    a.play().catch(() => {});
+  }
+
+  function selectAnswer(i: number) {
     if (current.type !== "task") return;
-    setPicked(index);
-    setIsCorrect(index === current.correctIndex);
+    setPicked(i);
+    setIsCorrect(i === current.correctIndex);
   }
 
   function next() {
+    // ✅ Ton beim Klick auf Weiter
+    playStepSound();
+
     if (current.type === "task" && isCorrect !== true) return;
 
     if (stepIndex < steps.length - 1) {
       setStepIndex(v => v + 1);
-    } else {
-      // Fallback: falls content KEIN reward step hätte
-      markLessonDone(moduleKey!, lessonId!);
-
-      // wenn es auch wirklich keine nächste Lektion im Modul gibt: Modul Complete Overlay in Lessons
-      if (!nextLessonId) {
-        setPendingModuleComplete({
-          moduleKey,
-          title: "Modul geschafft! 🎉",
-          message: "Mega! Du hast alle Lektionen in diesem Modul geschafft."
-        });
-      }
-
-      navigate("/lessons", { replace: true });
+      return;
     }
+
+    // Fallback: falls kein reward-step existiert
+    markLessonDone(moduleKey!, lessonId!);
+
+    if (!nextLessonId) {
+      setPendingModuleComplete({
+        moduleKey: moduleKey!,
+        title: "Modul geschafft! 🎉",
+        message: "Mega! Du hast alle Lektionen in diesem Modul geschafft."
+      });
+    }
+
+    navigate("/lessons", { replace: true });
   }
 
   return (
@@ -262,7 +280,7 @@ export default function LessonDetail() {
           </div>
 
           <div className="mt-3 flex gap-2">
-            {Array.from({ length: steps.length }).map((_, i) => (
+            {steps.map((_, i) => (
               <span
                 key={i}
                 className={`h-3 w-3 rounded-full ${
@@ -298,7 +316,7 @@ export default function LessonDetail() {
             })}
           </div>
 
-          <div className="mt-5 flex items-center justify-end gap-3">
+          <div className="mt-5 flex items-center justify-end">
             {current.type !== "reward" && (
               <PrimaryButton
                 label={stepIndex < steps.length - 1 ? "Weiter" : "Fertig!"}
@@ -340,22 +358,19 @@ export default function LessonDetail() {
               <p className="text-sm font-semibold text-(--color-dark-gray)">{current.content}</p>
 
               <div className="mt-4 grid gap-2">
-                {current.answers.map((a, idx) => {
-                  const selectedAnswer = picked === idx;
-                  return (
-                    <button
-                      key={a}
-                      type="button"
-                      onClick={() => selectAnswer(idx)}
-                      className={[
-                        "rounded-2xl px-4 py-3 text-left transition hover:-translate-y-0.5",
-                        selectedAnswer ? moduleAccentSoft[moduleKey] : "bg-white"
-                      ].join(" ")}
-                    >
-                      {a}
-                    </button>
-                  );
-                })}
+                {current.answers.map((a, i) => (
+                  <button
+                    key={a}
+                    type="button"
+                    onClick={() => selectAnswer(i)}
+                    className={[
+                      "rounded-2xl px-4 py-3 text-left transition hover:-translate-y-0.5",
+                      picked === i ? moduleAccentSoft[moduleKey] : "bg-white"
+                    ].join(" ")}
+                  >
+                    {a}
+                  </button>
+                ))}
               </div>
 
               {isCorrect === true && (
@@ -374,7 +389,7 @@ export default function LessonDetail() {
             </div>
           )}
 
-          {/* Reward-Hinweis (nicht im Reward-Step) */}
+          {/* Reward-Hinweis */}
           {current.type !== "reward" && (
             <div className="mt-6 flex items-center gap-3 rounded-3xl bg-white p-5 shadow-sm border border-(--color-dark-gray)/10">
               <img src="/flower-full.svg" alt="" className="h-8 w-8" />
@@ -410,7 +425,6 @@ export default function LessonDetail() {
             return;
           }
 
-          // letzte Lektion im Modul
           setPendingModuleComplete({
             moduleKey,
             title: "Modul geschafft! 🎉",

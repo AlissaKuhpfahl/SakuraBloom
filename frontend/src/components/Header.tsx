@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/useAuth.tsx";
 import { ProfilesModal } from "./ProfilesModal.tsx";
 import type { LottieRefCurrentProps } from "lottie-react";
+import { useNavigate } from "react-router";
 
 export default function Header() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
   const { user } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
@@ -51,16 +53,22 @@ export default function Header() {
       <div className="flex h-20 items-center pl-8">
         {!user ? (
           //  Gast: Girl + Speechbubble + Text
-          <div className="relative flex items-center gap-1">
+          <div className="relative flex items-center gap-1 ">
             {/* Girl bild */}
-            <img src="/girl.svg" alt="Sakura Girl" className="h-15 w-15 shrink-0" />
+            <button
+              onClick={() => navigate("/signup")}
+              className="cursor-pointer transition-transform hover:scale-105"
+              aria-label="Zur Registrierung"
+            >
+              <img src="/girl.svg" alt="Sakura Girl" className="h-15 w-15 shrink-0" />
+            </button>
 
             {/* Bubble + Text Overlay */}
-            <div className="relative">
+            <div className="relative animate-bubble-in-out">
               <img src="/bubble.svg" alt="Nachricht" className="h-20 w-40" />
 
               {/* Text in Bubble */}
-              <p className="absolute left-10 top-1/2 -translate-y-1/2  w-24 text-xs font-bold text-(--color-dark-gray) leading-tight ">
+              <p className="absolute left-10 top-1/2 -translate-y-1/2 w-24 text-xs font-bold   ">
                 Komm rein und lerne mit mir!
               </p>
             </div>
