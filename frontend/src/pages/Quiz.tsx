@@ -131,8 +131,8 @@ export default function Quiz() {
     feedback === "wrong"
       ? { x: [0, -8, 8, -6, 6, -3, 3, 0] }
       : feedback === "correct"
-      ? { scale: [1, 1.02, 1] }
-      : {};
+        ? { scale: [1, 1.02, 1] }
+        : {};
 
   // win sound
   useEffect(() => {
@@ -246,7 +246,7 @@ export default function Quiz() {
 
                 <div className="mt-4 flex justify-center gap-3">
                   <PrimaryButton
-                    label="Widerholen"
+                    label="Wiederholen"
                     onClick={() => {
                       setFinished(false);
                       setScore(0);

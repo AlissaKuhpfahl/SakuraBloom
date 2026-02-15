@@ -57,7 +57,9 @@ export async function login(body: { email: string; password: string }) {
 }
 
 export async function getMe() {
-  const response = await fetch(`${authServiceURL}/auth/me`);
+  const response = await fetch(`${authServiceURL}/auth/me`, {
+    credentials: "include"
+  });
 
   console.log("resp:", response);
 
@@ -75,7 +77,8 @@ export async function getMe() {
 
 export async function refresh() {
   const response = await fetch(`${authServiceURL}/auth/refresh`, {
-    method: "POST"
+    method: "POST",
+    credentials: "include"
   });
 
   console.log("resp:", response);
@@ -94,7 +97,8 @@ export async function refresh() {
 
 export async function logout() {
   const response = await fetch(`${authServiceURL}/auth/logout`, {
-    method: "DELETE"
+    method: "DELETE",
+    credentials: "include"
   });
   if (!response.ok) {
     const errorData = await response.json();
