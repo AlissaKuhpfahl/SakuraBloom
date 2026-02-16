@@ -143,7 +143,7 @@ export default function LessonDetail() {
     return (
       <section className="pt-6">
         <div className="rounded-3xl bg-white p-6 shadow-md">
-          <h1 className="text-xl font-extrabold">Oops 😵‍💫</h1>
+          <h1 className="text-xl font-extrabold">Oops </h1>
           <p className="mt-2 text-sm text-(--color-dark-gray)">
             Bitte öffne eine Lektion über die Lektionen-Seite.
           </p>
@@ -427,7 +427,7 @@ export default function LessonDetail() {
 
           setPendingModuleComplete({
             moduleKey,
-            title: "Modul geschafft! 🎉",
+            title: "Modul geschafft! ",
             message: "Mega! Du hast alle Lektionen in diesem Modul geschafft."
           });
 

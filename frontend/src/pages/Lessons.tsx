@@ -217,7 +217,9 @@ export default function Lessons() {
 
             <div className="mt-2 flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-extrabold">{selectedModule.title}</h2>
+                <h3 className="text-3xl font-extrabold text-(--color-dark-gray)">
+                  {selectedModule.title}
+                </h3>
                 <p className="mt-1 text-sm font-semibold">
                   Nächste Lektion: {nextLessonId}/{selectedModule.total}
                 </p>
