@@ -3,7 +3,7 @@ import { useState } from "react";
 // import { Link } from "react-router";
 import PrimaryButton from "../components/Btn.tsx";
 import { setActiveProfile } from "../data/profiles.ts";
-import { getMe } from "../data/auth.ts";
+// import { getMe } from "../data/auth.ts";
 
 type ProfilesModalProps = {
   user: User | null;
@@ -13,8 +13,8 @@ type ProfilesModalProps = {
 
 function Profiles({
   user,
-  setShowModal,
-  setUser
+  setShowModal
+  // setUser
 }: {
   user: User;
   setShowModal: (value: boolean) => void;
@@ -32,22 +32,7 @@ function Profiles({
           {/* * Map */}
           {user.profiles.map(profile => {
             const isSelected = profile._id === selectedProfileId;
-            console.log(
-              "Rendering profile:",
-              profile._id,
-              ": ",
-              profile.profileName,
-              "isSelected:",
-              isSelected
-            );
-            {
-              /* * Lessons learned 😅: React uses property key on the outermost element returned by
-               * the map to track list items between renders. In your map, the outermost
-               * element is the wrapping <div>, not the <label>. Putting the key on the
-               * label doesn’t help React identify the list item correctly, which can
-               * lead to stale state or unexpected UI updates. Moving it to the outer
-               *  <div> matches React’s requirement and keeps list reconciliation stable.*/
-            }
+
             return (
               <div key={profile._id} className="flex items-center  justify-between gap-3 mb-2">
                 <div className="rounded-full flex items-center justify-center h-20 w-20 bg-linear-to-r from-pink-500 to-rose-500">
@@ -59,11 +44,7 @@ function Profiles({
                   />
                 </div>
                 <h2>{profile.profileName}</h2>
-                {/* <label
-                  className={`flex flex-col items-center gap-2 rounded-xl border-2 px-2 py-3 transition ${
-                    isSelected ? "border-(--color-primary)" : "border-transparent"
-                  }`}
-                > */}
+
                 <input
                   type="radio"
                   name="avatar"
