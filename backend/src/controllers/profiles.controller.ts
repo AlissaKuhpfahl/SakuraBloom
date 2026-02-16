@@ -3,6 +3,7 @@ import type { Response, Request, NextFunction } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { ACCESS_JWT_SECRET } from "#config";
+import { cursorTo } from "node:readline";
 
 /**
  * Endpoint GET /profiles/progress/:id
@@ -141,3 +142,46 @@ export async function updateProgress(req: Request, res: Response, next: NextFunc
 }
 
 export async function deleteProfile(req: Request, res: Response) {}
+
+export async function setActiveProfile(req: Request, res: Response, next: NextFunction) {
+  console.log("req activeProfile", req.body);
+  const { profileId } = req.body;
+
+  if (!mongoose.isValidObjectId(profileId))
+    throw new Error("Invalid id", { cause: { status: 400 } });
+
+  const profile = await Profile.findById(profileId).select("userId");
+
+  if (!profile) throw new Error("Profile id not found", { cause: { status: 404 } });
+
+  const { userId } = profile;
+
+  /*
+  Ensure caller is authenticated. Should be because middlware "authenticate" 
+  catches that before. Also satisfies typescript needs
+  */
+  if (!req.user?.id) throw new Error("Authorization error", { cause: { status: 401 } });
+
+  if (userId.toString() !== req.user.id) throw new Error("Forbidden", { cause: { status: 403 } });
+
+  const currentUser = await User.findById(req.user.id);
+
+  if (!currentUser) throw new Error("User Id not found", { cause: { status: 404 } });
+
+  const { activeProfile: cUactiveProfile, profiles: cUProfiles } = currentUser;
+
+  // const foundId = cUProfiles.find(id => id.toString === profileId);
+
+  // if (!foundId) throw new Error("Profile Id not in users profile list");
+
+  currentUser.activeProfile = profileId;
+
+  try {
+    await currentUser.save();
+  } catch (error) {
+    console.log("Catched error:", error);
+    throw new Error("Saving new active profile failed", { cause: { status: 500 } });
+  }
+
+  res.json({ message: "Active profile updates" });
+}

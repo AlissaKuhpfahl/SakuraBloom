@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 
 export default function Header() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
   const navigate = useNavigate();
@@ -92,7 +92,11 @@ export default function Header() {
       </div>
 
       {showProfilesModal && (
-        <ProfilesModal setShowProfilesModal={setShowProfilesModal} user={user}></ProfilesModal>
+        <ProfilesModal
+          setShowProfilesModal={setShowProfilesModal}
+          user={user}
+          setUser={setUser}
+        ></ProfilesModal>
       )}
 
       {/* Button rechts */}
