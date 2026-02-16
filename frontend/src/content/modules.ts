@@ -7,7 +7,7 @@ export type ContentLesson = {
   title: string;
   subtitle: string;
   status: LessonStatus;
-  stepsDone: number; // Demo-Stand für Lessons.tsx (5 Kreise)
+  stepsDone: number;
   steps: Step[];
 };
 

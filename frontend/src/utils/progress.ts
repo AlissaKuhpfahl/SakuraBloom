@@ -35,7 +35,7 @@ export function clearProgress() {
   localStorage.removeItem(KEY);
 }
 
-///
+// -------- Pending reward --------
 const REWARD_KEY = "sakura_reward_v1";
 
 export type RewardPayload = {

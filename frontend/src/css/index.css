@@ -149,6 +149,15 @@ h3 {
   }
 }
 
+/* Klasse für die Profilbild-Bubble-Animation */
 .animate-bubble-in-out {
   animation: bubbleInOut 3s ease forwards;
+}
+/* Scrollbar ausblenden bei Fortschritt-Seite */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
