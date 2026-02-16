@@ -85,8 +85,8 @@ function Profiles({
           label="OK"
           onClick={async () => {
             console.log(await setActiveProfile(selectedProfileId as string));
-            const { upUser } = await getMe();
-            setUser(upUser);
+            // const { upUser } = await getMe();
+            // setUser(upUser);
             setShowModal(false);
           }}
         />
