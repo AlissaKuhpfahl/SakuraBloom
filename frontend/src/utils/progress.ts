@@ -113,3 +113,15 @@ export function readPendingModuleComplete(): PendingModuleComplete | null {
 export function clearPendingModuleComplete() {
   localStorage.removeItem(PENDING_MODULE_COMPLETE);
 }
+
+// Für Quiz hauptseite
+export function getDoneLessonsForModule(moduleKey: string): string[] {
+  const data = read();
+  return data.doneLessons
+    .filter(k => k.startsWith(`${moduleKey}-`))
+    .map(k => k.slice(moduleKey.length + 1));
+}
+
+export function countDoneLessonsForModule(moduleKey: string): number {
+  return getDoneLessonsForModule(moduleKey).length;
+}

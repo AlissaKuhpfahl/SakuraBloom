@@ -130,7 +130,7 @@ export default function Home() {
       <div className="rounded-3xl bg-white p-8 shadow-sm  ">
         <h2 className="mb-4 text-2xl font-bold ">Module</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Erste Module */}
           <Link
             to="/module/online-sicherheit"
