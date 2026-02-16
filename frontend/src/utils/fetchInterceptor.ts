@@ -7,7 +7,6 @@ if (!backendServiceURL) {
 }
 
 window.fetch = async (url, options, ...rest) => {
-  console.log("overloaded fetch");
   let res = await originalFetch(url, { ...options, credentials: "include" }, ...rest);
   const authHeader = res.headers.get("WWW-Authenticate");
   if (authHeader?.includes("token_expired")) {

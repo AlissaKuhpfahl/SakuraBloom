@@ -144,7 +144,6 @@ export async function updateProgress(req: Request, res: Response, next: NextFunc
 export async function deleteProfile(req: Request, res: Response) {}
 
 export async function setActiveProfile(req: Request, res: Response, next: NextFunction) {
-  console.log("req activeProfile", req.body);
   const { profileId } = req.body;
 
   if (!mongoose.isValidObjectId(profileId))
@@ -170,18 +169,21 @@ export async function setActiveProfile(req: Request, res: Response, next: NextFu
 
   const { activeProfile: cUactiveProfile, profiles: cUProfiles } = currentUser;
 
-  // const foundId = cUProfiles.find(id => id.toString === profileId);
+  const foundId = cUProfiles.find(id => {
+    return id.toString() === profileId;
+  });
 
-  // if (!foundId) throw new Error("Profile Id not in users profile list");
+  console.log("foundId", foundId);
+
+  if (!foundId) throw new Error("Profile Id not in users profile list");
 
   currentUser.activeProfile = profileId;
 
   try {
     await currentUser.save();
   } catch (error) {
-    console.log("Catched error:", error);
     throw new Error("Saving new active profile failed", { cause: { status: 500 } });
   }
 
-  res.json({ message: "Active profile updates" });
+  res.json({ message: "Active profile updated" });
 }
