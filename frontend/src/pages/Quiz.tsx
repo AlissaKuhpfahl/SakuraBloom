@@ -181,7 +181,7 @@ export default function Quiz() {
 
     return (
       <section className="pt-6">
-        <div className="mx-auto max-w-3xl px-4">
+        <div className="mx-auto max-w-5xl px-4">
           {/* HEADER CARD */}
           <div className="rounded-3xl bg-white border-(--color-dark-gray)/10 shadow-md p-6">
             <div className="flex gap-4 items-center">

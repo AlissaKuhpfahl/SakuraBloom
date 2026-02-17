@@ -128,7 +128,9 @@ h3 {
 .btn-secondary {
   --btn-color: var(--color-success);
 }
-
+.btn-remove {
+  --btn-color: var(--color-warnung);
+}
 /* Profilbild Bubble Animation*/
 @keyframes bubbleInOut {
   0% {
