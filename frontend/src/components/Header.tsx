@@ -81,7 +81,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <button
                 onClick={handleProfileClick}
-                className="h-17 w-17 rounded-full flex items-center justify-center bg-black border-1 text-white font-extrabold"
+                className="h-17 w-17 rounded-full flex items-center justify-center bg-black border text-white font-extrabold"
               >
                 <img
                   src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
