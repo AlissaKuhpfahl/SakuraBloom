@@ -20,7 +20,7 @@ export default function ConfirmModal({
   title = "Confirm",
   message = "Are you sure?",
   confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
+  cancelLabel,
   onConfirm,
   onCancel,
   wrapperClassName,
