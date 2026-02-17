@@ -11,7 +11,8 @@ const NAV = [
   { to: "/quiz", label: "Quiz", icon: "/icons/quiz.svg" },
   { to: "/progress", label: "Fortschritte", icon: "/icons/progress.svg" },
   { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" },
-  { to: "/createProfiles", label: "Profil erstellen", icon: "/avatars/cat.svg" }
+  { to: "/createProfiles", label: "Profil erstellen", icon: "/icons/account.svg" },
+  { to: "/profile", label: "Mein Profil", icon: "/icons/manager.svg" }
 ];
 
 export default function Sidebar() {

@@ -14,8 +14,8 @@ type ProfilesModalProps = {
 function Profiles({
   user,
   setShowModal
-  // setUser
-}: {
+}: // setUser
+{
   user: User;
   setShowModal: (value: boolean) => void;
   setUser: (user: User | null) => void;

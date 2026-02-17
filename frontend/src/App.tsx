@@ -11,6 +11,7 @@ import { Login } from "./pages/Login.tsx";
 import { SignUp } from "./pages/Signup.tsx";
 import LessonDetail from "./pages/LessonDetail.tsx";
 import { CreateProfiles } from "./pages/CreateProfiles.tsx";
+import ProfileDashboard from "./pages/ProfileDashboard.tsx";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="createProfiles" element={<CreateProfiles />} />
+            <Route path="/profile" element={<ProfileDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>
