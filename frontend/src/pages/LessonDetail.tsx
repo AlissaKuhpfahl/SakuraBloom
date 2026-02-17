@@ -100,6 +100,17 @@ export default function LessonDetail() {
   const [rewardOpen, setRewardOpen] = useState(false);
   const rewardShownRef = useRef(false);
 
+  // Reset bei Modul/Lektion-Wechsel
+  useEffect(() => {
+    setTimeout(() => {
+      setStepIndex(0);
+      setPicked(null);
+      setIsCorrect(null);
+      setRewardOpen(false);
+      rewardShownRef.current = false;
+    }, 0);
+  }, [moduleKey, lessonId]);
+
   //  Weiter-Sound
   const stepSoundRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
@@ -117,8 +128,10 @@ export default function LessonDetail() {
   // Reset beim Stepwechsel
   useEffect(() => {
     if (!lesson) return;
-    setPicked(null);
-    setIsCorrect(null);
+    setTimeout(() => {
+      setPicked(null);
+      setIsCorrect(null);
+    }, 0);
   }, [stepIndex, lesson]);
 
   // Reward Step: speichern + Overlay öffnen (einmal)
@@ -135,7 +148,9 @@ export default function LessonDetail() {
     rewardShownRef.current = true;
 
     markLessonDone(moduleKey!, lessonId!);
-    setRewardOpen(true);
+    setTimeout(() => {
+      setRewardOpen(true);
+    }, 0);
   }, [stepIndex, moduleKey, lessonId, module, lesson]);
 
   // Guards + Daten finden
@@ -204,8 +219,10 @@ export default function LessonDetail() {
 
   function selectAnswer(i: number) {
     if (current.type !== "task") return;
-    setPicked(i);
-    setIsCorrect(i === current.correctIndex);
+    setTimeout(() => {
+      setPicked(i);
+      setIsCorrect(i === current.correctIndex);
+    }, 0);
   }
 
   function next() {
@@ -215,7 +232,9 @@ export default function LessonDetail() {
     if (current.type === "task" && isCorrect !== true) return;
 
     if (stepIndex < steps.length - 1) {
-      setStepIndex(v => v + 1);
+      setTimeout(() => {
+        setStepIndex(v => v + 1);
+      }, 0);
       return;
     }
 
