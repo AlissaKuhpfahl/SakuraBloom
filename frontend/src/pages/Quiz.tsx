@@ -103,6 +103,24 @@ function LottieGraduation({ onDone }: { onDone: () => void }) {
 
 export default function Quiz() {
   const [mode, setMode] = useState<"select" | "play">("select");
+  // Music
+  const [musicOn, setMusicOn] = useState(true);
+
+  const musicRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const el = musicRef.current;
+    if (!el) return;
+
+    el.loop = true;
+    el.volume = 0.25;
+
+    if (mode === "play" && musicOn) {
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+      el.currentTime = 0;
+    }
+  }, [mode, musicOn]);
 
   // Fragen
   const params = useParams<{ moduleKey?: string }>();
@@ -211,6 +229,7 @@ export default function Quiz() {
                   disabled={!unlocked}
                   onClick={() => {
                     if (!unlocked) return;
+                    musicRef.current?.play().catch(() => {});
                     navigate(`/quiz/${it.key}`);
                     setMode("play");
                   }}
@@ -299,10 +318,25 @@ export default function Quiz() {
         loop
         playsInline
       />
+      <audio ref={musicRef} src="/sounds/music.mp3" preload="auto" />
 
       <div className="absolute inset-0 bg-black/25" />
 
       <div className="relative z-10 min-h-screen p-8">
+        {/* music button */}
+        <button
+          type="button"
+          aria-label={musicOn ? "Musik ausschalten" : "Musik einschalten"}
+          onClick={() => setMusicOn(v => !v)}
+          className="absolute  top-8 grid h-10 w-10 place-items-center rounded-full bg-(--color-Deep-Wine)  backdrop-blur  shadow-md hover:scale-105 active:scale-95 transition right-5 mt-11 "
+        >
+          <img
+            src="/icons/ton.svg"
+            alt="music icon "
+            className={["h-5 w-5", !musicOn && "opacity-40"].filter(Boolean).join(" ")}
+          />
+        </button>
+
         {/* X BUTTON  */}
         <button
           type="button"
