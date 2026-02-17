@@ -4,6 +4,7 @@ import { useState } from "react";
 import PrimaryButton from "../components/Btn.tsx";
 import { setActiveProfile } from "../data/profiles.ts";
 // import { getMe } from "../data/auth.ts";
+import { useAuth } from "../contexts/useAuth.tsx";
 
 type ProfilesModalProps = {
   user: User | null;
@@ -22,6 +23,7 @@ function Profiles({
 }) {
   const [selectedProfileId, setSelectedProfileId] = useState(user?.activeProfile?._id);
   console.log("Selected profile ID in Profiles component:", selectedProfileId);
+  const { setRefreshUser } = useAuth();
 
   if (!user?.profiles || user.profiles.length === 0) {
     return <p>Bitte anmelden</p>;
@@ -68,6 +70,7 @@ function Profiles({
             console.log(await setActiveProfile(selectedProfileId as string));
             // const { upUser } = await getMe();
             // setUser(upUser);
+            setRefreshUser(true);
             setShowModal(false);
           }}
         />

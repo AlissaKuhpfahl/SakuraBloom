@@ -6,11 +6,13 @@ import { refresh, getMe } from "../data/auth.ts";
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<null | User>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [refreshUser, setRefreshUser] = useState<boolean>(false);
 
   useEffect(() => {
     const refreshLogin = async () => {
       try {
         setAuthLoading(true);
+        console.log("Auth Loading:", authLoading);
         await refresh();
         console.log("Token refreshed");
         const { user } = await getMe();
@@ -20,13 +22,17 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         console.log("Refresh: ", error);
       } finally {
         setAuthLoading(false);
+        setRefreshUser(false);
+        console.log("Auth Loading:", authLoading);
       }
     };
     refreshLogin();
-  }, []);
+  }, [refreshUser]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, authLoading }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, setUser, authLoading, refreshUser, setRefreshUser }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

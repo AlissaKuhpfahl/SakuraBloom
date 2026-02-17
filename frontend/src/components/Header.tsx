@@ -7,10 +7,12 @@ import { useNavigate } from "react-router";
 
 export default function Header() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
-  const { user, setUser } = useAuth();
+  const { user, setUser, authLoading } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
   const navigate = useNavigate();
+
+  console.log("Header loaded");
 
   useEffect(() => {
     let isMounted = true;
@@ -50,46 +52,48 @@ export default function Header() {
 
   return (
     <header className=" relative mt-8 z-20 ">
-      <div className="flex h-20 items-center pl-8">
-        {!user ? (
-          //  Gast: Girl + Speechbubble + Text
-          <div className="relative flex items-center gap-1 ">
-            {/* Girl bild */}
-            <button
-              onClick={() => navigate("/signup")}
-              className="cursor-pointer transition-transform hover:scale-105"
-              aria-label="Zur Registrierung"
-            >
-              <img src="/girl.svg" alt="Sakura Girl" className="h-15 w-15 shrink-0" />
-            </button>
+      {!authLoading ? (
+        <div className="flex h-20 items-center pl-8">
+          {!user ? (
+            //  Gast: Girl + Speechbubble + Text
+            <div className="relative flex items-center gap-1 ">
+              {/* Girl bild */}
+              <button
+                onClick={() => navigate("/signup")}
+                className="cursor-pointer transition-transform hover:scale-105"
+                aria-label="Zur Registrierung"
+              >
+                <img src="/girl.svg" alt="Sakura Girl" className="h-15 w-15 shrink-0" />
+              </button>
 
-            {/* Bubble + Text Overlay */}
-            <div className="relative animate-bubble-in-out">
-              <img src="/bubble.svg" alt="Nachricht" className="h-20 w-40" />
+              {/* Bubble + Text Overlay */}
+              <div className="relative animate-bubble-in-out">
+                <img src="/bubble.svg" alt="Nachricht" className="h-20 w-40" />
 
-              {/* Text in Bubble */}
-              <p className="absolute left-10 top-1/2 -translate-y-1/2 w-24 text-xs font-bold   ">
-                Komm rein und lerne mit mir!
-              </p>
+                {/* Text in Bubble */}
+                <p className="absolute left-10 top-1/2 -translate-y-1/2 w-24 text-xs font-bold   ">
+                  Komm rein und lerne mit mir!
+                </p>
+              </div>
             </div>
-          </div>
-        ) : (
-          // Eingeloggt
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleProfileClick}
-              className="h-17 w-17 rounded-full flex items-center justify-center bg-black border-1 text-white font-extrabold"
-            >
-              <img
-                src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
-                alt={user?.activeProfile?.profileName.slice(0, 1)}
-                className="h-16 w-16"
-              />
-            </button>
-            <p className="text-sm font-semibold">{getActiveProfileName()}</p>
-          </div>
-        )}
-      </div>
+          ) : (
+            // Eingeloggt
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleProfileClick}
+                className="h-17 w-17 rounded-full flex items-center justify-center bg-black border-1 text-white font-extrabold"
+              >
+                <img
+                  src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
+                  alt={user?.activeProfile?.profileName.slice(0, 1)}
+                  className="h-16 w-16"
+                />
+              </button>
+              <p className="text-sm font-semibold">{getActiveProfileName()}</p>
+            </div>
+          )}
+        </div>
+      ) : null}
 
       {showProfilesModal && (
         <ProfilesModal
