@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router";
 import MainLayout from "./layout/MainLayout";
+import ProtectedLayout from "./layout/ProtectedLayout.tsx";
 
 // Pages
 import Home from "./pages/Home.tsx";
@@ -28,8 +29,11 @@ function App() {
             <Route path="lektion/:moduleKey/:lessonId" element={<LessonDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
-            <Route path="createProfiles" element={<CreateProfiles />} />
-            <Route path="/profile" element={<ProfileDashboard />} />
+            <Route element={<ProtectedLayout />}>
+              {/* Hier können weitere geschützte Routen hinzugefügt werden */}
+              <Route path="/profile" element={<ProfileDashboard />} />
+              <Route path="createProfiles" element={<CreateProfiles />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
