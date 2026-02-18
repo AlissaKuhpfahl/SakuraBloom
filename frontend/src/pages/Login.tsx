@@ -12,7 +12,7 @@ type LoginFormState = {
 };
 
 const inputClass =
-  "w-full rounded-2xl px-5 py-2 " +
+  "min-w-0 w-full rounded-2xl px-5 py-2 " +
   "bg-white border-1 border-(--color-primary-50) " +
   "text-(--color-Deep-Wine) placeholder:text-(--color-dark-gray)/40  " +
   "transition-all duration-200 " +
@@ -63,7 +63,7 @@ export function Login() {
   }, []);
 
   return (
-    <div className="min-h-full  px-4 py-10">
+    <div className="px-4 sm:px-6 py-8 sm:py-10">
       <div className="mx-auto w-full max-w-5xl">
         {/* farbverlauf */}
         <div className="  rounded-3xl overflow-hidden bg-linear-to-br from-(--color-primary) via-(--color-light-pink) to-(--color-blue) shadow-lg ">
@@ -76,10 +76,10 @@ export function Login() {
             </div>
 
             {/* RECHTS: Inhalt */}
-            <div className="p-8 md:p-10  ">
+            <div className="p-6 sm:p-8 md:p-10">
               <h1 className="text-2xl font-bold">Anmeldung</h1>
               <form id="login-form" className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
-                <label className="flex items-center gap-1" htmlFor="login-input-email">
+                <label className="flex items-center gap-2 min-w-0" htmlFor="login-input-email">
                   <span className="grid h-11 w-11 place-items-center ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +103,7 @@ export function Login() {
                   />
                 </label>
 
-                <label className="flex items-center gap-1" htmlFor="login-input-password">
+                <label className="flex items-center gap-2 min-w-0" htmlFor="login-input-password">
                   <span className="grid h-11 w-11 place-items-center ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

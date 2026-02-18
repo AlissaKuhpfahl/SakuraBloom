@@ -16,7 +16,7 @@ type RegisterFormState = {
 };
 
 const inputClass =
-  "w-full rounded-2xl px-5 py-2 " +
+  "w-full rounded-2xl px-5 py-2 min-w-0 " +
   "bg-white border border-(--color-primary-50) " +
   "text-(--color-Deep-Wine) placeholder:text-(--color-dark-gray)/40 " +
   "transition-all duration-200 " +
@@ -82,7 +82,7 @@ export function SignUp() {
   }, []);
 
   return (
-    <div className="min-h-full px-4 py-10">
+    <div className="px-4 sm:px-6 py-8 sm:py-10">
       <div className="mx-auto w-full max-w-5xl">
         {/* farbverlauf */}
         <div className="rounded-3xl overflow-hidden bg-linear-to-br from-(--color-primary) via-(--color-light-pink) to-(--color-blue) shadow-lg">
@@ -95,12 +95,12 @@ export function SignUp() {
             </div>
 
             {/* RECHTS: Inhalt */}
-            <div className="p-8 md:p-10 md:pl-0">
+            <div className="p-6 sm:p-8 md:p-10 md:pl-0s">
               <h1 className="text-2xl font-bold">Registrieren</h1>
 
               <form id="signup-form" className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
                 {/* Vorname / Nachname */}
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <label className="flex items-center gap-1 flex-1">
                     <span className={iconWrapClass}>
                       <svg
@@ -144,7 +144,7 @@ export function SignUp() {
                 </div>
 
                 {/* Email */}
-                <label className="flex items-center gap-1">
+                <label className="flex items-center gap-2  min-w-0">
                   <span className={iconWrapClass}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -168,8 +168,8 @@ export function SignUp() {
                 </label>
 
                 {/* Passwort / Confirm */}
-                <div className="flex gap-3">
-                  <label className="flex items-center gap-1 flex-1">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <label className="flex items-center gap-2 flex-1 min-w-0">
                     <span className={iconWrapClass}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -240,7 +240,9 @@ export function SignUp() {
                   }}
                 />
 
-                <p className="text-center font-extrabold">{noteSignup ? noteSignup : ""}</p>
+                <p className="text-center text-sm font-semibold text-(--color-Deep-Wine)">
+                  {noteSignup ? noteSignup : ""}
+                </p>
 
                 {/* Mobile Panda */}
                 <div className="mt-6 flex md:hidden items-center justify-center">

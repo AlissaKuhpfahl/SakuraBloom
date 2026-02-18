@@ -24,6 +24,43 @@
   --color-Deep-Wine: #61033b; /* von logo */
 }
 
+/*  Dark mode */
+:root[data-theme="dark"] {
+  --color-primary: #f091ac;
+  --color-secondary: #2a0f22;
+  --color-peach: #6b2c3a;
+  --color-green: #2e4f3a;
+  --color-blue: #1e2f44;
+  --color-yellow: #5a4a18;
+  --color-light-yellow: #3c3010;
+
+  --color-bg-vanilla: #1a0b16;
+  --color-dark-gray: #fce4ec;
+  --color-light-gray: #3a2a35;
+
+  --color-warnung: #7a2d40;
+  --color-skyblue: #1c2633;
+  --color-success: #2f6a4b;
+
+  --color-primary-50: #3a1a2a;
+  --color-light-pink: #1a0b16;
+  --color-Deep-Wine: #fce4ec;
+
+  --surface: #2a0f22;
+  --surface-soft: #35152c;
+  --text-main: #fce4ec;
+}
+:root[data-theme="dark"] {
+  --surface: #4a1f3c;
+}
+:root[data-theme="dark"] .bg-white {
+  background-color: var(--surface) !important;
+}
+/* Progress Karten – Dark Mode */
+:root[data-theme="dark"] .progress-card {
+  background: #2a0f1d !important;
+}
+
 html,
 body {
   height: 100%;

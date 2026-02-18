@@ -322,13 +322,13 @@ export default function Quiz() {
 
       <div className="absolute inset-0 bg-black/25" />
 
-      <div className="relative z-10 min-h-screen p-8">
+      <div className="relative z-10 min-h-screen px-4 py-6 sm:p-8">
         {/* music button */}
         <button
           type="button"
           aria-label={musicOn ? "Musik ausschalten" : "Musik einschalten"}
           onClick={() => setMusicOn(v => !v)}
-          className="absolute  top-8 grid h-10 w-10 place-items-center rounded-full bg-(--color-Deep-Wine)  backdrop-blur  shadow-md hover:scale-105 active:scale-95 transition right-5 mt-11 "
+          className=" quiz-music-btn absolute top-8 grid h-10 w-10 place-items-center rounded-full bg-(--color-Deep-Wine)  backdrop-blur  shadow-md hover:scale-105 active:scale-95 transition right-5 mt-11 "
         >
           <img
             src="/icons/ton.svg"
@@ -372,15 +372,15 @@ export default function Quiz() {
         </button>
 
         {/* HEADER  */}
-        <div className=" flex flex-col items-center text-center gap-2 text-(--color-Deep-Wine) bg-(--color-bg-vanilla)/20 rounded-3xl px-6 py-4 max-w-1/2 mx-auto mt-2">
-          <h3 className="text-2xl font-semibolddrop-shadow ">Quiz: {moduleTitle}</h3>
+        <div className="header-bg flex flex-col items-center text-center gap-2 text-(--color-Deep-Wine) bg-(--color-bg-vanilla)/20 rounded-3xl px-4 sm:px-6 py-4 max-w-xl mx-auto mt-2">
+          <h3 className="text-xl sm:text-2xl font-extrabold drop-shadow ">Quiz: {moduleTitle}</h3>
           <p className=" text-sm  font-bold">
             Lerne spielerisch, wie du sicher im Internet unterwegs bist.
           </p>
         </div>
 
         {/* Layout*/}
-        <div className="quiz-scene relative rounded-4xl px-25 pt-12">
+        <div className="quiz-scene relative px-0 sm:px-6 lg:px-12 pt-8 sm:pt-12">
           {/* Feedback Overlay mit Animation */}
           <AnimatePresence>
             {feedback && (
@@ -493,12 +493,14 @@ export default function Quiz() {
 
             {/* QUIZ CARD */}
             <motion.div
-              className="quiz-card-bg relative mx-auto max-w-xl rounded-2xl px-6 flex flex-col items-center justify-center"
+              className="quiz-card-bg relative mx-auto w-full max-w-xl rounded-2xl px-4 sm:px-6 flex flex-col items-center justify-center"
               animate={cardAnim}
               transition={{ duration: 0.45 }}
             >
-              <div className="w-full max-w-md mt-12">
-                <div className="text-xl font-semibold quiz-headline">Situation:</div>
+              <div className="w-full max-w-md mt-18 sm:mt-16 ">
+                <div className="pt-8 text-lg sm:text-xl font-extrabold text-(--color-Deep-Wine) quiz-headline">
+                  Situation:
+                </div>
                 <p className="mt-1 text-sm font-semibold">{current.situation}</p>
 
                 <div className="mt-4 space-y-2">
@@ -529,7 +531,7 @@ export default function Quiz() {
                   })}
                 </div>
 
-                <div className="mt-6 flex justify-center">
+                <div className="mt-6 pb-12 lg:pb-0 flex justify-center">
                   <PrimaryButton label="Weiter" disabled={!locked} onClick={resetForNext} />
                 </div>
               </div>

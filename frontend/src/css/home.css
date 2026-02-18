@@ -215,3 +215,18 @@
 .tip-back {
   transform: rotateY(180deg);
 }
+
+/* Tip Card surfaces im Dark Mode */
+:root[data-theme="dark"] .tip-face {
+  background-color: var(--surface);
+  color: var(--text-main);
+  border: 1px solid color-mix(in srgb, var(--text-main) 12%, transparent);
+}
+/*  Dark Mode: Progress Badge */
+:root[data-theme="dark"] .home-module::before,
+:root[data-theme="dark"] .module-card::before {
+  background: rgba(74, 31, 60, 0.85);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 234, 243, 0.18);
+  backdrop-filter: blur(10px);
+}
