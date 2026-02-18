@@ -238,3 +238,34 @@
 .quiz-close-btn:active svg {
   transform: scale(0.95);
 }
+/* Quiz – Dark Mode Text Fix */
+:root[data-theme="dark"] .quiz-headline {
+  color: #61033b !important;
+}
+
+:root[data-theme="dark"] .quiz-card-bg p {
+  color: #61033b !important;
+}
+:root[data-theme="dark"] .quiz-card-bg button {
+  border-color: #61033b !important;
+}
+:root[data-theme="dark"] .bg-success {
+  background: #1f2e24 !important;
+  color: #9be3a0 !important;
+}
+
+:root[data-theme="dark"] .bg-warnung {
+  background: #2e1f23 !important;
+  color: #ffb3b3 !important;
+}
+
+:root[data-theme="dark"] .quiz-card-bg button.opacity-60 {
+  opacity: 1 !important;
+  color: #4b5563 !important;
+}
+:root[data-theme="dark"] .quiz-music-btn {
+  background: #61033b !important;
+}
+:root[data-theme="dark"] .header-bg {
+  background: #61033b !important;
+}

@@ -50,12 +50,12 @@ export default function Progress() {
       />
 
       {/* Blur  */}
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+      <div className=" absolute inset-0 bg-white/10 backdrop-blur-sm " />
 
       {/*  Content */}
       <div className="relative z-10 space-y-6">
         {/* HERO */}
-        <div className="mx-auto max-w-xl rounded-3xl bg-white/80 p-6 shadow-md text-center backdrop-blur border border-(--color-dark-gray)/10">
+        <div className="progress-card mx-auto max-w-xl rounded-3xl bg-white/80 p-6 shadow-md text-center backdrop-blur border border-(--color-dark-gray)/10">
           <div className="mx-auto w-80 -mt-8">
             {catAnim ? (
               <Lottie animationData={catAnim} loop />
@@ -84,7 +84,7 @@ export default function Progress() {
         </div>
 
         {/* SAKURA BAR */}
-        <div className="mx-auto max-w-xl rounded-3xl bg-white/80 p-6 shadow-md backdrop-blur border border-(--color-dark-gray)/10  ">
+        <div className="progress-card mx-auto max-w-xl rounded-3xl bg-white/80 p-6 shadow-md backdrop-blur border border-(--color-dark-gray)/10  ">
           <div className="flex items-center justify-between ">
             <p className="text-sm font-extrabold">Sakura-Fortschritt</p>
             <span className="rounded-full bg-(--color-primary)/10 px-3 py-1 text-xs font-semibold ">
@@ -118,7 +118,7 @@ export default function Progress() {
         {/* Erfolge */}
         <div className="mx-auto max-w-xl mt-6 grid grid-cols-2 gap-4">
           {/* Erfolg 1 - unlocked */}
-          <div className="rounded-3xl bg-white/80 p-6 text-center shadow-sm backdrop-blur border border-(--color-dark-gray)/10">
+          <div className="progress-card rounded-3xl bg-white/80 p-6 text-center shadow-sm backdrop-blur border border-(--color-dark-gray)/10">
             <img
               src="/icons/progress1.svg"
               alt=""
@@ -132,7 +132,7 @@ export default function Progress() {
           </div>
 
           {/* Achievement 2 - locked */}
-          <div className="rounded-3xl bg-white/60 p-6 text-center opacity-80 shadow-sm backdrop-blur border border-(--color-dark-gray)/10">
+          <div className="progress-card rounded-3xl bg-white/60 p-6 text-center opacity-80 shadow-sm backdrop-blur border border-(--color-dark-gray)/10">
             <img
               src="/icons/progress2.svg"
               alt=""

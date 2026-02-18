@@ -50,8 +50,31 @@ export default function Header() {
     setShowProfilesModal(true);
   };
 
+  // dark mode toggle
+  const [theme, setTheme] = useState(document.documentElement.dataset.theme || "light");
+
+  function toggleTheme() {
+    const root = document.documentElement;
+    const next = theme === "dark" ? "light" : "dark";
+
+    root.dataset.theme = next;
+    localStorage.setItem("theme", next);
+    setTheme(next);
+  }
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) {
+      document.documentElement.dataset.theme = saved;
+      setTheme(saved);
+    }
+  }, []);
+
   return (
     <header className=" relative mt-8 z-20 ">
+      <div className="h-20 px-4 sm:px-8 grid grid-cols-[1fr_auto_1fr] items-center">
+        {/* LEFT */}
+        <div className="flex items-center justify-self-start">
       {!authLoading ? (
         <div className="flex h-20 items-center pl-8">
           {!user ? (
@@ -81,6 +104,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <button
                 onClick={handleProfileClick}
+                className="h-17 w-17 rounded-full flex items-center justify-center bg-black border text-white font-extrabold"
                 className="h-17 w-17 rounded-full flex items-center justify-center bg-(--color-primary) border text-white font-extrabold"
               >
                 <img
@@ -93,73 +117,80 @@ export default function Header() {
             </div>
           )}
         </div>
+
+        {showProfilesModal && (
+          <ProfilesModal
+            setShowProfilesModal={setShowProfilesModal}
+            user={user}
+            setUser={setUser}
+          ></ProfilesModal>
+        )}
+        {/* CENTER: Toggle Theme Button */}
+        <button
+          onClick={toggleTheme}
+          aria-label="Theme wechseln"
+          className={`justify-self-center grid h-14 w-14 place-items-center rounded-full shadow-sm hover:scale-105 active:scale-95 transition
+    ${theme === "dark" ? "bg-(--color-peach)/40" : "bg-white/40"}`}
+        >
+          <img
+            src={theme === "dark" ? "/icons/sun.svg" : "/icons/full-moon.png"}
+            alt=""
+            className="h-10 w-10 transition-all duration-300"
+          />
+        </button>
       ) : null}
 
-      {showProfilesModal && (
-        <ProfilesModal
-          setShowProfilesModal={setShowProfilesModal}
-          user={user}
-          setUser={setUser}
-        ></ProfilesModal>
-      )}
-
-      {/* Button rechts */}
-      <div
-        className="  group absolute right-0 top-2
-    h-20 w-20 hover:w-52
-    bg-(--color-light-yellow) shadow-sm
-    rounded-l-full rounded-r-none
-    transition-all duration-200
-    overflow-hidden
-          
-        "
-        onMouseEnter={() => {
-          lottieRef.current?.stop?.();
-          lottieRef.current?.play?.();
-        }}
-        onMouseLeave={() => {
-          lottieRef.current?.stop?.();
-          lottieRef.current?.goToAndStop?.(0, true);
-        }}
-        aria-label="Willkommen"
-      >
-        {/* Kreis links */}
-        <div className="absolute left-2 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full  grid place-items-center">
-          <div className="h-14 w-14">
-            {animationData && (
-              <Lottie
-                lottieRef={lottieRef}
-                animationData={animationData}
-                autoplay={false}
-                loop={false}
-              />
-            )}
+        {/* Button rechts */}
+        <div
+          className="  group absolute right-0 top-2 h-18 w-20 hover:w-52 bg-(--color-light-yellow) shadow-sm rounded-l-full rounded-r-none transition-all duration-200 overflow-hidden"
+          onMouseEnter={() => {
+            lottieRef.current?.stop?.();
+            lottieRef.current?.play?.();
+          }}
+          onMouseLeave={() => {
+            lottieRef.current?.stop?.();
+            lottieRef.current?.goToAndStop?.(0, true);
+          }}
+          aria-label="Willkommen"
+        >
+          {/* Kreis links */}
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full  grid place-items-center">
+            <div className="h-14 w-14">
+              {animationData && (
+                <Lottie
+                  lottieRef={lottieRef}
+                  animationData={animationData}
+                  autoplay={false}
+                  loop={false}
+                />
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Text: erscheint bei Hover */}
-        <p
-          className="
+          {/* Text: erscheint bei Hover */}
+          <p
+            className="
             absolute  left-18 top-1/2 -translate-y-1/2
             text-m font-bold whitespace-nowrap
             opacity-0 translate-x-2
             group-hover:opacity-100 group-hover:translate-x-0
             transition-all duration-150
           "
-        >
-          Willkommen
-        </p>
+          >
+            Willkommen
+          </p>
 
-        {/* Pfeil rechts*/}
-        <div
-          className="
+          {/* Pfeil rechts*/}
+          <div
+            className="
             absolute right-1 top-1/2 -translate-y-1/2
             text-4xl leading-none text-(--color-dark-gray)
             transition-transform duration-200
             group-hover:rotate-180
           "
-        >
-          ›
+          >
+            ›
+          </div>
         </div>
       </div>
     </header>

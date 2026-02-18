@@ -253,10 +253,10 @@ export default function LessonDetail() {
   }
 
   return (
-    <section className="space-y-6 pt-6">
+    <section className="space-y-6 pt-6 px-4 sm:px-6 lg:px-0">
       {/* TOP */}
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-        <div className="relative overflow-hidden rounded-3xl bg-white shadow-md aspect-4/3">
+        <div className="relative overflow-hidden rounded-3xl bg-white shadow-md aspect-4/3 sm:aspect-4/3">
           <img src="/hase-lektion.jpg" alt="" className="h-auto w-full object-cover" />
           <div
             className={[
@@ -268,7 +268,7 @@ export default function LessonDetail() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-md">
+        <div className="relative overflow-hidden rounded-3xl bg-white p-4 sm:p-6 shadow-md">
           <div className={`absolute left-0 top-0 h-2 w-full ${moduleAccent[moduleKey]}`} />
 
           <p className="text-xs text-(--color-dark-gray)">Modul</p>
@@ -290,7 +290,7 @@ export default function LessonDetail() {
       {/* MAIN */}
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
         {/* LEFT */}
-        <div className="rounded-3xl bg-white p-5 shadow-md">
+        <div className="rounded-3xl bg-white p-4 sm:p-5 shadow-md">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-extrabold">Mini-Schritte</h3>
             <span className="rounded-full bg-(--color-dark-gray)/5 px-3 py-1 text-xs font-semibold">
@@ -321,7 +321,7 @@ export default function LessonDetail() {
                   disabled={locked}
                   onClick={() => setStepIndex(i)}
                   className={[
-                    "flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left transition",
+                    "flex w-full iitems-start sm:items-center justify-between rounded-2xl px-4 py-4 text-left transition",
                     active ? moduleAccentSoft[moduleKey] : "bg-(--color-dark-gray)/5",
                     locked ? "opacity-60 cursor-not-allowed" : "hover:-translate-y-0.5"
                   ].join(" ")}
@@ -351,7 +351,7 @@ export default function LessonDetail() {
         </div>
 
         {/* RIGHT */}
-        <div className="rounded-3xl bg-white p-6 shadow-md">
+        <div className="rounded-3xl bg-white p-4 sm:p-6 shadow-md">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className={`h-3 w-3 rounded-full ${moduleAccent[moduleKey]}`} />

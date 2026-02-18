@@ -295,7 +295,7 @@ export default function Lessons() {
           </div>
 
           {/* Alle Lektionen anzeigen */}
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {selectedModule.lessons.map(l => {
               const storedDone = isLessonDone(selectedModule.key, l.id);
 
@@ -307,7 +307,7 @@ export default function Lessons() {
                 <div
                   key={l.id}
                   className={[
-                    "rounded-3xl bg-white p-6 shadow-md",
+                    "rounded-3xl bg-white p-4 sm:p-6 shadow-md",
                     isLocked ? "opacity-80" : ""
                   ].join(" ")}
                 >
@@ -325,7 +325,7 @@ export default function Lessons() {
 
                   <h2 className="mt-2 font-extrabold">{l.title}</h2>
 
-                  <div className="mt-5 flex items-center justify-between gap-3">
+                  <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <PrimaryButton
                       label={isDone ? "Nochmal" : isActive ? "Weiter" : "Starten"}
                       className={isLocked ? "pointer-events-none opacity-50" : ""}
@@ -333,11 +333,13 @@ export default function Lessons() {
                     />
 
                     {(isActive || isDone) && (
-                      <div className="flex items-center gap-1.5 text-xs text-(--color-dark-gray)">
+                      <div className="flex items-start sm:items-center gap-1.5 text-xs text-(--color-dark-gray)">
                         {isActive && (
                           <>
                             <img src="/icons/weiter.svg" alt="" className="h-4 w-4" />
-                            <span>Weiter zur nächsten Aufgabe</span>
+                            <span className="max-w-22rem sm:max-w-none">
+                              Weiter zur nächsten Aufgabe
+                            </span>
                           </>
                         )}
                         {isDone && (

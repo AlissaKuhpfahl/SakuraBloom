@@ -133,7 +133,7 @@ export default function ModulesMainBigSlider() {
       <div className="mx-auto max-w-4xl rounded-3xl bg-white p-8 shadow-sm">
         <h1 className="text-3xl font-bold">Welches Abenteuer willst du heute starten?</h1>
         <p className="mt-2 text-md">
-          Heute schon etwas gelernt? Dein Sakura-Fortschritt wächst mit jeder Lektion. 🙌
+          Heute schon etwas gelernt? Dein Sakura-Fortschritt wächst mit jeder Lektion.
         </p>
         {/* SAKURA BAR */}
         <div>
@@ -174,7 +174,7 @@ export default function ModulesMainBigSlider() {
               <div
                 className={[
                   "relative overflow-hidden rounded-[2.5rem] shadow-sm",
-                  "min-h-[420px] sm:min-h-[460px] md:min-h-[520px]",
+                  "min-h-420px sm:min-h-460px md:min-h-520px",
                   m.bgClass
                 ].join(" ")}
               >
@@ -183,7 +183,7 @@ export default function ModulesMainBigSlider() {
                 <div className="pointer-events-none absolute left-10 top-10 h-44 w-44 rounded-full bg-white/20 blur-xl" />
 
                 {/* Badge */}
-                <div className="absolute right-6 top-6 rounded-2xl bg-white/70 px-4 py-2 text-xs font-extrabold">
+                <div className="progress-card absolute right-6 top-6 rounded-2xl bg-white/70 px-4 py-2 text-xs font-extrabold">
                   {getBadge(m.key)}
                 </div>
 
@@ -196,19 +196,19 @@ export default function ModulesMainBigSlider() {
 
                     {/* Small “what you learn” chips */}
                     <div className="mt-5 flex flex-wrap gap-2">
-                      <span className="rounded-2xl bg-white/65 px-4 py-2 text-xs font-bold">
+                      <span className="progress-card rounded-2xl bg-white/65 px-4 py-2 text-xs font-bold">
                         Mini-Lektionen
                       </span>
-                      <span className="rounded-2xl bg-white/65 px-4 py-2 text-xs font-bold">
+                      <span className="progress-card rounded-2xl bg-white/65 px-4 py-2 text-xs font-bold">
                         Bilder & Beispiele
                       </span>
-                      <span className="rounded-2xl bg-white/65 px-4 py-2 text-xs font-bold">
+                      <span className="progress-card rounded-2xl bg-white/65 px-4 py-2 text-xs font-bold">
                         Kurzes Quiz
                       </span>
                     </div>
 
                     <div className="mt-7">
-                      <Link to={m.route}>
+                      <Link to="/lessons">
                         <PrimaryButton label="Starten ➜" />
                       </Link>
                     </div>
@@ -224,7 +224,7 @@ export default function ModulesMainBigSlider() {
                       src={m.art}
                       alt=""
                       className={[
-                        "w-[320px] sm:w-[380px] md:w-[460px] lg:w-[520px]",
+                        "w-[320px] sm:w-380px md:w-460px lg:w-520px",
                         "drop-shadow-md transition-transform duration-300",
                         idx === active ? "scale-[1.03]" : "scale-100"
                       ].join(" ")}
