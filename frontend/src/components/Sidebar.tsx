@@ -120,7 +120,7 @@ export default function Sidebar() {
           {/* Header: Logo + Toggle */}
           <div className="mb-8 flex justify-center">
             <div className="relative flex h-24 w-full items-center justify-center">
-              {/* Logo  */}
+              {/* Logo */}
               {!collapsed && (
                 <Link to="/" className="absolute inset-0 flex items-center justify-center mt-6">
                   <img src="/logo.svg" alt="SakuraBloom Logo" className="w-40" />
@@ -143,7 +143,7 @@ export default function Sidebar() {
                 onClick={() => setCollapsed(v => !v)}
                 aria-label={collapsed ? "Sidebar öffnen" : "Sidebar schließen"}
                 className={`absolute grid h-10 w-10 place-items-center rounded-full bg-white/90 shadow transition-all duration-300 hover:scale-105 active:scale-95 ml-1
-                ${collapsed ? "left-1/2 -translate-x-1/2 -bottom-4" : "right-4 -bottom-4"}`}
+              ${collapsed ? "left-1/2 -translate-x-1/2 -bottom-4" : "right-4 -bottom-4"}`}
               >
                 <img
                   src="/icons/arrow.svg"
@@ -155,62 +155,34 @@ export default function Sidebar() {
               </button>
             </div>
           </div>
-        {/* Navigation */}
-        <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-8"}`}>
-          {NAV.map(item =>
-            item.showItem() ? (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={({ isActive }) => `group ${navClass({ isActive, collapsed })}`}
-                title={collapsed ? item.label : undefined}
-              >
-                <span
-                  className={`flex items-center ${collapsed ? "justify-center" : "gap-3 pl-4"}`}
-                >
-                  {/* Icon */}
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md ">
-                    <img
-                      src={item.icon}
-                      alt=""
-                      className="h-7 w-7 transition-transform group-hover:scale-110"
-                    />
-                  </span>
 
-                  {/* Label (nur wenn offen) */}
-                  {!collapsed && <span>{item.label}</span>}
-                </span>
-              </NavLink>
-            ) : null
-          )}
-        </nav>
-
-          {/* Navigation */}
+          {/* Navigation (NUR EINMAL) */}
           <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-8"}`}>
-            {NAV.map(item => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) => `group ${navClass({ isActive, collapsed })}`}
-                title={collapsed ? item.label : undefined}
-              >
-                <span
-                  className={`flex items-center ${collapsed ? "justify-center" : "gap-3 pl-4"}`}
+            {NAV.map(item =>
+              item.showItem() ? (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  onClick={() => setMobileOpen(false)}
+                  className={({ isActive }) => `group ${navClass({ isActive, collapsed })}`}
+                  title={collapsed ? item.label : undefined}
                 >
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
-                    <img
-                      src={item.icon}
-                      alt=""
-                      className="h-7 w-7 transition-transform group-hover:scale-110"
-                    />
+                  <span
+                    className={`flex items-center ${collapsed ? "justify-center" : "gap-3 pl-4"}`}
+                  >
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md">
+                      <img
+                        src={item.icon}
+                        alt=""
+                        className="h-7 w-7 transition-transform group-hover:scale-110"
+                      />
+                    </span>
+                    {!collapsed && <span>{item.label}</span>}
                   </span>
-                  {!collapsed && <span>{item.label}</span>}
-                </span>
-              </NavLink>
-            ))}
+                </NavLink>
+              ) : null
+            )}
           </nav>
 
           <div className="flex-1" />
