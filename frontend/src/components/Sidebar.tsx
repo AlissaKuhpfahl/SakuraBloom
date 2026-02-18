@@ -5,16 +5,6 @@ import ConfirmModal from "./ConfirmModal.tsx";
 import { logout } from "../data/auth.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
 
-const NAV = [
-  { to: "/", label: "Home", icon: "/icons/home.svg", end: true },
-  { to: "/modules", label: "Module", icon: "/icons/modules.svg" },
-  { to: "/quiz", label: "Quiz", icon: "/icons/quiz.svg" },
-  { to: "/progress", label: "Fortschritte", icon: "/icons/progress.svg" },
-  { to: "/lessons", label: "Lektionen", icon: "/icons/lessons.svg" },
-  { to: "/createProfiles", label: "Profil erstellen", icon: "/icons/account.svg" },
-  { to: "/profile", label: "Mein Profil", icon: "/icons/manager.svg" }
-];
-
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -24,6 +14,66 @@ export default function Sidebar() {
     setMobileOpen(false);
   }
   const { setUser, user } = useAuth();
+
+  const NAV = [
+    {
+      showItem: () => {
+        return true;
+      },
+      to: "/",
+      label: "Home",
+      icon: "/icons/home.svg",
+      end: true
+    },
+    {
+      showItem: () => {
+        return true;
+      },
+      to: "/modules",
+      label: "Module",
+      icon: "/icons/modules.svg"
+    },
+    {
+      showItem: () => {
+        return true;
+      },
+      to: "/quiz",
+      label: "Quiz",
+      icon: "/icons/quiz.svg"
+    },
+    {
+      showItem: () => {
+        return true;
+      },
+      to: "/progress",
+      label: "Fortschritte",
+      icon: "/icons/progress.svg"
+    },
+    {
+      showItem: () => {
+        return true;
+      },
+      to: "/lessons",
+      label: "Lektionen",
+      icon: "/icons/lessons.svg"
+    },
+    {
+      showItem: () => {
+        return user != null;
+      },
+      to: "/createProfiles",
+      label: "Profil erstellen",
+      icon: "/icons/account.svg"
+    },
+    {
+      showItem: () => {
+        return user != null;
+      },
+      to: "/profile",
+      label: "Mein Profil",
+      icon: "/icons/manager.svg"
+    }
+  ];
 
   const handleLogout = async () => {
     await logout();
@@ -105,6 +155,36 @@ export default function Sidebar() {
               </button>
             </div>
           </div>
+        {/* Navigation */}
+        <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-8"}`}>
+          {NAV.map(item =>
+            item.showItem() ? (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) => `group ${navClass({ isActive, collapsed })}`}
+                title={collapsed ? item.label : undefined}
+              >
+                <span
+                  className={`flex items-center ${collapsed ? "justify-center" : "gap-3 pl-4"}`}
+                >
+                  {/* Icon */}
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-white/40 transition group-hover:bg-white group-hover:shadow-md ">
+                    <img
+                      src={item.icon}
+                      alt=""
+                      className="h-7 w-7 transition-transform group-hover:scale-110"
+                    />
+                  </span>
+
+                  {/* Label (nur wenn offen) */}
+                  {!collapsed && <span>{item.label}</span>}
+                </span>
+              </NavLink>
+            ) : null
+          )}
+        </nav>
 
           {/* Navigation */}
           <nav className={`flex flex-col gap-2 ${collapsed ? "pl-3" : "text-center pl-6 pt-8"}`}>

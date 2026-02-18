@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { addProfile } from "../data/profiles.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
 import { getMe } from "../data/auth.ts";
+import PrimaryButton from "../components/Btn.tsx";
+import ConfirmModal from "../components/ConfirmModal.tsx";
 
 type AvatarOption = {
   id: string;
@@ -83,6 +85,7 @@ export function CreateProfiles() {
   const [selectedAvatarId, setSelectedAvatarId] = useState(avatarOptions[0].id);
   const [note, setNote] = useState<string | null>(null);
   const { setUser } = useAuth();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const selectedAvatar = useMemo(
     () => avatarOptions.find(avatar => avatar.id === selectedAvatarId),
@@ -114,6 +117,7 @@ export function CreateProfiles() {
     setNote(`Profil erstellt: ${trimmedName}`);
     const { user } = await getMe();
     setUser(user);
+    setShowConfirm(true);
     // navigate("/");
   };
 
@@ -121,6 +125,7 @@ export function CreateProfiles() {
     <div className="flex flex-col items-center gap-6">
       <h2>Profil erstellen</h2>
       <form
+        id="create-profile-form"
         className="w-full max-w-lg rounded-2xl bg-white/70 p-6 shadow-md"
         onSubmit={handleSubmit}
       >
@@ -186,9 +191,26 @@ export function CreateProfiles() {
           </div>
         </div>
         <h3 className="text-center">Alles klar?</h3>
-        <button type="submit" className="btn-primary w-full">
+        {/* <button type="submit" className="btn-primary w-full">
           Profil anlegen
-        </button>
+        </button> */}
+        <PrimaryButton
+          className="w-full self-center"
+          label={"Profil anlegen"}
+          disabled={false}
+          onClick={() => {
+            const form = document.getElementById("create-profile-form") as HTMLFormElement | null;
+            form?.requestSubmit();
+          }}
+        />
+        <ConfirmModal
+          isOpen={showConfirm}
+          title="Profil erstellt"
+          message="Dein Profil wurde erfolgreich erstellt"
+          confirmLabel="Okay"
+          onConfirm={() => setShowConfirm(false)}
+          onCancel={() => setShowConfirm(false)}
+        />
 
         {note && <p className="mt-4 text-center text-sm font-semibold">{note}</p>}
       </form>

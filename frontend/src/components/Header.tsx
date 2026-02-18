@@ -7,10 +7,12 @@ import { useNavigate } from "react-router";
 
 export default function Header() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
-  const { user, setUser } = useAuth();
+  const { user, setUser, authLoading } = useAuth();
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
   const navigate = useNavigate();
+
+  console.log("Header loaded");
 
   useEffect(() => {
     let isMounted = true;
@@ -73,6 +75,8 @@ export default function Header() {
       <div className="h-20 px-4 sm:px-8 grid grid-cols-[1fr_auto_1fr] items-center">
         {/* LEFT */}
         <div className="flex items-center justify-self-start">
+      {!authLoading ? (
+        <div className="flex h-20 items-center pl-8">
           {!user ? (
             //  Gast: Girl + Speechbubble + Text
             <div className="relative flex items-center gap-1 ">
@@ -101,6 +105,7 @@ export default function Header() {
               <button
                 onClick={handleProfileClick}
                 className="h-17 w-17 rounded-full flex items-center justify-center bg-black border text-white font-extrabold"
+                className="h-17 w-17 rounded-full flex items-center justify-center bg-(--color-primary) border text-white font-extrabold"
               >
                 <img
                   src={user?.activeProfile?.avatarUrl ?? "/avatars/bear.svg"}
@@ -133,6 +138,7 @@ export default function Header() {
             className="h-10 w-10 transition-all duration-300"
           />
         </button>
+      ) : null}
 
         {/* Button rechts */}
         <div

@@ -4,6 +4,7 @@ import { useState } from "react";
 import PrimaryButton from "../components/Btn.tsx";
 import { setActiveProfile } from "../data/profiles.ts";
 // import { getMe } from "../data/auth.ts";
+import { useAuth } from "../contexts/useAuth.tsx";
 
 type ProfilesModalProps = {
   user: User | null;
@@ -22,6 +23,7 @@ function Profiles({
 }) {
   const [selectedProfileId, setSelectedProfileId] = useState(user?.activeProfile?._id);
   console.log("Selected profile ID in Profiles component:", selectedProfileId);
+  const { setRefreshUser } = useAuth();
 
   if (!user?.profiles || user.profiles.length === 0) {
     return <p>Bitte anmelden</p>;
@@ -35,12 +37,12 @@ function Profiles({
 
             return (
               <div key={profile._id} className="flex items-center  justify-between gap-3 mb-2">
-                <div className="rounded-full flex items-center justify-center h-20 w-20 bg-linear-to-r from-pink-500 to-rose-500">
+                <div className="rounded-full flex items-center justify-center h-20 w-20 bg-(--color-primary)">
                   {/* <p>{profile.profileName[0]}</p> */}
                   <img
                     src={profile.avatarUrl ?? "/avatars/bear.svg"}
                     alt={profile.profileName[0]}
-                    className="h-18 w-18"
+                    className="h-19 w-19"
                   />
                 </div>
                 <h2>{profile.profileName}</h2>
@@ -68,6 +70,7 @@ function Profiles({
             console.log(await setActiveProfile(selectedProfileId as string));
             // const { upUser } = await getMe();
             // setUser(upUser);
+            setRefreshUser(true);
             setShowModal(false);
           }}
         />
