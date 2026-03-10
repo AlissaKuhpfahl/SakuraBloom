@@ -65,7 +65,7 @@ export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps
   const panelClass =
     "z-10 w-11/12 max-w-md max-h-[65vh] rounded-lg bg-white p-6 shadow-lg flex flex-col";
   const profilesContainerClass = "overflow-y-auto flex-1";
-  const { setRefreshUser } = useAuth();
+  const { setToggleRefreshUser } = useAuth();
   const [selectedProfileId, setSelectedProfileId] = useState(user?.activeProfile?._id);
 
   return createPortal(
@@ -94,7 +94,7 @@ export function ProfilesModal({ setShowProfilesModal, user }: ProfilesModalProps
             console.log(await setActiveProfile(selectedProfileId as string));
             // const { upUser } = await getMe();
             // setUser(upUser);
-            setRefreshUser(true);
+            setToggleRefreshUser(prev => !prev);
             setShowProfilesModal(false);
           }}
         />
