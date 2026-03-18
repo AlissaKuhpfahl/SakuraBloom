@@ -264,7 +264,7 @@ export default function Sidebar() {
                 message="Willst du dich wirklich ausloggen?"
                 confirmLabel="Ausloggen"
                 cancelLabel="Abbrechen"
-                onConfirm={handleLogout}
+                onConfirm={async () => handleLogout()}
                 onCancel={() => setShowConfirm(false)}
               />
             </div>
