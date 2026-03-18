@@ -6,31 +6,33 @@ import { refresh, getMe } from "../data/auth.ts";
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<null | User>(null);
   const [authLoading, setAuthLoading] = useState(false);
-  const [refreshUser, setRefreshUser] = useState<boolean>(false);
+  const [toggleRefreshUser, setToggleRefreshUser] = useState<boolean>(false);
 
   useEffect(() => {
     const refreshLogin = async () => {
       try {
         setAuthLoading(true);
-        console.log("Auth Loading:", authLoading);
+        // console.log("Auth Loading:", authLoading);
         await refresh();
-        console.log("Token refreshed");
+        // console.log("Token refreshed");
         const { user } = await getMe();
-        console.log("Refresh: Fetched user:", user);
+        // console.log("Refresh: Fetched user:", user);
         setUser(user);
       } catch (error) {
-        console.log("Refresh: ", error);
+        console.log("Refresh error: ", error);
       } finally {
         setAuthLoading(false);
-        setRefreshUser(false);
-        console.log("Auth Loading:", authLoading);
+        // setRefreshUser(false);
+        // console.log("Auth Loading:", authLoading);
       }
     };
     refreshLogin();
-  }, [refreshUser]);
+  }, [toggleRefreshUser]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, authLoading, refreshUser, setRefreshUser }}>
+    <AuthContext.Provider
+      value={{ user, setUser, authLoading, toggleRefreshUser, setToggleRefreshUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
