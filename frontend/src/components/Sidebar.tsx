@@ -76,7 +76,7 @@ export default function Sidebar() {
   ];
 
   const handleLogout = async () => {
-    await logout();
+    console.log(await logout());
     setUser(null);
     setShowConfirm(false);
   };

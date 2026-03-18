@@ -16,8 +16,9 @@ export async function addProfile(profileName: string, avatarUrl: string) {
   if (!res.ok) {
     const errorData = await res.json();
     console.log(errorData);
+
     if (!errorData.error) {
-      throw new Error(errorData.message);
+      throw new Error("Error while adding profile");
     }
     throw new Error(errorData.error);
   }
@@ -39,6 +40,7 @@ export async function setActiveProfile(profileId: string) {
   if (!res.ok) {
     const errorData = await res.json();
     console.log(errorData);
+
     if (!errorData.message) {
       throw new Error("Error while update active profile");
     }
@@ -53,13 +55,12 @@ export async function readProfiles() {
 
   if (!res.ok) {
     const errorData = await res.json();
-
     console.log(errorData);
 
-    if (!errorData.error) {
-      throw new Error(errorData.message);
+    if (!errorData.message) {
+      throw new Error("Error while read profiles");
     }
-    throw new Error(errorData.error);
+    throw new Error(errorData.message);
   }
   return res.json();
 }
