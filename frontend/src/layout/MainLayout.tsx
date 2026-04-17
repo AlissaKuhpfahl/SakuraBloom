@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import Footer from "../components/Footer.tsx";
 import Header from "../components/Header.tsx";
 import Sidebar from "../components/Sidebar.tsx";
+import LanguageHandler from "../layout/LanguageHandler.tsx";
 
 export default function MainLayout() {
   return (
@@ -11,6 +12,7 @@ export default function MainLayout() {
 
       {/* Main rechts = Column */}
       <div className="flex min-h-screen flex-1 flex-col">
+        <LanguageHandler />
         <Header />
 
         {/* Content wächst */}
