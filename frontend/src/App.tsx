@@ -19,10 +19,12 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainLayout />}>
+          <Route path="/" element={<Navigate to="/de" replace />} />
+          <Route path="/:lang" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="modules" element={<Modules />} />
-            <Route path="quiz" element={<Navigate to="/quiz/online" replace />} />
+            {/* <Route path="quiz" element={<Navigate to="/quiz/online" replace />} /> */}
+            <Route path="quiz" element={<Navigate to="online" replace />} />
             <Route path="quiz/:moduleKey" element={<Quiz />} />
             <Route path="progress" element={<Progress />} />
             <Route path="lessons" element={<Lessons />} />
@@ -31,7 +33,8 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route element={<ProtectedLayout />}>
               {/* Hier können weitere geschützte Routen hinzugefügt werden */}
-              <Route path="/profile" element={<ProfileDashboard />} />
+              {/* / gelöscht bei profile */}
+              <Route path="profile" element={<ProfileDashboard />} />
               <Route path="createProfiles" element={<CreateProfiles />} />
             </Route>
           </Route>

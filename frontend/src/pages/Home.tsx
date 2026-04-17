@@ -4,8 +4,10 @@ import PrimaryButton from "../components/Btn.tsx";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation("home");
   const progressLevel = 2; // 1–5
   const total = 5;
 
@@ -92,17 +94,18 @@ export default function Home() {
         {/* Inhalt links  */}
         <div className="max-w-5xl sm:pr-56 lg:pr-80">
           <h1 className="home-hero-title text-3xl font-bold">
-            Sicher <br></br>
-            <span className="inline-block text-6xl text-(--color-primary) pr-2 ">wachsen</span>
-            im Internet
+            {t("hero.title1")} <br></br>
+            <span className="inline-block text-6xl text-(--color-primary) pr-2 ">
+              {" "}
+              {t("hero.title2")}{" "}
+            </span>
+            {t("hero.title3")}
           </h1>
-          <p className="mt-3 text-md">
-            Lerne spielerisch, wie du sicher im Internet unterwegs bist.
-          </p>
+          <p className="mt-3 text-md">{t("hero.subtitle")}</p>
 
           {/* Fortschritte */}
           <div className="mt-6 flex flex-col md:flex-row  gap-3 text-sm">
-            <span className="min-w-28 ">Dein Fortschritt:</span>
+            <span className="min-w-28 ">{t("hero.progress")}:</span>
 
             <div className="flex items-center gap-2">
               {Array.from({ length: total }).map((_, i) => {
@@ -132,7 +135,7 @@ export default function Home() {
 
       {/* Module */}
       <div className="rounded-3xl bg-white p-8 shadow-sm  ">
-        <h2 className="mb-4 text-2xl font-bold ">Module</h2>
+        <h2 className="mb-4 text-2xl font-bold">{t("modules.title")}</h2>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Erste Module */}
@@ -141,7 +144,7 @@ export default function Home() {
             data-badge={`${progress.online}/${total}`}
             className="module-headline module-card rounded-2xl bg-(--color-blue) p-6 font-semibold flex items-center justify-between"
           >
-            <span>Online Sicherheit</span>
+            <span>{t("modules.online")}</span>
             <img
               src="/elephant.svg"
               alt=""
@@ -152,9 +155,9 @@ export default function Home() {
           <Link
             to="/modules"
             data-badge={`${progress.privacy}/${total}`}
-            className=" module-headline  rounded-2xl bg-(--color-light-yellow) p-6 font-semibold flex items-center justify-between home-module"
+            className=" module-headline  module-card  rounded-2xl bg-(--color-light-yellow) p-6 font-semibold flex items-center justify-between home-module"
           >
-            <span> Privatsphäre</span>
+            <span>{t("modules.privacy")}</span>
             <img
               src="/hase.svg"
               alt=""
@@ -165,9 +168,9 @@ export default function Home() {
           <Link
             to="/modules"
             data-badge={`${progress.chats}/${total}`}
-            className="module-headline  rounded-2xl bg-(--color-peach) p-6 font-semibold flex items-center justify-between home-module"
+            className="module-headline module-card  rounded-2xl bg-(--color-peach) p-6 font-semibold flex items-center justify-between home-module"
           >
-            <span> Chats & Verhalten</span>
+            <span>{t("modules.chats")}</span>
             <img
               src="/animal.svg"
               alt=""
@@ -178,9 +181,9 @@ export default function Home() {
           <Link
             to="/modules"
             data-badge={`${progress.fake}/${total}`}
-            className="module-headline  rounded-2xl bg-(--color-green) p-6 font-semibold flex items-center justify-between home-module"
+            className="module-headline module-card  rounded-2xl bg-(--color-green) p-6 font-semibold flex items-center justify-between home-module"
           >
-            <span> Fake erkennen</span>
+            <span>{t("modules.fake")}</span>
             <img
               src="/duck.svg"
               alt=""
@@ -195,15 +198,13 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           {/* Left */}
           <div>
-            <h2 className="quiz-title text-2xl font-extrabold">Quiz </h2>
+            <h2 className="quiz-title text-2xl font-extrabold">{t("quiz.title")}</h2>
 
-            <p className="mt-2 text-md text-(--color-dark-gray)">
-              Finde heraus, wie gut du dich im Internet auskennst!
-            </p>
+            <p className="mt-2 text-md text-(--color-dark-gray)">{t("quiz.subtitle")}</p>
 
             <PrimaryButton
               className="mt-2"
-              label="Quiz starten"
+              label={t("quiz.start")}
               onClick={() => navigate("/quiz/${moduleKey}")}
             />
           </div>
@@ -224,11 +225,12 @@ export default function Home() {
             {/* Front */}
             <div className="tip-face tip-front shadow-sm">
               <img src="/tips.svg" alt="" className="h-16 w-16" />
-              <h2 className="text-sm font-bold text-center">{bonusTip.title}</h2>
+              <h2 className="text-sm font-bold text-center">{t("tip.defaultTitle")}</h2>
             </div>
 
             {/* Back */}
             <div className="tip-face tip-back shadow-sm">
+              {/* übersetzung fehlt noch */}
               <p className="text-md text-center ">{bonusTip.text}</p>
             </div>
           </div>
@@ -237,12 +239,12 @@ export default function Home() {
 
       {/* Kontakt & Feedback */}
       <div className="rounded-3xl bg-white p-8">
-        <h3 className="text-lg font-bold">Deine Meinung zählt!</h3>
+        <h3 className="text-lg font-bold">{t("feedback.title")}</h3>
 
-        <p className="mt-2 text-sm ">Hast du eine Frage, ein Problem oder eine Idee für uns?</p>
+        <p className="mt-2 text-sm ">{t("feedback.text")}</p>
 
         <div className="mt-4 flex flex-col sm:flex-row gap-3">
-          <PrimaryButton label="Kontakt & Feedback" onClick={() => navigate("/feedback")} />
+          <PrimaryButton label={t("feedback.button")} onClick={() => navigate("/feedback")} />
         </div>
       </div>
     </section>

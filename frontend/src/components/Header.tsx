@@ -4,6 +4,8 @@ import { useAuth } from "../contexts/useAuth.tsx";
 import { ProfilesModal } from "./ProfilesModal.tsx";
 import type { LottieRefCurrentProps } from "lottie-react";
 import { useNavigate } from "react-router";
+import LanguageSwitcher from "./LanguageSwitcher.tsx";
+import { useParams } from "react-router-dom";
 
 export default function Header() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
@@ -11,6 +13,7 @@ export default function Header() {
   const [showProfilesModal, setShowProfilesModal] = useState<boolean>(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
   const navigate = useNavigate();
+  const { lang } = useParams();
 
   console.log("Header loaded");
 
@@ -80,7 +83,7 @@ export default function Header() {
               // Gast: Girl + Speechbubble + Text
               <div className="relative flex items-center gap-1">
                 <button
-                  onClick={() => navigate("/signup")}
+                  onClick={() => navigate(`/${lang}/signup`)}
                   className="cursor-pointer transition-transform hover:scale-105"
                   aria-label="Zur Registrierung"
                 >
@@ -131,6 +134,9 @@ export default function Header() {
               />
             </button>
           ) : null}
+          <div className=" ml-4">
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* RIGHT */}

@@ -1,11 +1,15 @@
 // ////// Nav icon + open/close  /////////
+import { useParams } from "react-router-dom";
 import { NavLink, Link } from "react-router";
 import { useState } from "react";
 import ConfirmModal from "./ConfirmModal.tsx";
 import { logout } from "../data/auth.ts";
 import { useAuth } from "../contexts/useAuth.tsx";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
+  const { lang } = useParams();
+  const { t } = useTranslation("common");
   const [collapsed, setCollapsed] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -20,8 +24,8 @@ export default function Sidebar() {
       showItem: () => {
         return true;
       },
-      to: "/",
-      label: "Home",
+      to: `/${lang}/`,
+      label: t("nav.home"),
       icon: "/icons/home.svg",
       end: true
     },
@@ -29,48 +33,48 @@ export default function Sidebar() {
       showItem: () => {
         return true;
       },
-      to: "/modules",
-      label: "Module",
+      to: `/${lang}/modules`,
+      label: t("nav.modules"),
       icon: "/icons/modules.svg"
     },
     {
       showItem: () => {
         return true;
       },
-      to: "/quiz",
-      label: "Quiz",
+      to: `/${lang}/quiz/online`,
+      label: t("nav.quiz"),
       icon: "/icons/quiz.svg"
     },
     {
       showItem: () => {
         return true;
       },
-      to: "/progress",
-      label: "Fortschritte",
+      to: `/${lang}/progress`,
+      label: t("nav.progress"),
       icon: "/icons/progress.svg"
     },
     {
       showItem: () => {
         return true;
       },
-      to: "/lessons",
-      label: "Lektionen",
+      to: `/${lang}/lessons`,
+      label: t("nav.lessons"),
       icon: "/icons/lessons.svg"
     },
     {
       showItem: () => {
         return user != null;
       },
-      to: "/createProfiles",
-      label: "Profil erstellen",
+      to: `/${lang}/createProfiles`,
+      label: t("nav.createProfile"),
       icon: "/icons/account.svg"
     },
     {
       showItem: () => {
         return user != null;
       },
-      to: "/profile",
-      label: "Mein Profil",
+      to: `/${lang}/profile`,
+      label: t("nav.profile"),
       icon: "/icons/manager.svg"
     }
   ];
@@ -122,7 +126,10 @@ export default function Sidebar() {
             <div className="relative flex h-24 w-full items-center justify-center">
               {/* Logo */}
               {!collapsed && (
-                <Link to="/" className="absolute inset-0 flex items-center justify-center mt-6">
+                <Link
+                  to={`/${lang}`}
+                  className="absolute inset-0 flex items-center justify-center mt-6"
+                >
                   <img src="/logo.svg" alt="SakuraBloom Logo" className="w-40" />
                 </Link>
               )}
@@ -195,7 +202,7 @@ export default function Sidebar() {
               }`}
             >
               <NavLink
-                to="/signup"
+                to={`/${lang}/signup`}
                 onClick={() => setMobileOpen(false)}
                 className="text-(--color-primary) transition group"
                 title={collapsed ? "Signup" : undefined}
@@ -208,12 +215,14 @@ export default function Sidebar() {
                       className="h-6 w-6 transition-transform group-hover:scale-110"
                     />
                   </span>
-                  {!collapsed && <span className="font-semibold w-20 text-left">Sign up</span>}
+                  {!collapsed && (
+                    <span className="font-semibold w-20 text-left">{t("nav.signup")}</span>
+                  )}
                 </span>
               </NavLink>
 
               <NavLink
-                to="/login"
+                to={`/${lang}/login`}
                 onClick={() => setMobileOpen(false)}
                 title={collapsed ? "Login" : undefined}
                 className="group text-(--color-primary) transition"
@@ -226,7 +235,9 @@ export default function Sidebar() {
                       className="h-6 w-6 transition-transform group-hover:scale-110"
                     />
                   </span>
-                  {!collapsed && <span className="font-semibold w-20 text-left">Login</span>}
+                  {!collapsed && (
+                    <span className="font-semibold w-20 text-left">{t("nav.login")}</span>
+                  )}
                 </span>
               </NavLink>
             </div>
@@ -237,7 +248,7 @@ export default function Sidebar() {
               }`}
             >
               <NavLink
-                to="/"
+                to={`/${lang}/`}
                 title={collapsed ? "Logout" : undefined}
                 onClick={e => {
                   e.preventDefault();
@@ -254,16 +265,18 @@ export default function Sidebar() {
                       className="h-6 w-6 transition-transform group-hover:scale-110"
                     />
                   </span>
-                  {!collapsed && <span className="font-semibold w-20 text-left">Logout</span>}
+                  {!collapsed && (
+                    <span className="font-semibold w-20 text-left">{t("nav.logout")}</span>
+                  )}
                 </span>
               </NavLink>
 
               <ConfirmModal
                 isOpen={showConfirm}
-                title="Ausloggen?"
-                message="Willst du dich wirklich ausloggen?"
-                confirmLabel="Ausloggen"
-                cancelLabel="Abbrechen"
+                title={t("modal.logoutTitle")}
+                message={t("modal.logoutMessage")}
+                confirmLabel={t("modal.confirm")}
+                cancelLabel={t("modal.cancel")}
                 onConfirm={async () => handleLogout()}
                 onCancel={() => setShowConfirm(false)}
               />
